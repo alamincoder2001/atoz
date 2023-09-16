@@ -145,7 +145,7 @@
                 quantity: qty
             },
             success: res => {
-                $.notify(res.msg, "success");
+                // $.notify(res.msg, "success");
                 //calculate total
                 $(".subTotal label").text(res.subtotal)
                 $(".Total label").text(res.subtotal)
