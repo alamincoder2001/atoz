@@ -51,7 +51,7 @@
                 <!-- Header Logo Start -->
                 <div class="col-6 col-md-3 col-md-3 col-lg-3">
                     <div class="header-logo">
-                        <a href="{{route('website')}}"><img src="{{asset('backend/assets/images/logo-text.png')}}" alt="Site Logo" /></a>
+                        <a href="{{route('website')}}"><img src="{{asset($profile->logo)}}" alt="Site Logo" /></a>
                     </div>
                 </div>
                 <!-- Header Logo End -->
