@@ -48,28 +48,6 @@ class SettingController extends Controller
             $data->twitter          = $request->twitter;
             $data->linkedin         = $request->linkedin;
             $data->youtube          = $request->youtube;
-            $data->minimum_qty      = $request->minimum_qty;
-            $data->hotText_two      = $request->hotText_two;
-            $data->hotText_two      = $request->hotText_two;
-
-            if($request->hasFile('hotImage_one')){
-                $old_hotImage_one = $data->hotImage_one;
-                if (!empty($old_hotImage_one) && isset($old_hotImage_one)) {
-                    if (File::exists($old_hotImage_one)) {
-                        File::delete($old_hotImage_one);
-                    }
-                }
-                $data->hotImage_one    = $this->imageUpload($request, 'hotImage_one', 'uploads/hotImage') ?? '';
-            }
-            if($request->hasFile('hotImage_two')){
-                $old_hotImage_two = $data->hotImage_two;
-                if (!empty($old_hotImage_two) && isset($old_hotImage_two)) {
-                    if (File::exists($old_hotImage_two)) {
-                        File::delete($old_hotImage_two);
-                    }
-                }
-                $data->hotImage_two    = $this->imageUpload($request, 'hotImage_two', 'uploads/hotImage') ?? '';
-            }
 
             $data->save();
             return "Setting updated successfully";

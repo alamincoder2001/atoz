@@ -14,22 +14,10 @@
                             <a href="{{route('admin.slider.index')}}" class="sidebar-link {{Request::is('admin.slider.index') ? 'active':''}}"><i class="fas fa-sliders-h"></i><span class="hide-menu"> Slider Entry</span></a>
                         </li>
                         <li class="sidebar-item">
-                            <a href="{{route('admin.bank.index')}}" class="sidebar-link {{Request::is('admin.bank.index') ? 'active':''}}"><i class="fas fa-sliders-h"></i><span class="hide-menu"> Bank Account Entry</span></a>
-                        </li>
-                        <li class="sidebar-item">
                             <a href="{{route('admin.banner.index')}}" class="sidebar-link {{Request::is('admin.banner.index') ? 'active':''}}"><i class="fas fa-sliders-h"></i><span class="hide-menu"> Banner Entry</span></a>
                         </li>
                         <li class="sidebar-item">
-                            <a href="{{route('admin.brand.index')}}" class="sidebar-link {{Request::is('admin.brand.index') ? 'active':''}}"><i class="fab fa-bimobject"></i><span class="hide-menu"> Brand Entry</span></a>
-                        </li>
-                        <li class="sidebar-item">
                             <a href="{{route('admin.category.index')}}" class="sidebar-link {{Request::is('admin.category.index') ? 'active':''}}"><i class="fas fa-list-alt"></i><span class="hide-menu"> Category Entry</span></a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="{{route('admin.subcategory.index')}}" class="sidebar-link {{Request::is('admin.subcategory.index') ? 'active':''}}"><i class="fas fa-list-alt"></i><span class="hide-menu"> Sub-Category Entry</span></a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="{{route('admin.unit.index')}}" class="sidebar-link {{Request::is('admin.unit.index') ? 'active':''}}"><i class="fas fa-list-alt"></i><span class="hide-menu"> Unit Entry </span></a>
                         </li>
                         <li class="sidebar-item">
                             <a href="{{route('admin.partner.index')}}" class="sidebar-link {{Request::is('admin.partner.index') ? 'active':''}}"><i class="fas fa-handshake"></i><span class="hide-menu"> Partner Entry </span></a>
@@ -40,13 +28,13 @@
                     </ul>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="fab fa-product-hunt"></i><span class="hide-menu"> Product Module </span></a>
+                    <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="fab fa-product-hunt"></i><span class="hide-menu"> Service Module </span></a>
                     <ul aria-expanded="false" class="collapse first-level">
                         <li class="sidebar-item">
-                            <a href="{{route('admin.product.index')}}" class="sidebar-link {{Request::is('admin.product.index') ? 'active':''}}"><i class="fab fa-product-hunt"></i><span class="hide-menu"> Product Entry </span></a>
+                            <a href="{{route('admin.service.index')}}" class="sidebar-link {{Request::is('admin.service.index') ? 'active':''}}"><i class="fab fa-product-hunt"></i><span class="hide-menu"> Service Entry </span></a>
                         </li>
                         <li class="sidebar-item">
-                            <a href="{{route('admin.product.published')}}" class="sidebar-link {{Request::is('admin.product.published') ? 'active':''}}"><i class="fas fa-upload"></i><span class="hide-menu"> Product Published Entry </span></a>
+                            <a href="{{route('admin.service.published')}}" class="sidebar-link {{Request::is('admin.service.published') ? 'active':''}}"><i class="fas fa-upload"></i><span class="hide-menu"> Service Published Entry </span></a>
                         </li>
                     </ul>
                 </li>

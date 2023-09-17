@@ -55,7 +55,7 @@
             </div>
         </div>
 
-        <div class="col-12" v-if="searchType == 'month'">
+        <!-- <div class="col-12" v-if="searchType == 'month'">
             <h3 class="text-center">This Month Orders Completed</h3>
             <GChart type="ColumnChart" :data="monthlyData" :options="chartOptions1" />
         </div>
@@ -74,7 +74,7 @@
         <div class="col-lg-8 mt-3">
             <h3 class="text-center">Top Sold Products</h3>
             <GChart type="PieChart" :data="topData" :options="chartOptions2" />
-        </div>
+        </div> -->
         <div class="col-lg-4 mt-3">
             <h3 class="text-center">Top Buyer List</h3>
             <table v-if="topCustomer.length > 0" class="table table-bordered" style="border-color: #bdbdbd;">
@@ -100,11 +100,11 @@
 </template>
 
 <script>
-import { GChart } from 'vue-google-charts/legacy'
+// import { GChart } from 'vue-google-charts/legacy'
 export default {
-    components: {
-        GChart
-    },
+    // components: {
+    //     GChart
+    // },
     data() {
         return {
             searchType: 'year',

@@ -212,6 +212,6 @@ class DashboardController extends Controller
     public function AdminLogout()
     {
         Auth::guard("admin")->logout();
-        return redirect("/");
+        return redirect("/admin");
     }
 }

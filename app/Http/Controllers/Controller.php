@@ -36,6 +36,11 @@ class Controller extends BaseController
         return false;
     }
 
+    function make_slug($string)
+    {
+        return preg_replace('/\s+/u', '-', trim($string));
+    }
+
     public function generateCode($model, $prefix = '')
     {
         $code = "000001";

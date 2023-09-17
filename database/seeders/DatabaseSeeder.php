@@ -18,5 +18,6 @@ class DatabaseSeeder extends Seeder
         $this->call(AdminSeederTable::class);
         $this->call(SettingSeederTable::class);
         $this->call(BdgeocodeSeeder::class);
+        $this->call(PermissionSeederTable::class);
     }
 }

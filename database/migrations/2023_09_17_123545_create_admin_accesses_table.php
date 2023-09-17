@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateWishlistsTable extends Migration
+class CreateAdminAccessesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class CreateWishlistsTable extends Migration
      */
     public function up()
     {
-        Schema::create('wishlists', function (Blueprint $table) {
+        Schema::create('admin_accesses', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("customer_id")->constrained("users", "id")->onDelete("cascade");
-            $table->foreignId("product_id")->constrained("products", "id")->onDelete("cascade");
-            $table->ipAddress("ipAddress");
+            $table->foreignId('admin_id')->constrained('admins', 'id')->onDelete('cascade');
+            $table->string('group_name', 100);
+            $table->string('permissions', 100);
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ class CreateWishlistsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('wishlists');
+        Schema::dropIfExists('admin_accesses');
     }
 }

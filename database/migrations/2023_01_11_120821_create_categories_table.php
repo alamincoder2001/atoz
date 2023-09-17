@@ -17,6 +17,7 @@ class CreateCategoriesTable extends Migration
             $table->id();
             $table->string("name")->unique();
             $table->string("slug");
+            $table->string("is_website")->default('true');
             $table->char("status", 5)->default('a');
             $table->string("image")->nullable();
             $table->timestamps();

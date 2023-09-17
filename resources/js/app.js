@@ -19,9 +19,8 @@ import CKEditor from '@ckeditor/ckeditor5-vue2';
 Vue.use( CKEditor );
 
 Vue.component("Dashboard", require("./components/Dashboard.vue").default);
-Vue.component("Bank", require("./components/Bank.vue").default);
-Vue.component("Product", require("./components/Product.vue").default);
-Vue.component("published_product", require("./components/publishedProduct.vue").default);
+Vue.component("Service", require("./components/Service.vue").default);
+Vue.component("published_service", require("./components/publishedService.vue").default);
 Vue.component("Customer", require("./components/Customer.vue").default);
 Vue.component("Technician", require("./components/Technician.vue").default);
 Vue.component("Slider", require("./components/Slider.vue").default);

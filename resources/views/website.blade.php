@@ -170,11 +170,7 @@
                                                     <a href="{{route('single.product', $item->slug)}}">{{$item->name}}</a>
                                                 </h3>
                                                 <span class="price regular-price">
-                                                    @if(Auth::guard('web')->check() && Auth::guard('web')->user()->customer_type == 'Wholesale')
-                                                    ৳ {{$item->wholesale_rate}}
-                                                    @else
-                                                    ৳ {{$item->selling_rate}}
-                                                    @endif
+                                                    ৳ 0
                                                 </span>
                                                 <button class="product-btn btn btn-primary btn-hover-warning" onclick="addCart({{$item->id}})">
                                                     Add to Cart
@@ -208,13 +204,12 @@
 <!-- Feature Product tab End -->
 
 <!-- Technician tab Start -->
-<section class="section  section-py">
+<!-- <section class="section  section-py">
     <div class="container">
         <div class="row g-0">
             <div class="col-12">
                 <div class="title-section text-center text-lg-start">
                     <div class="row">
-                        <!-- title section Start -->
                         <div class="col-12 col-lg-4">
                             <h3 class="title">Recent Technician</h3>
                         </div>
@@ -236,7 +231,6 @@
                             </div>
                             <div class="swiper-container">
                                 <div class="swiper-wrapper">
-                                    <!-- single slide Start -->
                                     @if(Auth::guard('web')->check())
                                     @foreach($technician as $item)
                                     @if(Auth::guard('web')->user()->district_id == $item->district_id)
@@ -292,7 +286,6 @@
                                             </div>
                                         @endforeach
                                     @endif
-                                    <!-- single slide End -->
                                 </div>
                             </div>
                             @if(count($technician) == 0)
@@ -307,7 +300,7 @@
 
         </div>
     </div>
-</section>
+</section> -->
 <!-- Technician tab End -->
 
 <!-- Banner Section Start -->
@@ -363,11 +356,7 @@ $bann = array_chunk($banner, 3);
                                     <a href="{{route('single.product', $newarrival_product[0]->slug)}}">{{$newarrival_product[0]->name}}</a>
                                 </h3>
                                 <span class="price-lg onsale-price d-block mb-7">
-                                    @if(Auth::guard('web')->check() && Auth::guard('web')->user()->customer_type == 'Wholesale')
-                                    ৳ {{$newarrival_product[0]->wholesale_rate}}
-                                    @else
-                                    ৳ {{$newarrival_product[0]->selling_rate}}
-                                    @endif
+                                    ৳ 0
                                 </span>
                                 <button class="product-btn-lg btn btn-primary btn-hover-warning" onclick="addCart({{$newarrival_product[0]->id}})">
                                     Add to cart
@@ -410,11 +399,7 @@ $bann = array_chunk($banner, 3);
                                                         <a href="{{route('single.product', $item->slug)}}">{{$item->name}}</a>
                                                     </h3>
                                                     <span class="price regular-price">
-                                                        @if(Auth::guard('web')->check() && Auth::guard('web')->user()->customer_type == 'Wholesale')
-                                                        ৳ {{$item->wholesale_rate}}
-                                                        @else
-                                                        ৳ {{$item->selling_rate}}
-                                                        @endif
+                                                        ৳ 0
                                                     </span>
                                                     <button class="product-btn btn btn-primary btn-hover-warning" onclick="addCart({{$item->id}})">
                                                         Add to cart
@@ -458,11 +443,7 @@ $bann = array_chunk($banner, 3);
                                     <a href="{{route('single.product', $topsold_product[0]->slug)}}">{{$topsold_product[0]->name}}</a>
                                 </h3>
                                 <span class="price-lg onsale-price d-block mb-7">
-                                    @if(Auth::guard('web')->check() && Auth::guard('web')->user()->customer_type == 'Wholesale')
-                                    ৳ {{$topsold_product[0]->wholesale_rate}}
-                                    @else
-                                    ৳ {{$topsold_product[0]->selling_rate}}
-                                    @endif
+                                    ৳
                                 </span>
                                 <button class="product-btn-lg btn btn-primary btn-hover-warning" onclick="addCart({{$topsold_product[0]->id}})">
                                     Add to cart
@@ -505,11 +486,7 @@ $bann = array_chunk($banner, 3);
                                                         <a href="{{route('single.product', $item->slug)}}">{{$item->name}}</a>
                                                     </h3>
                                                     <span class="price regular-price">
-                                                        @if(Auth::guard('web')->check() && Auth::guard('web')->user()->customer_type == 'Wholesale')
-                                                        ৳ {{$item->wholesale_rate}}
-                                                        @else
-                                                        ৳ {{$item->selling_rate}}
-                                                        @endif
+                                                        ৳
                                                     </span>
                                                     <button class="product-btn btn btn-primary btn-hover-warning" onclick="addCart({{$item->id}})">
                                                         Add to cart
@@ -551,11 +528,7 @@ $bann = array_chunk($banner, 3);
                                     <a href="{{route('single.product', $feature_product[0]->slug)}}">{{$feature_product[0]->name}}</a>
                                 </h3>
                                 <span class="price-lg onsale-price d-block mb-7">
-                                    @if(Auth::guard('web')->check() && Auth::guard('web')->user()->customer_type == 'Wholesale')
-                                    ৳ {{$feature_product[0]->wholesale_rate}}
-                                    @else
-                                    ৳ {{$feature_product[0]->selling_rate}}
-                                    @endif
+                                ৳ 0
                                 </span>
                                 <button class="product-btn-lg btn btn-primary btn-hover-warning" onclick="addCart({{$feature_product[0]->id}})">
                                     Add to cart
@@ -598,11 +571,7 @@ $bann = array_chunk($banner, 3);
                                                         <a href="{{route('single.product', $item->slug)}}">{{$item->name}}</a>
                                                     </h3>
                                                     <span class="price regular-price">
-                                                        @if(Auth::guard('web')->check() && Auth::guard('web')->user()->customer_type == 'Wholesale')
-                                                        ৳ {{$item->wholesale_rate}}
-                                                        @else
-                                                        ৳ {{$item->selling_rate}}
-                                                        @endif
+                                                        ৳ 0
                                                     </span>
                                                     <button class="product-btn btn btn-primary btn-hover-warning" onclick="addCart({{$item->id}})">
                                                         Add to cart
@@ -722,11 +691,8 @@ $bann = array_chunk($banner, 3);
                                                         <a href="{{route('single.product', $item->slug)}}">{{$item->name}}</a>
                                                     </h3>
                                                     <span class="price-lg regular-price">
-                                                        @if(Auth::guard('web')->check() && Auth::guard('web')->user()->customer_type == 'Wholesale')
-                                                            ৳ {{$item->wholesale_rate}}
-                                                        @else
-                                                            ৳ {{$item->selling_rate}}
-                                                        @endif
+                                                    
+                                                            ৳ 0
                                                     </span>
                                                 </div>
                                             </div>
@@ -757,32 +723,26 @@ $bann = array_chunk($banner, 3);
 
 <!-- Brand Slider Satrt -->
 
-<div class="brand-section section-py">
+<!-- <div class="brand-section section-py">
     <div class="container">
         <div class="row">
             <div class="col-12">
                 <div class="brand-carousel">
                     <div class="swiper-container">
                         <div class="swiper-wrapper">
-                            <!-- single-brand Start -->
-                            @foreach($brand as $item)
                             <div class="swiper-slide">
                                 <div class="single-brand">
                                     <a class="thumb" href="#"><img src="{{asset($item->image != null ? $item->image : 'noImage.jpg')}}" alt="brand logo"></a>
                                 </div>
                             </div>
-                            @endforeach
-                            <!-- single-brand End -->
                         </div>
                     </div>
                     <div class="swiper-pagination d-none"></div>
-                    <!-- <div class="swiper-button-prev"></div>
-                    <div class="swiper-button-next"></div> -->
                 </div>
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
 <!-- Brand Slider End -->
 

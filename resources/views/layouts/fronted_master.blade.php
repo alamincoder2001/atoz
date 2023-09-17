@@ -306,48 +306,16 @@
                                     <div style="height:30px;"></div>
                                     <div class="card" style="background: none;">
                                         <div class="card-header">
-                                            <h5 class="m-0 text-center">Our Bank Account</h5>
+                                            <h5 class="m-0 text-center">Our service</h5>
                                         </div>
                                         <div class="card-body">
                                             <div class="row">
-                                                @foreach($bank as $item)
-                                                <div class="col-lg-6">
-                                                    <h5>{{$item->bank_name}}</h5>
-                                                    <ul>
-                                                        <li>
-                                                            <span>Account Name: </span>
-                                                            <span>{{$item->account_name}}</span>
-                                                        </li>
-                                                        <li>
-                                                            <span>Account No: </span>
-                                                            <span>{{$item->account_number}}</span>
-                                                        </li>
-                                                        <li>
-                                                            <span>Branch: </span>
-                                                            <span>{{$item->branch_name}}</span>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                                @endforeach
+                                                <div class="col-md-12">Hello World</div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-lg-2">
-                                    <h4>Hot Line</h4>
-                                    <ul>
-                                        <li style="margin-bottom: 10px;">
-                                            <a href="tel:/{{$profile->hotText_one}}">
-                                                <img style="height: 45px;width:100%;" src="{{asset($profile->hotImage_one != null ? $profile->hotImage_one: 'noImage.jpg')}}" alt="">
-                                            </a>
-                                        </li>
-                                        <li style="margin-bottom: 10px;">
-                                            <a href="tel:/{{$profile->hotText_two}}">
-                                                <img style="height: 45px;width:100%;" src="{{asset($profile->hotImage_two != null ? $profile->hotImage_two: 'noImage.jpg')}}" alt="">
-                                            </a>
-                                        </li>
-                                    </ul>
-                                    <hr style="margin:15px 0px 10px 0">
                                     <h4>Social Link</h4>
                                     <ul>
                                         <li style="margin-bottom: 5px;">
