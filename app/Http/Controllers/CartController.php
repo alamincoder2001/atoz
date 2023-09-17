@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
+use App\Models\Service;
 use Illuminate\Http\Request;
 use Gloudemans\Shoppingcart\Facades\Cart;
-use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
@@ -17,12 +16,12 @@ class CartController extends Controller
     public function addCart(Request $request)
     {
         try {
-            $product = Product::find($request->id);
+            $product = Service::find($request->id);
             Cart::add([
                 'id'      => $request->id,
                 'name'    => $product->name,
                 'qty'     => $request->quantity,
-                'price'   => Auth::guard("web")->check() && Auth::guard("web")->user()->customer_type != 'Retail' ? $product->wholesale_rate : $product->selling_rate,
+                'price'   => 0,
                 'weight'  => 0,
                 'options' => ['image' => $product->image]
             ]);

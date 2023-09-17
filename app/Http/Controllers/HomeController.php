@@ -35,10 +35,6 @@ class HomeController extends Controller
             $product = Service::orderBy('name', 'ASC')->paginate(25);
         } else if (isset($_GET['sortBy']) && $_GET['sortBy'] == "descending") {
             $product = Service::orderBy('name', 'DESC')->paginate(25);
-        } else if (isset($_GET['sortBy']) && $_GET['sortBy'] == "low-high") {
-            $product = Service::orderBy('selling_rate', 'ASC')->paginate(25);
-        } else if (isset($_GET['sortBy']) && $_GET['sortBy'] == "high-low") {
-            $product = Service::orderBy('selling_rate', 'DESC')->paginate(25);
         } else {
             $product = Service::paginate(25);
         }

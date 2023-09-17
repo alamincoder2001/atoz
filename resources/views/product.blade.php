@@ -46,8 +46,6 @@
                                         <option selected value="" @php echo isset($_GET['sortBy']) && $_GET['sortBy']=="" ? "selected" : "" ; @endphp>Default</option>
                                         <option value="ascending" @php echo isset($_GET['sortBy']) && $_GET['sortBy']=="ascending" ? "selected" : "" ; @endphp>Name, A to Z</option>
                                         <option value="descending" @php echo isset($_GET['sortBy']) && $_GET['sortBy']=="descending" ? "selected" : "" ; @endphp>Name, Z to A</option>
-                                        <option value="low-high" @php echo isset($_GET['sortBy']) && $_GET['sortBy']=="low-high" ? "selected" : "" ; @endphp>Price, Low to High</option>
-                                        <option value="high-low" @php echo isset($_GET['sortBy']) && $_GET['sortBy']=="high-low" ? "selected" : "" ; @endphp>Price, High to Low</option>
                                     </select>
                                 </div>
                             </div>
@@ -71,11 +69,7 @@
                                                 <a href="{{route('single.product', $item->slug)}}">{{$item->name}}</a>
                                             </h3>
                                             <span class="price regular-price">
-                                                @if(Auth::guard('web')->check() && Auth::guard('web')->user()->customer_type == 'Wholesale')
-                                                ৳ {{$item->wholesale_rate}}
-                                                @else
-                                                ৳ {{$item->selling_rate}}
-                                                @endif
+                                                ৳ 0
                                             </span>
                                             <button type="button" class="product-btn btn btn-primary btn-hover-warning" onclick="addCart({{$item->id}})">
                                                 Add to cart
@@ -125,11 +119,7 @@
                                             <div class="col-lg-3 mb-7">
                                                 <div class="product-content-list">
                                                     <span class="price-list regular-price">
-                                                        @if(Auth::guard('web')->check() && Auth::guard('web')->user()->customer_type == 'Wholesale')
-                                                        ৳ {{$item->wholesale_rate}}
-                                                        @else
-                                                        ৳ {{$item->selling_rate}}
-                                                        @endif
+                                                        ৳ 0
                                                     </span>
                                                     <button type="button" class="product-btn-list btn btn-primary btn-hover-warning" onclick="addCart({{$item->id}})">
                                                         Add to cart
@@ -178,17 +168,6 @@
                                         <div class="widget-check-box">
                                             <input type="radio" name="category" id="{{$item->id}}" />
                                             <label for="{{$item->id}}">{{$item->name}} ({{$item->product->count()}})</label>
-                                        </div>
-                                        @endforeach
-                                    </div>
-
-                                    <!-- widget-inner -->
-                                    <h3 class="title"><span>Brand</span></h3>
-                                    <div class="widget-inner">
-                                        @foreach($brands as $item)
-                                        <div class="widget-check-box">
-                                            <input type="radio" name="brand" id="{{$item->name}}-{{$item->id}}" />
-                                            <label for="{{$item->name}}-{{$item->id}}">{{$item->name}} ({{$item->product->count()}})</label>
                                         </div>
                                         @endforeach
                                     </div>
