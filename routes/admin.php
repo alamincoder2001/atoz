@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DistrictController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\AdminAccessController;
 
 // Admin Login Route
 Route::group(["prefix" => "admin"], function () {
@@ -48,13 +49,13 @@ Route::group(["prefix" => "admin"], function () {
     Route::get('/category/fetch/{id?}', [CategoryController::class, 'fetch'])->name('admin.category.fetch');
     Route::post('/category', [CategoryController::class, 'store'])->name('admin.category.store');
     Route::post('/category/delete', [CategoryController::class, 'destroy'])->name('admin.category.destroy');
-    
+
     // partner Route
     Route::get('/partner', [PartnerController::class, 'index'])->name('admin.partner.index');
     Route::get('/partner/fetch/{id?}', [PartnerController::class, 'fetch'])->name('admin.partner.fetch');
     Route::post('/partner', [PartnerController::class, 'store'])->name('admin.partner.store');
     Route::post('/partner/delete', [PartnerController::class, 'destroy'])->name('admin.partner.destroy');
-    
+
     // service Route
     Route::get('/service', [ServiceController::class, 'index'])->name('admin.service.index');
     Route::get('/service/fetch/{id?}', [ServiceController::class, 'fetch'])->name('admin.service.fetch');
@@ -69,7 +70,7 @@ Route::group(["prefix" => "admin"], function () {
     Route::get('/district/fetch/{id?}', [DistrictController::class, 'fetch'])->name('admin.district.fetch');
     Route::post('/district', [DistrictController::class, 'store'])->name('admin.district.store');
     Route::post('/district/delete', [DistrictController::class, 'destroy'])->name('admin.district.destroy');
-    
+
     // thana Route
     Route::get('/thana', [ThanaContoller::class, 'index'])->name('admin.thana.index');
     Route::get('/thana/fetch/{id?}', [ThanaContoller::class, 'fetch'])->name('admin.thana.fetch');
@@ -88,7 +89,7 @@ Route::group(["prefix" => "admin"], function () {
     Route::post('/order/update', [OrderController::class, 'update'])->name("admin.order.update");
     Route::get('/order/report', [OrderController::class, 'report'])->name("admin.order.report");
     Route::post('/order/commission', [OrderController::class, 'getCommission'])->name("admin.order.commission");
-    
+
     // blog route
     Route::get('/blog', [BlogController::class, 'index'])->name('admin.blog.index');
     Route::get('/blog/fetch/{id?}', [BlogController::class, 'fetch'])->name('admin.blog.fetch');
@@ -113,4 +114,13 @@ Route::group(["prefix" => "admin"], function () {
     Route::post('/technician/status', [AdminTechnicianController::class, 'status'])->name("admin.technician.status");
     Route::get('/technician/fetch/{id?}', [AdminTechnicianController::class, 'fetch'])->name("admin.technician.fetch");
     Route::post('/technician/rating', [AdminTechnicianController::class, 'rating'])->name("admin.technician.rating");
+
+    //user Route
+    Route::get('/user', [AdminAccessController::class, 'create'])->name('admin.user.create');
+    Route::get('/get-user/{id?}', [AdminAccessController::class, 'index'])->name('admin.user.index');
+    Route::post('/user', [AdminAccessController::class, 'store'])->name('admin.user.store');
+    Route::post('/update/user', [AdminAccessController::class, 'update'])->name('admin.user.update');
+    Route::post('/user/delete', [AdminAccessController::class, 'destroy'])->name('admin.user.destroy');
+    Route::get('/user/permission/{id}', [AdminAccessController::class, 'permissionEdit'])->name('admin.user.permission');
+    Route::post('/user/store-permission', [AdminAccessController::class, 'permissionStore'])->name('admin.store.permission');
 });

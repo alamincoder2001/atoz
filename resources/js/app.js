@@ -3,6 +3,10 @@ require("./bootstrap");
 window.Vue = require("vue").default;
 import VueGoodTablePlugin from "vue-good-table";
 import "vue-good-table/dist/vue-good-table.css";
+//Vform import
+import Form from "vform";
+//vform globally register
+window.Form = Form;
 
 Vue.use(VueGoodTablePlugin);
 
@@ -25,6 +29,7 @@ Vue.component("Customer", require("./components/Customer.vue").default);
 Vue.component("Technician", require("./components/Technician.vue").default);
 Vue.component("Slider", require("./components/Slider.vue").default);
 Vue.component("Blog", require("./components/Blog.vue").default);
+Vue.component("create-user", require("./components/CreateUser.vue").default);
 Vue.component("Orderlist", require("./components/OrderList.vue").default);
 Vue.component("proccess-order", require("./components/processOrder.vue").default);
 Vue.component("delivered-order", require("./components/deliveredOrder.vue").default);

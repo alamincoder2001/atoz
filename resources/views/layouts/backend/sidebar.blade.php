@@ -75,9 +75,13 @@
                     </ul>
                 </li>
 
+                <li class="sidebar-item {{Request::is('admin.user.create') ? 'selected':''}}">
+                    <a class="sidebar-link waves-effect waves-dark sidebar-link {{Request::is('admin.user.create') ? 'active':''}}" href="{{route('admin.user.create')}}" aria-expanded="false"><i class="mdi mdi-account-plus"></i><span class="hide-menu">User Create</span></a>
+                </li>
+
                 <li class="sidebar-item {{Request::is('admin.setting') ? 'selected':''}}">
                     <a class="sidebar-link waves-effect waves-dark sidebar-link {{Request::is('admin.setting') ? 'active':''}}" href="{{route('admin.setting')}}" aria-expanded="false"><i class="mdi mdi-settings"></i><span class="hide-menu">Settings</span></a>
-                </li>
+                </li>                
 
                 <li class="sidebar-item {{Request::is('admin.setting') ? 'selected':''}}">
                     <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{route('admin.logout')}}" aria-expanded="false"><i class="mdi mdi-logout-variant"></i><span class="hide-menu">Logout</span></a>

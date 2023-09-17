@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class AdminAccess extends Model
 {
     use HasFactory;
+    
+    protected $guarded = ["id"];
 }

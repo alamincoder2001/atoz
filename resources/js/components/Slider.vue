@@ -5,34 +5,23 @@
                 <div class="card-body">
                     <form @submit.prevent="saveSlider">
                         <div class="row">
-                            <div class="col-lg-5">
+                            <div class="col-md-10">
                                 <div class="row mt-2">
-                                    <label for="title"
-                                        class="col-5 col-lg-4 d-flex align-items-center">Title:</label>
-                                    <div class="col-7 col-lg-8">
-                                        <input type="text" name="title" v-model="slider.title" id="title" class="form-control shadow-none">
+                                    <label for="title" class="col-4 col-md-3 d-flex align-items-center">Title:</label>
+                                    <div class="col-8 col-md-9">
+                                        <input type="text" name="title" v-model="slider.title" id="title"
+                                            class="form-control shadow-none">
                                     </div>
                                 </div>
                                 <div class="row mt-2">
-                                    <label for="date"
-                                        class="col-5 col-lg-4 d-flex align-items-center">For Customer:</label>
-                                    <div class="col-7 col-lg-8">
-                                        <select name="using_by" class="form-select shadow-none" v-model="slider.using_by">
-                                            <option value="retail">Retail Customer</option>
-                                            <option value="wholesale">Wholesale Customer</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-5">
-                                <div class="row mt-2">
-                                    <div class="col-12">
-                                        <ckeditor :editor="editor" v-model="slider.description"></ckeditor>
+                                    <label for="description" class="col-4 col-md-3 d-flex align-items-center">Description:</label>
+                                    <div class="col-8 col-md-9">
+                                        <ckeditor id="description" :editor="editor" v-model="slider.description"></ckeditor>
                                     </div>
                                 </div>
                                 <div class="row mt-4">
-                                    <label for="previous_due" class="col-5 col-lg-4 d-flex align-items-center"></label>
-                                    <div class="col-7 col-lg-8 text-end">
+                                    <label for="previous_due" class="col-4 col-md-3 d-flex align-items-center"></label>
+                                    <div class="col-8 col-md-9 text-end">
                                         <button type="button" @click="clearData"
                                             class="btn btn-sm btn-outline-secondary shadow-none">
                                             Reset
@@ -43,7 +32,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-12 col-lg-2 d-flex justify-content-center align-items-center">
+                            <div class="col-12 col-md-2 d-flex justify-content-center align-items-center">
                                 <div class="form-group ImageBackground">
                                     <img :src="imageSrc" class="imageShow" />
                                     <label for="image">Image</label>
@@ -87,10 +76,6 @@ export default {
                     field: "title",
                 },
                 {
-                    label: "For Customer",
-                    field: "using_by",
-                },
-                {
                     label: "Description",
                     field: "description",
                 },
@@ -101,13 +86,13 @@ export default {
             ],
             sliders: [],
             slider: {
-                id         : "",
-                title      : "",
-                using_by   : "retail",
+                id: "",
+                title: "",
+                using_by: "retail",
                 description: "",
-                image      : ""
+                image: ""
             },
-            imageSrc: location.origin + "/noImage.jpg",
+            imageSrc: "/noImage.jpg",
         };
     },
 
@@ -117,7 +102,7 @@ export default {
 
     methods: {
         getSlider() {
-            axios.get(location.origin + "/admin/slider/fetch").then((res) => {
+            axios.get("/admin/slider/fetch").then((res) => {
                 this.sliders = res.data.data.filter(slide => slide.description = slide.description.replace(/(<([^>]+)>)/gi, ""));
             });
         },
@@ -130,10 +115,10 @@ export default {
 
             let formdata = new FormData(event.target)
             formdata.append("image", this.slider.image)
-            formdata.append("id", this.slider.id)           
+            formdata.append("id", this.slider.id)
             formdata.append("description", this.slider.description != null ? this.slider.description : "")
             axios
-                .post(location.origin + "/admin/slider", formdata)
+                .post("/admin/slider", formdata)
                 .then((res) => {
                     $.notify(res.data, "success");
                     this.clearData();
@@ -143,16 +128,16 @@ export default {
 
         editRow(val) {
             this.slider = {
-                id         : val.id,
-                title      : val.title,
-                using_by   : val.using_by,
+                id: val.id,
+                title: val.title,
+                using_by: val.using_by,
                 description: val.description
-            };            
-            this.imageSrc = val.image != null ? location.origin + "/" + val.image : location.origin + "/noImage.jpg"
+            };
+            this.imageSrc = val.image != null ? "/" + val.image : "/noImage.jpg"
         },
         deleteRow(id) {
             if (confirm("Are you sure want to delete this!")) {
-                axios.post(location.origin + "/admin/slider/delete", { id: id }).then((res) => {
+                axios.post("/admin/slider/delete", { id: id }).then((res) => {
                     $.notify(res.data, "success");
                     this.getSlider();
                 });
@@ -178,11 +163,11 @@ export default {
             this.slider = {
                 id: "",
                 title: "",
-                using_by   : "retail",
+                using_by: "retail",
                 description: "",
             };
             this.getSlider()
-            this.imageSrc = location.origin + "/noImage.jpg"
+            this.imageSrc = "/noImage.jpg"
         },
     },
 };
