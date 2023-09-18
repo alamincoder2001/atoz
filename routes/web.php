@@ -10,8 +10,8 @@ use App\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('website');
-Route::get('/product', [HomeController::class, 'ProductShow'])->name('product');
-Route::get('/product-single/{slug}', [HomeController::class, 'singleProductShow'])->name('single.product');
+Route::get('/service', [HomeController::class, 'ServiceShow'])->name('service');
+Route::get('/service-single/{slug}', [HomeController::class, 'singleServiceShow'])->name('single.service');
 Route::get('/blog', [HomeController::class, 'blog'])->name('blog');
 Route::get('/technician', [HomeController::class, 'technician'])->name('technician');
 Route::get('/technician-details/{id}', [HomeController::class, 'technicianDetails'])->name('technician.details');

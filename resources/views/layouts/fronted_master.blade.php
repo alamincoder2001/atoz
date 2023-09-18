@@ -150,7 +150,7 @@
                             <a href="{{route('website')}}">Home</a>
                         </li>
                         <li>
-                            <a href="{{route('product')}}">Product</a>
+                            <a href="{{route('service')}}">Service</a>
                         </li>
                         <li>
                             <a href="{{route('technician')}}">Technician</a>

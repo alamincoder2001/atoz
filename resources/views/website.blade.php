@@ -159,7 +159,7 @@
                                     @foreach($feature_product as $item)
                                     <div class="swiper-slide">
                                         <div class="product-card" style="height:350px;">
-                                            <a class="thumb" href="{{route('single.product', $item->slug)}}"><img src="{{asset($item->image != null ? $item->image : 'no-product-image.jpg')}}" alt="img" />
+                                            <a class="thumb" href="{{route('single.service', $item->slug)}}"><img src="{{asset($item->image != null ? $item->image : 'no-product-image.jpg')}}" alt="img" />
                                                 <div class="onsales-badges">
                                                     <span class="badge bg-dark">new</span>
                                                 </div>
@@ -167,7 +167,7 @@
                                             <div class="product-content">
                                                 <a class="product-category" href="#?">{{$item->category_name}}</a>
                                                 <h3 class="product-title">
-                                                    <a href="{{route('single.product', $item->slug)}}">{{$item->name}}</a>
+                                                    <a href="{{route('single.service', $item->slug)}}">{{$item->name}}</a>
                                                 </h3>
                                                 <span class="price regular-price">
                                                     ৳ 0
@@ -348,12 +348,12 @@ $bann = array_chunk($banner, 3);
                 <div class="row mb-n7">
                     <div class="col-lg-5 col-xl-4 mb-7">
                         <div class="product-card-large">
-                            <a class="thumb" href="{{route('single.product', $newarrival_product[0]->slug)}}"><img class="d-block mx-auto" src="{{asset($newarrival_product[0]->image != null ? $newarrival_product[0]->image : 'no-product-image.jpg')}}" alt="img" />
+                            <a class="thumb" href="{{route('single.service', $newarrival_product[0]->slug)}}"><img class="d-block mx-auto" src="{{asset($newarrival_product[0]->image != null ? $newarrival_product[0]->image : 'no-product-image.jpg')}}" alt="img" />
                             </a>
                             <div class="product-content">
                                 <a class="product-category" href="#?">{{$newarrival_product[0]->category_name}}</a>
                                 <h3 class="product-title">
-                                    <a href="{{route('single.product', $newarrival_product[0]->slug)}}">{{$newarrival_product[0]->name}}</a>
+                                    <a href="{{route('single.service', $newarrival_product[0]->slug)}}">{{$newarrival_product[0]->name}}</a>
                                 </h3>
                                 <span class="price-lg onsale-price d-block mb-7">
                                     ৳ 0
@@ -388,7 +388,7 @@ $bann = array_chunk($banner, 3);
                                         <div class="product-list">
                                             @foreach($newarrival as $item)
                                             <div class="product-card">
-                                                <a class="thumb" href="{{route('single.product', $item->slug)}}"><img src="{{asset($item->image != null ? $item->image : 'no-product-image.jpg')}}" alt="img" />
+                                                <a class="thumb" href="{{route('single.service', $item->slug)}}"><img src="{{asset($item->image != null ? $item->image : 'no-product-image.jpg')}}" alt="img" />
                                                     <div class="onsales-badges">
                                                         <span class="badge bg-dark">new</span>
                                                     </div>
@@ -396,7 +396,7 @@ $bann = array_chunk($banner, 3);
                                                 <div class="product-content">
                                                     <a class="product-category" href="#?">{{$item->category_name}}</a>
                                                     <h3 class="product-title">
-                                                        <a href="{{route('single.product', $item->slug)}}">{{$item->name}}</a>
+                                                        <a href="{{route('single.service', $item->slug)}}">{{$item->name}}</a>
                                                     </h3>
                                                     <span class="price regular-price">
                                                         ৳ 0
@@ -435,12 +435,12 @@ $bann = array_chunk($banner, 3);
                 <div class="row mb-n7">
                     <div class="col-lg-5 col-xl-4 mb-7">
                         <div class="product-card-large">
-                            <a class="thumb" href="{{route('single.product', $topsold_product[0]->slug)}}"><img class="d-block mx-auto" src="{{asset($topsold_product[0]->image != null ? $topsold_product[0]->image : 'no-product-image.jpg')}}" alt="img" />
+                            <a class="thumb" href="{{route('single.service', $topsold_product[0]->slug)}}"><img class="d-block mx-auto" src="{{asset($topsold_product[0]->image != null ? $topsold_product[0]->image : 'no-product-image.jpg')}}" alt="img" />
                             </a>
                             <div class="product-content">
                                 <a class="product-category" href="#?">{{$topsold_product[0]->category_name}}</a>
                                 <h3 class="product-title">
-                                    <a href="{{route('single.product', $topsold_product[0]->slug)}}">{{$topsold_product[0]->name}}</a>
+                                    <a href="{{route('single.service', $topsold_product[0]->slug)}}">{{$topsold_product[0]->name}}</a>
                                 </h3>
                                 <span class="price-lg onsale-price d-block mb-7">
                                     ৳
@@ -475,7 +475,7 @@ $bann = array_chunk($banner, 3);
                                         <div class="product-list">
                                             @foreach($topsold as $item)
                                             <div class="product-card">
-                                                <a class="thumb" href="{{route('single.product', $item->slug)}}"><img src="{{asset($item->image != null ? $item->image : 'no-product-image.jpg')}}" alt="img" />
+                                                <a class="thumb" href="{{route('single.service', $item->slug)}}"><img src="{{asset($item->image != null ? $item->image : 'no-product-image.jpg')}}" alt="img" />
                                                     <div class="onsales-badges">
                                                         <span class="badge bg-dark">new</span>
                                                     </div>
@@ -483,7 +483,7 @@ $bann = array_chunk($banner, 3);
                                                 <div class="product-content">
                                                     <a class="product-category" href="#?">{{$item->category_name}}</a>
                                                     <h3 class="product-title">
-                                                        <a href="{{route('single.product', $item->slug)}}">{{$item->name}}</a>
+                                                        <a href="{{route('single.service', $item->slug)}}">{{$item->name}}</a>
                                                     </h3>
                                                     <span class="price regular-price">
                                                         ৳
@@ -520,15 +520,15 @@ $bann = array_chunk($banner, 3);
                 <div class="row mb-n7">
                     <div class="col-lg-5 col-xl-4 mb-7">
                         <div class="product-card-large">
-                            <a class="thumb" href="{{route('single.product', $feature_product[0]->slug)}}"><img class="d-block mx-auto" src="{{asset($feature_product[0]->image != null ? $feature_product[0]->image : 'no-product-image.jpg')}}" alt="img" />
+                            <a class="thumb" href="{{route('single.service', $feature_product[0]->slug)}}"><img class="d-block mx-auto" src="{{asset($feature_product[0]->image != null ? $feature_product[0]->image : 'no-product-image.jpg')}}" alt="img" />
                             </a>
                             <div class="product-content">
                                 <a class="product-category" href="#?">{{$feature_product[0]->category_name}}</a>
                                 <h3 class="product-title">
-                                    <a href="{{route('single.product', $feature_product[0]->slug)}}">{{$feature_product[0]->name}}</a>
+                                    <a href="{{route('single.service', $feature_product[0]->slug)}}">{{$feature_product[0]->name}}</a>
                                 </h3>
                                 <span class="price-lg onsale-price d-block mb-7">
-                                ৳ 0
+                                    ৳ 0
                                 </span>
                                 <button class="product-btn-lg btn btn-primary btn-hover-warning" onclick="addCart({{$feature_product[0]->id}})">
                                     Add to cart
@@ -560,7 +560,7 @@ $bann = array_chunk($banner, 3);
                                         <div class="product-list">
                                             @foreach($feature as $item)
                                             <div class="product-card">
-                                                <a class="thumb" href="{{route('single.product', $item->slug)}}"><img src="{{asset($item->image != null ? $item->image : 'no-product-image.jpg')}}" alt="img" />
+                                                <a class="thumb" href="{{route('single.service', $item->slug)}}"><img src="{{asset($item->image != null ? $item->image : 'no-product-image.jpg')}}" alt="img" />
                                                     <div class="onsales-badges">
                                                         <span class="badge bg-dark">new</span>
                                                     </div>
@@ -568,7 +568,7 @@ $bann = array_chunk($banner, 3);
                                                 <div class="product-content">
                                                     <a class="product-category" href="#?">{{$item->category_name}}</a>
                                                     <h3 class="product-title">
-                                                        <a href="{{route('single.product', $item->slug)}}">{{$item->name}}</a>
+                                                        <a href="{{route('single.service', $item->slug)}}">{{$item->name}}</a>
                                                     </h3>
                                                     <span class="price regular-price">
                                                         ৳ 0
@@ -683,16 +683,16 @@ $bann = array_chunk($banner, 3);
                                         <!-- media-list -->
                                         <div class="media-list mb-4">
                                             <div class="media">
-                                                <a class="thumb" href="{{route('single.product', $item->slug)}}"><img style="width:105px; height:105px;" src="{{asset($item->image != null ? $item->image : 'noImage.jpg')}}" alt="img" />
+                                                <a class="thumb" href="{{route('single.service', $item->slug)}}"><img style="width:105px; height:105px;" src="{{asset($item->image != null ? $item->image : 'noImage.jpg')}}" alt="img" />
                                                 </a>
                                                 <div class="media-body">
                                                     <a class="product-category" href="#?">{{$category->name}}</a>
                                                     <h3 class="product-title">
-                                                        <a href="{{route('single.product', $item->slug)}}">{{$item->name}}</a>
+                                                        <a href="{{route('single.service', $item->slug)}}">{{$item->name}}</a>
                                                     </h3>
                                                     <span class="price-lg regular-price">
-                                                    
-                                                            ৳ 0
+
+                                                        ৳ 0
                                                     </span>
                                                 </div>
                                             </div>

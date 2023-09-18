@@ -32,7 +32,7 @@
                                 <span class="product-quantity">${value.qty}x</span>
                             </div>
                             <div class="checkout-block">
-                                <a class="product-name" href="{{route('product')}}">${value.name}</a>
+                                <a class="product-name" href="{{route('service')}}">${value.name}</a>
                                 <span class="product-price">৳ ${value.price}</span>
                                 <a class="remove-cart" row-id="${value.rowId}" onclick="removeCart(event)">
                                     x
@@ -53,7 +53,7 @@
                         url: location.origin + "/deletewishlist",
                         method: "POST",
                         data: {
-                            product_id: id
+                            service_id: id
                         },
                         success: res => {
                             $(".wishlist-" + id).remove();
@@ -61,7 +61,7 @@
                                 let row = `
                             <tr>
                                 <td colspan="6" class="text-center">
-                                    Product Not Found
+                                    Service Not Found
                                 </td>
                             </tr>
                             `;

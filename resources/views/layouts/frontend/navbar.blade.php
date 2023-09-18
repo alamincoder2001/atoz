@@ -90,7 +90,7 @@
                                     <a class="main-menu-link {{Route::is('website')?'text-warning':''}}" href="{{route('website')}}">Home</a>
                                 </li>
                                 <li class="position-static main-menu-item">
-                                    <a class="main-menu-link {{Route::is('product')?'text-warning':''}}" href="{{route('product')}}">Product</a>
+                                    <a class="main-menu-link {{Route::is('service')?'text-warning':''}}" href="{{route('service')}}">Service</a>
                                 </li>
                                 <li class="position-static main-menu-item">
                                     <a class="main-menu-link {{Route::is('technician')?'text-warning':''}}" href="{{route('technician')}}">Technician</a>
@@ -120,7 +120,7 @@
                                                 <span class="product-quantity"><label>{{$item->qty}}</label>x</span>
                                             </div>
                                             <div class="checkout-block">
-                                                <a class="product-name" href="{{route('product')}}">{{$item->name}}</a>
+                                                <a class="product-name" href="{{route('service')}}">{{$item->name}}</a>
                                                 <span class="product-price">৳ {{ $item->price }}</span>
                                                 <a class="remove-cart" row-id="{{$item->rowId}}" onclick="removeCart(event)">
                                                     x

@@ -21,11 +21,9 @@
                         <thead class="thead-light">
                             <tr>
                                 <th scope="col"></th>
-                                <th class="text-center" scope="col">Product Image</th>
-                                <th class="text-center" scope="col">Product Name</th>
+                                <th class="text-center" scope="col">Service Image</th>
+                                <th class="text-center" scope="col">Service Name</th>
                                 <th class="text-center" scope="col">Qty</th>
-                                <th class="text-center" scope="col">Price</th>
-                                <th class="text-center" scope="col">Total</th>
                                 <th class="text-center" scope="col">action</th>
                             </tr>
                         </thead>
@@ -43,29 +41,6 @@
                                 <td class="text-center">
                                     <span class="whish-title">{{$item->name}}</span>
                                 </td>
-                                <td class="text-center">
-                                    <div class="product-count style">
-                                        <div class="count d-flex justify-content-center">
-                                            <input type="number" readonly class="cartQty-{{$item->rowId}}" min="1" max="100" step="1" value="{{$item->qty}}">
-                                            <div class="button-group">
-                                                <button class="count-btn increment" onclick="cartUpdate(event,'{{$item->rowId}}')">
-                                                    <i class="lnr lnr-chevron-up"></i>
-                                                </button>
-                                                <button class="count-btn decrement" onclick="cartUpdate(event,'{{$item->rowId}}')">
-                                                    <i class="lnr lnr-chevron-down"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="text-center">
-                                    <span class="whish-list-price cartUnitprice">৳ <label> {{$item->price}} </label> </span>
-                                </td>
-
-                                <td class="text-center">
-                                    <span class="whish-list-price cartUnitTotalPrice">৳ <label> {{$item->price * $item->qty}} </label></span>
-                                </td>
-
                                 <td class="text-center">
                                     <a onclick="cartDelete('{{$item->rowId}}')" style="cursor: pointer;background: red;padding: 4px 7px;border-radius: 50%;color: white;font-weight: 600;"><span>X</span></a>
                                 </td>
@@ -90,7 +65,7 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-7">
-                <a href="{{route('product')}}" class="btn btn-warning text-white d-block">Continue to Shopping</a>
+                <a href="{{route('service')}}" class="btn btn-warning text-white d-block">Continue to Shopping</a>
             </div>
             <div class="col-lg-5 mt-4 mt-lg-0">
                 <div class="your-order-area">
@@ -145,7 +120,6 @@
                 quantity: qty
             },
             success: res => {
-                // $.notify(res.msg, "success");
                 //calculate total
                 $(".subTotal label").text(res.subtotal)
                 $(".Total label").text(res.subtotal)

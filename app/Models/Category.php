@@ -16,7 +16,7 @@ class Category extends Model
         return $this->hasMany(Subcategory::class, 'category_id', 'id')->with('product');
     }
 
-    public function product()
+    public function service()
     {
         return $this->hasMany(Service::class, "category_id", "id");
     }

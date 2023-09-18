@@ -22,32 +22,32 @@ class HomeController extends Controller
         $banner             = DB::select("SELECT b.* FROM banners b ORDER BY b.id DESC");
         $blog               = Blog::all();
         $slider             = Slider::latest()->get();
-        $categories         = Category::with('product')->orderBy("name", "ASC")->get();
+        $categories         = Category::with('service')->orderBy("name", "ASC")->get();
         $technician         = Technician::where('status', '!=' ,'p')->orderBy('id', "DESC")->get();
         $isWebsiteCategoryProduct = Category::with('subcategory')->where('is_website', 'true')->get();
         return view('website', compact("isWebsiteCategoryProduct", "technician", "categories", "blog", "newarrival_product", "feature_product", "popular_product", "topsold_product", "banner", "slider"));
     }
 
     // Product
-    public function ProductShow()
+    public function ServiceShow()
     {
         if (isset($_GET['sortBy']) && $_GET['sortBy'] == "ascending") {
-            $product = Service::orderBy('name', 'ASC')->paginate(25);
+            $service = Service::orderBy('name', 'ASC')->paginate(25);
         } else if (isset($_GET['sortBy']) && $_GET['sortBy'] == "descending") {
-            $product = Service::orderBy('name', 'DESC')->paginate(25);
+            $service = Service::orderBy('name', 'DESC')->paginate(25);
         } else {
-            $product = Service::paginate(25);
+            $service = Service::paginate(25);
         }
 
-        $categories = Category::with('product')->get();
-        return view("product", compact('product', 'categories'));
+        $categories = Category::with('service')->get();
+        return view("service", compact('service', 'categories'));
     }
 
-    // single product
-    public function singleProductShow($slug = null)
+    // single service
+    public function singleServiceShow($slug = null)
     {
-        $product = Service::where("slug", $slug)->first();
-        return view("single-product", compact('product'));
+        $service = Service::where("slug", $slug)->first();
+        return view("single-service", compact('service'));
     }
 
     public function blog()

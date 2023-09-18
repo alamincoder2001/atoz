@@ -14,6 +14,8 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DistrictController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\AdminAccessController;
+use App\Http\Controllers\Admin\CustomerController;
+use App\Http\Controllers\Admin\TechnicianController;
 
 // Admin Login Route
 Route::group(["prefix" => "admin"], function () {
@@ -103,17 +105,17 @@ Route::group(["prefix" => "admin"], function () {
     Route::post('/slider/delete', [SliderController::class, 'destroy'])->name('admin.slider.destroy');
 
     // customer route
-    Route::get('/customer', [AdminCustomerController::class, 'index'])->name("admin.customer.index");
-    Route::get('/customer/delete/{id}', [AdminCustomerController::class, 'destroy'])->name("admin.customer.destroy");
-    Route::post('/customer/status', [AdminCustomerController::class, 'status'])->name("admin.customer.status");
-    Route::get('/customer/fetch/{id?}', [AdminCustomerController::class, 'fetch'])->name("admin.customer.fetch");
+    Route::get('/customer', [CustomerController::class, 'index'])->name("admin.customer.index");
+    Route::get('/customer/delete/{id}', [CustomerController::class, 'destroy'])->name("admin.customer.destroy");
+    Route::post('/customer/status', [CustomerController::class, 'status'])->name("admin.customer.status");
+    Route::get('/customer/fetch/{id?}', [CustomerController::class, 'fetch'])->name("admin.customer.fetch");
 
     // technician route
-    Route::get('/technician', [AdminTechnicianController::class, 'index'])->name("admin.technician.index");
-    Route::get('/technician/delete/{id}', [AdminTechnicianController::class, 'destroy'])->name("admin.technician.destroy");
-    Route::post('/technician/status', [AdminTechnicianController::class, 'status'])->name("admin.technician.status");
-    Route::get('/technician/fetch/{id?}', [AdminTechnicianController::class, 'fetch'])->name("admin.technician.fetch");
-    Route::post('/technician/rating', [AdminTechnicianController::class, 'rating'])->name("admin.technician.rating");
+    Route::get('/technician', [TechnicianController::class, 'index'])->name("admin.technician.index");
+    Route::get('/technician/delete/{id}', [TechnicianController::class, 'destroy'])->name("admin.technician.destroy");
+    Route::post('/technician/status', [TechnicianController::class, 'status'])->name("admin.technician.status");
+    Route::get('/technician/fetch/{id?}', [TechnicianController::class, 'fetch'])->name("admin.technician.fetch");
+    Route::post('/technician/rating', [TechnicianController::class, 'rating'])->name("admin.technician.rating");
 
     //user Route
     Route::get('/user', [AdminAccessController::class, 'create'])->name('admin.user.create');

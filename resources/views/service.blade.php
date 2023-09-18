@@ -1,7 +1,7 @@
 @extends("layouts.fronted_master")
 @section("title", " - Product Page")
 @section("content")
-<form action="{{route('product')}}" method="GET">
+<form action="{{route('service')}}" method="GET">
     <nav class="breadcrumb-section">
         <div class="container">
             <div class="row">
@@ -33,7 +33,7 @@
                                             <a class="nav-link active" id="profile-tab" data-bs-toggle="tab" href="#profile" role="tab"><i class="ion-android-menu"></i></a>
                                         </li>
                                         <li>
-                                            <span class="total-products text-capitalize">There are {{count($product)}} products.</span>
+                                            <span class="total-products text-capitalize">There are {{count($service)}} services.</span>
                                         </li>
                                     </ul>
                                 </nav>
@@ -54,11 +54,11 @@
                     <div class="tab-content" id="myTabContent">
                         <div class="tab-pane fade" id="home" role="tabpanel">
                             <div class="row grid-view g-0 shop-grid-5">
-                                @foreach($product as $item)
+                                @foreach($service as $item)
                                 <!-- single slide Start -->
                                 <div class="col-xl-2 col-lg-3 col-sm-6 col-md-4">
                                     <div class="product-card">
-                                        <a class="thumb" href="{{route('single.product', $item->slug)}}"><img src="{{asset($item->image != null ? $item->image : 'no-product-image.jpg')}}" alt="img" />
+                                        <a class="thumb" href="{{route('single.service', $item->slug)}}"><img src="{{asset($item->image != null ? $item->image : 'no-product-image.jpg')}}" alt="img" />
                                             <div class="onsales-badges">
                                                 <span class="badge bg-dark">new</span>
                                             </div>
@@ -66,7 +66,7 @@
                                         <div class="product-content">
                                             <a class="product-category" href="#?">{{$item->category_name}}</a>
                                             <h3 class="product-title">
-                                                <a href="{{route('single.product', $item->slug)}}">{{$item->name}}</a>
+                                                <a href="{{route('single.service', $item->slug)}}">{{$item->name}}</a>
                                             </h3>
                                             <span class="price regular-price">
                                                 ৳ 0
@@ -89,14 +89,14 @@
                         </div>
                         <div class="tab-pane fade show active" id="profile" role="tabpanel">
                             <div class="row g-0 grid-view-list overflow-hidden">
-                                @foreach($product as $item)
+                                @foreach($service as $item)
                                 <div class="col-12 mb-7">
                                     <div class="border-bottom pb-7 pb-lg-0">
                                         <div class="row mb-n7 align-items-center">
                                             <!-- single slide Start -->
                                             <div class="col-lg-3 mb-7">
                                                 <div class="product-card-list">
-                                                    <a class="thumb" href="{{route('single.product', $item->slug)}}">
+                                                    <a class="thumb" href="{{route('single.service', $item->slug)}}">
                                                         <img src="{{asset($item->image != null ? $item->image : 'no-product-image.jpg')}}" alt="img" />
                                                         <div class="onsales-badges">
                                                             <span class="badge bg-dark">new</span>
@@ -109,7 +109,7 @@
                                                 <div class="product-content-list">
                                                     <a class="product-category" href="#">{{$item->category_name}}</a>
                                                     <h3 class="product-title">
-                                                        <a href="{{route('single.product', $item->slug)}}">{{$item->name}}</a>
+                                                        <a href="{{route('single.service', $item->slug)}}">{{$item->name}}</a>
                                                     </h3>
                                                     <p>
                                                         {!! $item->description !!}
@@ -148,7 +148,7 @@
                             <!-- pagination start -->
                             <nav aria-label="Page navigation">
                                 <ul class="pagination justify-content-sm-end">
-                                    {{$product->links('vendor.pagination.bootstrap-4')}}
+                                    {{$service->links('vendor.pagination.bootstrap-4')}}
                                 </ul>
                             </nav>
                             <!-- pagination start -->
@@ -167,7 +167,7 @@
                                         @foreach($categories as $item)
                                         <div class="widget-check-box">
                                             <input type="radio" name="category" id="{{$item->id}}" />
-                                            <label for="{{$item->id}}">{{$item->name}} ({{$item->product->count()}})</label>
+                                            <label for="{{$item->id}}">{{$item->name}} ({{$item->service->count()}})</label>
                                         </div>
                                         @endforeach
                                     </div>
