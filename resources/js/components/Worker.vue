@@ -3,8 +3,8 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <form @submit.prevent="saveUser">
-                        <div class="row justify-content-center">
+                    <form @submit.prevent="saveWorker">
+                        <div class="row">
                             <div class="col-md-10">
                                 <div class="row">
                                     <div class="col-md-6">
@@ -18,45 +18,68 @@
                                             </div>
                                         </div>
                                         <div class="form-group row mb-2">
-                                            <label for="name" class="col-md-3">User Name<span
+                                            <label for="mobile" class="col-md-3">Mobile<span
                                                     class="text-danger fw-bold">*</span></label>
                                             <div class="col-md-9">
-                                                <input type="text" id="username" v-model="form.username"
-                                                    class="form-control" placeholder="User Name" autocomplete="off">
-                                                <span class="error-username error text-danger"></span>
+                                                <input type="text" id="mobile" v-model="form.mobile" class="form-control"
+                                                    placeholder="Mobile" autocomplete="off">
+                                                <span class="error-mobile error text-danger"></span>
                                             </div>
                                         </div>
                                         <div class="form-group row mb-2">
-                                            <label for="name" class="col-md-3">Email<span
+                                            <label for="father_name" class="col-md-3">Father Name<span
                                                     class="text-danger fw-bold">*</span></label>
                                             <div class="col-md-9">
-                                                <input type="email" id="email" v-model="form.email" class="form-control"
-                                                    placeholder="Email" autocomplete="off">
-                                                <span class="error-email error text-danger"></span>
+                                                <input type="text" id="father_name" v-model="form.father_name"
+                                                    class="form-control" placeholder="Father Name" autocomplete="off">
+                                                <span class="error-father_name error text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row mb-2">
+                                            <label for="mother_name" class="col-md-3">Mother Name<span
+                                                    class="text-danger fw-bold">*</span></label>
+                                            <div class="col-md-9">
+                                                <input type="text" id="mother_name" v-model="form.mother_name"
+                                                    class="form-control" placeholder="Mother Name" autocomplete="off">
+                                                <span class="error-mother_name error text-danger"></span>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group row mb-2">
-                                            <label for="name" class="col-md-3">Role<span
+                                            <label for="district_id" class="col-md-3">District<span
                                                     class="text-danger fw-bold">*</span></label>
                                             <div class="col-md-9">
-                                                <select id="role" v-model="form.role" class="form-select shadow-none">
-                                                    <option value="">Select Role</option>
-                                                    <option value="superadmin">Super Admin</option>
-                                                    <option value="admin">Admin</option>
-                                                    <option value="user">User</option>
-                                                </select>
-                                                <span class="error-role error text-danger"></span>
+                                                <v-select :options="districts" v-model="selectedDistrict" label="name"
+                                                    @input="onChangeDistrict"></v-select>
+                                                <span class="error-password error text-danger"></span>
                                             </div>
                                         </div>
                                         <div class="form-group row mb-2">
-                                            <label for="name" class="col-md-3">Password<span
+                                            <label for="thana_id" class="col-md-3">Thana<span
                                                     class="text-danger fw-bold">*</span></label>
                                             <div class="col-md-9">
-                                                <input type="password" id="password" v-model="form.password"
-                                                    class="form-control" placeholder="Password" autocomplete="off">
+                                                <v-select :options="thanas" v-model="selectedThana" label="name"></v-select>
                                                 <span class="error-password error text-danger"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row mb-2">
+                                            <label for="address" class="col-md-3">Address<span
+                                                    class="text-danger fw-bold">*</span></label>
+                                            <div class="col-md-9">
+                                                <textarea id="address" v-model="form.address" class="form-control"
+                                                    placeholder="Mother Name" autocomplete="off"></textarea>
+                                                <span class="error-address error text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row mb-2">
+                                            <label for="reference" class="col-md-3">Reference<span
+                                                    class="text-danger fw-bold">*</span></label>
+                                            <div class="col-md-9">
+                                                <textarea id="reference" v-model="form.reference" class="form-control"
+                                                    placeholder="Mother Name" autocomplete="off"></textarea>
+                                                <span class="error-reference error text-danger"></span>
                                             </div>
                                         </div>
 
@@ -74,7 +97,8 @@
                             </div>
                             <div class="col-md-2 d-flex justify-content-center align-items-center">
                                 <div class="form-group ImageBackground">
-                                    <p class="text-danger" style="text-align: center;font-size: 11px;margin: 0px;">150px X 150px</p>
+                                    <p class="text-danger" style="text-align: center;font-size: 11px;margin: 0px;">150px X
+                                        150px</p>
                                     <img :src="imageSrc" class="imageShow" />
                                     <label for="image">Photo</label>
                                     <input type="file" id="image" class="form-control shadow-none" @change="imageUrl" />
@@ -88,7 +112,7 @@
 
         <!-- list of category -->
         <div class="col-md-12" style="overflow-x: auto">
-            <vue-good-table :columns="columns" :rows="users" :fixed-header="false" :pagination-options="{
+            <vue-good-table :columns="columns" :rows="workers" :fixed-header="false" :pagination-options="{
                 enabled: true,
                 perPage: 10,
             }" :search-options="{ enabled: true }" :line-numbers="true" styleClass="vgt-table striped bordered"
@@ -99,9 +123,6 @@
                 </template>
                 <template slot="table-row" slot-scope="props">
                     <span v-if="props.column.field == 'after'">
-                        <a title="User Access" class="text-danger" :href="`${linkHref + '/admin/user/permission/' + props.row.id}`">
-                            <i class="fas fa-users text-warning"></i>
-                        </a>
                         <a href="" @click.prevent="editRow(props.row)">
                             <i class="fas fa-edit text-info"></i>
                         </a>
@@ -124,20 +145,24 @@ export default {
             form: new Form({
                 id: "",
                 name: "",
-                username: "",
-                email: "",
-                role: "",
+                mobile: "",
+                father_name: "",
+                mother_name: "",
                 password: "",
             }),
             imageSrc: "/noImage.jpg",
-            users: [],
+            workers: [],
 
+            districts: [],
+            selectedDistrict: null,
+            thanas: [],
+            selectedThana: null,
             columns: [
                 { label: "Image", field: "img", html: true, },
                 { label: 'Name', field: 'name' },
-                { label: 'User Name', field: 'username' },
-                { label: 'Email', field: 'email' },
-                { label: 'Role', field: 'role' },
+                { label: 'Mobile', field: 'mobile' },
+                { label: 'Father', field: 'father_name' },
+                { label: 'Mother', field: 'mother_name' },
                 { label: "Action", field: "after" },
             ],
             // rows: [],
@@ -147,14 +172,35 @@ export default {
     },
 
     created() {
-        this.getUser();
+        this.getWorker();
+        this.getDistrict();
     },
 
     methods: {
-        getUser() {
-            axios.get("/admin/get-user")
+        getDistrict() {
+            axios.get("/admin/district/fetch")
                 .then(res => {
-                    this.users = res.data.data.map(c => {
+                    this.districts = res.data.data
+                })
+        },
+        onChangeDistrict() {
+            if (this.selectedDistrict != null) {
+                this.thanas = [];
+                this.getThana();
+            }
+        },
+        getThana() {
+            axios.get("/admin/thana/fetch")
+                .then(res => {
+                    this.thanas = res.data.data.filter(th => {
+                        return th.district_id == this.selectedDistrict.id
+                    })
+                })
+        },
+        getWorker() {
+            axios.get("/admin/get-worker")
+                .then(res => {
+                    this.workers = res.data.data.map(c => {
                         c.img = c.image == null ? '<img src="/noImage.jpg" width="40px">' : '<img src="/' + c.image + '" width="40px">'
                         return c;
                     })
@@ -162,10 +208,10 @@ export default {
 
         },
 
-        saveUser() {
-            let url = "/admin/user";
+        saveWorker() {
+            let url = "/admin/worker";
             if (this.form.id != '') {
-                url = "/admin/update/user";
+                url = "/admin/update/worker";
             }
             this.form.post(url).then(res => {
                 if (res.data.status == "error") {
@@ -176,7 +222,7 @@ export default {
 
                 if (res.data.status) {
                     this.clearData();
-                    this.getUser();
+                    this.getWorker();
                 }
             });
         },
@@ -187,25 +233,20 @@ export default {
             } else {
                 $('#name').removeClass('is-invalid');
             }
-            if (error.username) {
-                $('#username').addClass('is-invalid');
+            if (error.father_name) {
+                $('#father_name').addClass('is-invalid');
             } else {
-                $('#username').removeClass('is-invalid');
+                $('#father_name').removeClass('is-invalid');
             }
-            if (error.email) {
-                $('#email').addClass('is-invalid');
+            if (error.mother_name) {
+                $('#mother_name').addClass('is-invalid');
             } else {
-                $('#email').removeClass('is-invalid');
+                $('#mother_name').removeClass('is-invalid');
             }
-            if (error.role) {
-                $('#role').addClass('is-invalid');
+            if (error.mobile) {
+                $('#mobile').addClass('is-invalid');
             } else {
-                $('#role').removeClass('is-invalid');
-            }
-            if (error.password) {
-                $('#password').addClass('is-invalid');
-            } else {
-                $('#password').removeClass('is-invalid');
+                $('#mobile').removeClass('is-invalid');
             }
 
         },
@@ -213,17 +254,17 @@ export default {
         editRow(val) {
             this.form.id = val.id;
             this.form.name = val.name;
-            this.form.username = val.username;
-            this.form.email = val.email;
+            this.form.father_name = val.father_name;
+            this.form.mother_name = val.mother_name;
             this.form.role = val.role;
-            this.imageSrc = val.image != null ? '/'+val.image : "/noImage.jpg"
+            this.imageSrc = val.image != null ? '/' + val.image : "/noImage.jpg"
         },
 
         deleteRow(id) {
             if (confirm("Are you sure want to delete this!")) {
-                axios.post("/admin/user/delete", { id: id }).then((res) => {
+                axios.post("/admin/worker/delete", { id: id }).then((res) => {
                     $.notify(res.data, "success");
-                    this.getUser();
+                    this.getWorker();
                 });
             }
         },
@@ -246,12 +287,12 @@ export default {
         clearData() {
             this.form.id = "";
             this.form.name = "";
-            this.form.username = "";
-            this.form.email = "";
-            this.form.role = "";
+            this.form.father_name = "";
+            this.form.mother_name = "";
+            this.form.role = "manager";
             this.form.password = "";
             this.imageSrc = "/noImage.jpg",
-            delete (this.form.image)
+                delete (this.form.image)
         }
     },
 }

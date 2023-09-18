@@ -23,7 +23,7 @@ class HomeController extends Controller
         $blog               = Blog::all();
         $slider             = Slider::latest()->get();
         $categories         = Category::with('service')->orderBy("name", "ASC")->get();
-        $technician         = Technician::where('status', '!=' ,'p')->orderBy('id', "DESC")->get();
+        $technician         = Technician::where('status', '!=', 'p')->orderBy('id', "DESC")->get();
         $isWebsiteCategoryProduct = Category::with('subcategory')->where('is_website', 'true')->get();
         return view('website', compact("isWebsiteCategoryProduct", "technician", "categories", "blog", "newarrival_product", "feature_product", "popular_product", "topsold_product", "banner", "slider"));
     }
@@ -58,7 +58,7 @@ class HomeController extends Controller
 
     public function technician()
     {
-        $technician = Technician::where('status', '!=' ,'p')->orderBy('id', "DESC")->paginate(24);
+        $technician = Technician::where('status', '!=', 'p')->orderBy('id', "DESC")->paginate(24);
         return view('technician', compact("technician"));
     }
 

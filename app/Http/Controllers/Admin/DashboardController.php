@@ -96,13 +96,13 @@ class DashboardController extends Controller
 
         // top sold product
         $topSold = DB::select("SELECT
-                        p.name AS product_name,
+                        s.name AS service_name,
                         SUM(od.quantity) as qty
                     FROM order_details od
-                    JOIN products p ON p.id = od.product_id
+                    JOIN services s ON s.id = od.product_id
                     JOIN orders o ON o.id = od.order_id
                     WHERE o.status != 'cancel' AND o.status != 'pending'
-                    GROUP BY product_name LIMIT 5");
+                    GROUP BY service_name LIMIT 5");
         // top sold product
         $topCustomer = DB::select("SELECT
                             c.name,

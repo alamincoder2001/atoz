@@ -4,7 +4,7 @@
             <div class="card">
                 <div class="card-body">
                     <form @submit.prevent="saveUser">
-                        <div class="row justify-content-center">
+                        <div class="row">
                             <div class="col-md-10">
                                 <div class="row">
                                     <div class="col-md-6">
@@ -26,6 +26,8 @@
                                                 <span class="error-username error text-danger"></span>
                                             </div>
                                         </div>
+                                    </div>
+                                    <div class="col-md-6">
                                         <div class="form-group row mb-2">
                                             <label for="name" class="col-md-3">Email<span
                                                     class="text-danger fw-bold">*</span></label>
@@ -33,21 +35,6 @@
                                                 <input type="email" id="email" v-model="form.email" class="form-control"
                                                     placeholder="Email" autocomplete="off">
                                                 <span class="error-email error text-danger"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group row mb-2">
-                                            <label for="name" class="col-md-3">Role<span
-                                                    class="text-danger fw-bold">*</span></label>
-                                            <div class="col-md-9">
-                                                <select id="role" v-model="form.role" class="form-select shadow-none">
-                                                    <option value="">Select Role</option>
-                                                    <option value="superadmin">Super Admin</option>
-                                                    <option value="admin">Admin</option>
-                                                    <option value="user">User</option>
-                                                </select>
-                                                <span class="error-role error text-danger"></span>
                                             </div>
                                         </div>
                                         <div class="form-group row mb-2">
@@ -74,7 +61,8 @@
                             </div>
                             <div class="col-md-2 d-flex justify-content-center align-items-center">
                                 <div class="form-group ImageBackground">
-                                    <p class="text-danger" style="text-align: center;font-size: 11px;margin: 0px;">150px X 150px</p>
+                                    <p class="text-danger" style="text-align: center;font-size: 11px;margin: 0px;">150px X
+                                        150px</p>
                                     <img :src="imageSrc" class="imageShow" />
                                     <label for="image">Photo</label>
                                     <input type="file" id="image" class="form-control shadow-none" @change="imageUrl" />
@@ -99,7 +87,8 @@
                 </template>
                 <template slot="table-row" slot-scope="props">
                     <span v-if="props.column.field == 'after'">
-                        <a title="User Access" class="text-danger" :href="`${linkHref + '/admin/user/permission/' + props.row.id}`">
+                        <a title="User Access" class="text-danger"
+                            :href="`${linkHref + '/admin/user/permission/' + props.row.id}`">
                             <i class="fas fa-users text-warning"></i>
                         </a>
                         <a href="" @click.prevent="editRow(props.row)">
@@ -126,7 +115,7 @@ export default {
                 name: "",
                 username: "",
                 email: "",
-                role: "",
+                role: "manager",
                 password: "",
             }),
             imageSrc: "/noImage.jpg",
@@ -137,7 +126,6 @@ export default {
                 { label: 'Name', field: 'name' },
                 { label: 'User Name', field: 'username' },
                 { label: 'Email', field: 'email' },
-                { label: 'Role', field: 'role' },
                 { label: "Action", field: "after" },
             ],
             // rows: [],
@@ -152,7 +140,7 @@ export default {
 
     methods: {
         getUser() {
-            axios.get("/admin/get-user")
+            axios.get("/admin/get-manager")
                 .then(res => {
                     this.users = res.data.data.map(c => {
                         c.img = c.image == null ? '<img src="/noImage.jpg" width="40px">' : '<img src="/' + c.image + '" width="40px">'
@@ -163,9 +151,9 @@ export default {
         },
 
         saveUser() {
-            let url = "/admin/user";
+            let url = "/admin/manager";
             if (this.form.id != '') {
-                url = "/admin/update/user";
+                url = "/admin/update/manager";
             }
             this.form.post(url).then(res => {
                 if (res.data.status == "error") {
@@ -197,11 +185,6 @@ export default {
             } else {
                 $('#email').removeClass('is-invalid');
             }
-            if (error.role) {
-                $('#role').addClass('is-invalid');
-            } else {
-                $('#role').removeClass('is-invalid');
-            }
             if (error.password) {
                 $('#password').addClass('is-invalid');
             } else {
@@ -216,12 +199,12 @@ export default {
             this.form.username = val.username;
             this.form.email = val.email;
             this.form.role = val.role;
-            this.imageSrc = val.image != null ? '/'+val.image : "/noImage.jpg"
+            this.imageSrc = val.image != null ? '/' + val.image : "/noImage.jpg"
         },
 
         deleteRow(id) {
             if (confirm("Are you sure want to delete this!")) {
-                axios.post("/admin/user/delete", { id: id }).then((res) => {
+                axios.post("/admin/manager/delete", { id: id }).then((res) => {
                     $.notify(res.data, "success");
                     this.getUser();
                 });
@@ -248,10 +231,10 @@ export default {
             this.form.name = "";
             this.form.username = "";
             this.form.email = "";
-            this.form.role = "";
+            this.form.role = "manager";
             this.form.password = "";
             this.imageSrc = "/noImage.jpg",
-            delete (this.form.image)
+                delete (this.form.image)
         }
     },
 }

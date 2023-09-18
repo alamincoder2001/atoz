@@ -3,15 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Admin;
-use App\Models\Permission;
-use App\Models\AdminAccess;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
-class AdminAccessController extends Controller
+class AreaManagerController extends Controller
 {
     public function __construct()
     {
@@ -26,16 +25,14 @@ class AdminAccessController extends Controller
         // if (!in_array("userEntry", $access)) {
         //     return view("admin.unauthorize");
         // }
-        return view("admin.user.create");
+        return view("admin.manager.create");
     }
 
-    public function index($id = null)
+    public function index()
     {
-        if ($id == null) {
-            $data = Admin::where('role', '!=', 'manager')->where("id", "!=", 1)->get();
-        } else {
-            $data = Admin::find($id);
-        }
+        $authId = Auth::guard('admin')->user()->id;
+        $data = Admin::where("role", "manager")->where('id', '!=', $authId)->get();
+
         return response()->json(["data" => $data]);
     }
 
@@ -59,11 +56,11 @@ class AdminAccessController extends Controller
         }
 
         try {
-            $data = new Admin();
+            $data           = new Admin();
             $data->name     = $request->name;
             $data->username = $request->username;
             $data->email    = $request->email;
-            $data->role     = $request->role;
+            $data->role     = 'manager';
             $data->password = Hash::make($request->password);
             if ($request->hasFile('image')) {
                 $data->image    = $this->imageUpload($request, 'image', 'uploads/admins');
@@ -106,7 +103,6 @@ class AdminAccessController extends Controller
             $data->name     = $request->name;
             $data->username = $request->username;
             $data->email    = $request->email;
-            $data->role     = $request->role;
             if (!empty($request->password)) {
                 $data->password = Hash::make($request->password);
             }
@@ -145,49 +141,6 @@ class AdminAccessController extends Controller
                 'status'  => false,
                 'msg' => $e->getMessage()
             ]);
-        }
-    }
-
-    // permission edit
-    public function permissionEdit($id)
-    {
-        // $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
-        //     ->pluck('permissions')
-        //     ->toArray();
-        // if (!in_array("userAccess", $access)) {
-        //     return view("admin.unauthorize");
-        // }
-
-        $user = Admin::find($id);
-        $userAccess = AdminAccess::where('admin_id', $id)->pluck('permissions')->toArray();
-        $group_name = Permission::pluck('group_name')->unique();
-        $permissions = Permission::all();
-        return view('admin.user.access', compact('user', 'userAccess', 'group_name', 'permissions'));
-    }
-
-    public function permissionStore(Request $request)
-    {
-        try {
-            $admin = Admin::find($request->admin_id);
-            AdminAccess::where('admin_id', $request->admin_id)->delete();
-            $permissions = Permission::all();
-
-            foreach ($permissions as $value) {
-                if (in_array($value->id, $request->permissions)) {
-                    AdminAccess::create([
-                        'admin_id'    => $request->admin_id,
-                        'group_name'  => $value->group_name,
-                        'permissions' => $value->permissions,
-                    ]);
-                }
-            }
-            if ($admin->role == 'manager') {
-                return redirect()->route('admin.manager.create')->with('success', 'Permissions added successfullly');
-            }else{
-                return redirect()->route('admin.user.create')->with('success', 'Permissions added successfullly');
-            }
-        } catch (\Throwable $e) {
-            return redirect()->route('admin.user.create');
         }
     }
 }

@@ -50,9 +50,6 @@
                         <li class="sidebar-item">
                             <a href="{{route('admin.customer.index')}}" class="sidebar-link {{Request::is('admin.customer.index') ? 'active':''}}"><i class="fas fa-user-circle"></i><span class="hide-menu"> Customer List</span></a>
                         </li>
-                        <li class="sidebar-item">
-                            <a href="{{route('admin.technician.index')}}" class="sidebar-link {{Request::is('admin.technician.index') ? 'active':''}}"><i class="fas fa-wrench"></i><span class="hide-menu"> Technician List</span></a>
-                        </li>
                     </ul>
                 </li>
                 <li class="sidebar-item">
@@ -75,13 +72,21 @@
                     </ul>
                 </li>
 
+                <li class="sidebar-item {{Request::is('admin.worker.create') ? 'selected':''}}">
+                    <a class="sidebar-link waves-effect waves-dark sidebar-link {{Request::is('admin.worker.create') ? 'active':''}}" href="{{route('admin.worker.create')}}" aria-expanded="false"><i class="fas fa-wrench"></i><span class="hide-menu">Worker Create</span></a>
+                </li>
+
+                <li class="sidebar-item {{Request::is('admin.manager.create') ? 'selected':''}}">
+                    <a class="sidebar-link waves-effect waves-dark sidebar-link {{Request::is('admin.manager.create') ? 'active':''}}" href="{{route('admin.manager.create')}}" aria-expanded="false"><i class="mdi mdi-account-multiple-plus"></i><span class="hide-menu">Area Manager Create</span></a>
+                </li>
+
                 <li class="sidebar-item {{Request::is('admin.user.create') ? 'selected':''}}">
                     <a class="sidebar-link waves-effect waves-dark sidebar-link {{Request::is('admin.user.create') ? 'active':''}}" href="{{route('admin.user.create')}}" aria-expanded="false"><i class="mdi mdi-account-plus"></i><span class="hide-menu">User Create</span></a>
                 </li>
 
                 <li class="sidebar-item {{Request::is('admin.setting') ? 'selected':''}}">
                     <a class="sidebar-link waves-effect waves-dark sidebar-link {{Request::is('admin.setting') ? 'active':''}}" href="{{route('admin.setting')}}" aria-expanded="false"><i class="mdi mdi-settings"></i><span class="hide-menu">Settings</span></a>
-                </li>                
+                </li>
 
                 <li class="sidebar-item {{Request::is('admin.setting') ? 'selected':''}}">
                     <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{route('admin.logout')}}" aria-expanded="false"><i class="mdi mdi-logout-variant"></i><span class="hide-menu">Logout</span></a>

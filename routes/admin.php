@@ -14,8 +14,9 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DistrictController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\AdminAccessController;
+use App\Http\Controllers\Admin\AreaManagerController;
 use App\Http\Controllers\Admin\CustomerController;
-use App\Http\Controllers\Admin\TechnicianController;
+use App\Http\Controllers\Admin\WorkerController;
 
 // Admin Login Route
 Route::group(["prefix" => "admin"], function () {
@@ -111,11 +112,12 @@ Route::group(["prefix" => "admin"], function () {
     Route::get('/customer/fetch/{id?}', [CustomerController::class, 'fetch'])->name("admin.customer.fetch");
 
     // technician route
-    Route::get('/technician', [TechnicianController::class, 'index'])->name("admin.technician.index");
-    Route::get('/technician/delete/{id}', [TechnicianController::class, 'destroy'])->name("admin.technician.destroy");
-    Route::post('/technician/status', [TechnicianController::class, 'status'])->name("admin.technician.status");
-    Route::get('/technician/fetch/{id?}', [TechnicianController::class, 'fetch'])->name("admin.technician.fetch");
-    Route::post('/technician/rating', [TechnicianController::class, 'rating'])->name("admin.technician.rating");
+    Route::get('/worker', [WorkerController::class, 'create'])->name("admin.worker.create");
+    Route::get('/get-user/{id?}', [WorkerController::class, 'index'])->name("admin.worker.index");
+    Route::get('/worker/delete/{id}', [WorkerController::class, 'destroy'])->name("admin.worker.destroy");
+    Route::post('/worker/status', [WorkerController::class, 'status'])->name("admin.worker.status");
+    Route::get('/worker/fetch/{id?}', [WorkerController::class, 'fetch'])->name("admin.worker.fetch");
+    Route::post('/worker/rating', [WorkerController::class, 'rating'])->name("admin.worker.rating");
 
     //user Route
     Route::get('/user', [AdminAccessController::class, 'create'])->name('admin.user.create');
@@ -125,4 +127,11 @@ Route::group(["prefix" => "admin"], function () {
     Route::post('/user/delete', [AdminAccessController::class, 'destroy'])->name('admin.user.destroy');
     Route::get('/user/permission/{id}', [AdminAccessController::class, 'permissionEdit'])->name('admin.user.permission');
     Route::post('/user/store-permission', [AdminAccessController::class, 'permissionStore'])->name('admin.store.permission');
+    
+    //manager Route
+    Route::get('/manager', [AreaManagerController::class, 'create'])->name('admin.manager.create');
+    Route::get('/get-manager/{id?}', [AreaManagerController::class, 'index'])->name('admin.manager.index');
+    Route::post('/manager', [AreaManagerController::class, 'store'])->name('admin.manager.store');
+    Route::post('/update/manager', [AreaManagerController::class, 'update'])->name('admin.manager.update');
+    Route::post('/manager/delete', [AreaManagerController::class, 'destroy'])->name('admin.manager.destroy');
 });
