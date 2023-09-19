@@ -6,7 +6,6 @@ use App\Models\User;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Technician;
-use App\Models\Wishlist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -21,8 +20,7 @@ class CustomerController extends Controller
             $orders = Order::with("orderDetails")->where("customer_id", Auth::guard("web")->user()->id)->orderBy("invoice", "DESC")->get();
             $pending = Order::with("orderDetails")->where("customer_id", Auth::guard("web")->user()->id)->where("status", "pending")->orderBy("invoice", "DESC")->get();
             $complete = Order::with("orderDetails")->where("customer_id", Auth::guard("web")->user()->id)->where("status", "delivery")->orderBy("invoice", "DESC")->get();
-            $wishlists = Wishlist::with("product")->where('customer_id', Auth::guard('web')->user()->id)->where("ipAddress", request()->ip())->get();
-            return view("dashboard.customer-dashboard", compact("wishlists", "orders", "pending", "complete"));
+            return view("dashboard.customer-dashboard", compact("orders", "pending", "complete"));
         } else {
             return redirect("/login");
         }
@@ -118,10 +116,10 @@ class CustomerController extends Controller
     {
         try{
             OrderDetail::where("order_id", $request->orderId)->delete();
-            foreach($request->product_id as $key => $val){
+            foreach($request->service_id as $key => $val){
                 $detail = new OrderDetail();
                 $detail->order_id = $request->orderId;
-                $detail->product_id = $val;
+                $detail->service_id = $val;
                 $detail->quantity = $request->quantity[$key];
                 $detail->unit_price = $request->unitprice[$key];
                 $detail->total = $request->total[$key];

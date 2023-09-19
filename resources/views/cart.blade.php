@@ -23,7 +23,6 @@
                                 <th scope="col"></th>
                                 <th class="text-center" scope="col">Service Image</th>
                                 <th class="text-center" scope="col">Service Name</th>
-                                <th class="text-center" scope="col">Qty</th>
                                 <th class="text-center" scope="col">action</th>
                             </tr>
                         </thead>
@@ -69,7 +68,7 @@
             </div>
             <div class="col-lg-5 mt-4 mt-lg-0">
                 <div class="your-order-area">
-                    <div class="your-order-wrap gray-bg-4">
+                    <!-- <div class="your-order-wrap gray-bg-4">
                         <div class="your-order-product-info">
                             <div class="your-order-bottom">
                                 <ul>
@@ -84,7 +83,7 @@
                                 </ul>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="Place-order mt-2 text-end">
                         <a class="btn btn-primary btn-hover-warning text-capitalize my-2 my-sm-0" href="{{route('checkout')}}">Checkout</a>
                     </div>

@@ -38,7 +38,7 @@ class Controller extends BaseController
 
     function make_slug($string)
     {
-        return preg_replace('/\s+/u', '-', trim($string));
+        return strtolower(preg_replace('/\s+/u', '-', trim($string)));
     }
 
     public function generateCode($model, $prefix = '')

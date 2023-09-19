@@ -16,7 +16,7 @@ class CreateOrderDetailsTable extends Migration
         Schema::create('order_details', function (Blueprint $table) {
             $table->id();
             $table->foreignId("order_id")->constrained("orders", "id")->onDelete("cascade");
-            $table->integer("product_id");
+            $table->integer("service_id");
             $table->integer("quantity");
             $table->decimal("unit_price");
             $table->decimal("total");

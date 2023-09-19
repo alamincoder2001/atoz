@@ -48,7 +48,7 @@
 <section class="hero-section position-relative">
     <div class="container">
         <div class="row mb-n7">
-            <div class="col-xl-3 col-lg-4">
+            <div class="col-md-3">
                 <div class="vertical-menu d-none d-lg-block">
                     <button class="menu-btn d-flex">
                         <span class="lnr lnr-text-align-left"></span>Browse categories
@@ -79,24 +79,12 @@
                 </div>
 
             </div>
-            <div class="col-xl-6 col-lg-8">
+            <div class="col-md-9">
                 <div class="hero-slider position-relative">
                     <div class="swiper-container">
                         <div class="swiper-wrapper">
                             <!-- swiper-slide start -->
                             @foreach($slider as $item)
-                            @if(Auth::guard('web')->check() && Auth::guard('web')->user()->customer_type == 'Wholesale')
-                            @if($item->using_by == 'wholesale')
-                            <div class="hero-slide-item swiper-slide" style="background-image: url('{{asset($item->image != null ? $item->image : 'noImage.jpg')}}');background-repeat: no-repeat;background-size: cover;background-position: 0% center;">
-                                <div class="hero-slide-content">
-                                    <h2 class="title delay2 animated">{{$item->title}}</h2>
-                                    <p class="text animated">When you buy a selected westinghouse</p>
-                                    <a href="#" class="btn animated btn-primary text-white btn-hover-warning mb-3 mb-sm-0 text-uppercase">shopping Now</a>
-                                </div>
-                            </div>
-                            @endif
-                            @else
-                            @if($item->using_by == 'retail')
                             <div class="hero-slide-item swiper-slide" style="background-image: url('{{asset($item->image != null ? $item->image : 'noImage.jpg')}}');background-repeat: no-repeat;background-size: cover;background-position: 0% center;">
                                 <div class="hero-slide-content">
                                     <h2 class="title delay2 animated">{{$item->title}}</h2>
@@ -104,8 +92,6 @@
                                     <a href="#" class="btn animated btn-primary text-white btn-hover-warning mb-3 mb-sm-0 text-uppercase">shopping Now</a>
                                 </div>
                             </div>
-                            @endif
-                            @endif
                             @endforeach
                         </div>
                     </div>
@@ -135,7 +121,7 @@
                     <div class="row">
                         <!-- title section Start -->
                         <div class="col-12 col-lg-4">
-                            <h3 class="title">Featured Products</h3>
+                            <h3 class="title">Featured Service</h3>
                         </div>
                     </div>
                 </div>
@@ -160,27 +146,27 @@
                                     <div class="swiper-slide">
                                         <div class="product-card" style="height:350px;">
                                             <a class="thumb" href="{{route('single.service', $item->slug)}}"><img src="{{asset($item->image != null ? $item->image : 'no-product-image.jpg')}}" alt="img" />
-                                                <div class="onsales-badges">
+                                                <!-- <div class="onsales-badges">
                                                     <span class="badge bg-dark">new</span>
-                                                </div>
+                                                </div> -->
                                             </a>
                                             <div class="product-content">
                                                 <a class="product-category" href="#?">{{$item->category_name}}</a>
                                                 <h3 class="product-title">
                                                     <a href="{{route('single.service', $item->slug)}}">{{$item->name}}</a>
                                                 </h3>
-                                                <span class="price regular-price">
+                                                <!-- <span class="price regular-price">
                                                     ৳ 0
-                                                </span>
+                                                </span> -->
                                                 <button class="product-btn btn btn-primary btn-hover-warning" onclick="addCart({{$item->id}})">
                                                     Add to Cart
                                                 </button>
                                             </div>
                                             <!-- actions links start -->
-                                            <ul class="actions">
+                                            <!-- <ul class="actions">
                                                 <li class="action-item"><button class="action quick-view" data-bs-toggle="modal" data-bs-target="#quickview"><span class="lnr lnr-magnifier"></span></button></li>
                                                 <li class="action-item"><button class="action wishlist" onclick="addWishlist({{$item->id}})"><span class="lnr lnr-heart"></span></button></li>
-                                            </ul>
+                                            </ul> -->
                                             <!-- actions links end -->
                                         </div>
                                     </div>
@@ -203,15 +189,15 @@
 </section>
 <!-- Feature Product tab End -->
 
-<!-- Technician tab Start -->
-<!-- <section class="section  section-py">
+<!-- Worker tab Start -->
+<section class="section  section-py">
     <div class="container">
         <div class="row g-0">
             <div class="col-12">
                 <div class="title-section text-center text-lg-start">
                     <div class="row">
                         <div class="col-12 col-lg-4">
-                            <h3 class="title">Recent Technician</h3>
+                            <h3 class="title">Recent Worker</h3>
                         </div>
                     </div>
                 </div>
@@ -232,7 +218,7 @@
                             <div class="swiper-container">
                                 <div class="swiper-wrapper">
                                     @if(Auth::guard('web')->check())
-                                    @foreach($technician as $item)
+                                    @foreach($worker as $item)
                                     @if(Auth::guard('web')->user()->district_id == $item->district_id)
                                         <div class="swiper-slide">
                                             <div class="product-card" style="position:relative;height:200px;border: 1px solid #cdcdcd;">
@@ -250,7 +236,7 @@
                                         </div>
                                     @endif
                                     @endforeach
-                                    @foreach($technician as $item)
+                                    @foreach($worker as $item)
                                     @if(Auth::guard('web')->user()->district_id != $item->district_id)
                                         <div class="swiper-slide">
                                             <div class="product-card" style="position:relative;height:200px;border: 1px solid #cdcdcd;">
@@ -269,7 +255,7 @@
                                     @endif
                                     @endforeach
                                     @else
-                                        @foreach($technician as $item)
+                                        @foreach($worker as $item)
                                             <div class="swiper-slide">
                                                 <div class="product-card" style="position:relative;height:200px;border: 1px solid #cdcdcd;">
                                                     @if($item->status == 'v')
@@ -280,7 +266,7 @@
                                                         <h3 class="product-title mt-3">
                                                             <a href="">{{$item->name}}</a>
                                                         </h3>
-                                                        <span>Location: {{$item->upazila->name}}, {{$item->district->name}}</span>
+                                                        <span>Location: {{$item->thana->name}}, {{$item->thana->district->name}}</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -288,7 +274,7 @@
                                     @endif
                                 </div>
                             </div>
-                            @if(count($technician) == 0)
+                            @if(count($worker) == 0)
                             <div class="text-center">
                                 <img src="{{asset('no-product.png')}}" width="300">
                             </div>
@@ -300,8 +286,8 @@
 
         </div>
     </div>
-</section> -->
-<!-- Technician tab End -->
+</section>
+<!-- Worker tab End -->
 
 <!-- Banner Section Start -->
 @php
@@ -335,8 +321,8 @@ $bann = array_chunk($banner, 3);
                 <div class="title-section">
                     <ul class="nav nav-pills product-tab-links2">
                         <li class="nav-item"><a class="nav-link active" data-bs-toggle="pill" href="#newarrival">New Arrival</a></li>
-                        <li class="nav-item"><a class="nav-link" data-bs-toggle="pill" href="#bestseller">Best seller</a></li>
-                        <li class="nav-item"><a class="nav-link" data-bs-toggle="pill" href="#featuredproducts">Featured Products</a></li>
+                        <li class="nav-item"><a class="nav-link" data-bs-toggle="pill" href="#bestseller">Best Service</a></li>
+                        <li class="nav-item"><a class="nav-link" data-bs-toggle="pill" href="#featuredproducts">Featured Service</a></li>
                     </ul>
                 </div>
             </div>
@@ -355,19 +341,10 @@ $bann = array_chunk($banner, 3);
                                 <h3 class="product-title">
                                     <a href="{{route('single.service', $newarrival_product[0]->slug)}}">{{$newarrival_product[0]->name}}</a>
                                 </h3>
-                                <span class="price-lg onsale-price d-block mb-7">
-                                    ৳ 0
-                                </span>
                                 <button class="product-btn-lg btn btn-primary btn-hover-warning" onclick="addCart({{$newarrival_product[0]->id}})">
                                     Add to cart
                                 </button>
                             </div>
-                            <!-- actions links start -->
-                            <ul class="actions">
-                                <li class="action-item"><button class="action quick-view" data-bs-toggle="modal" data-bs-target="#quickview"><span class="lnr lnr-magnifier"></span></button></li>
-                                <li class="action-item"><button class="action wishlist" onclick="addWishlist({{$newarrival_product[0]->id}})"><span class="lnr lnr-heart"></span></button></li>
-                            </ul>
-                            <!-- actions links end -->
                         </div>
                     </div>
                     <div class="col-lg-7 col-xl-8 mb-7 order-first order-lg-last">
@@ -389,28 +366,16 @@ $bann = array_chunk($banner, 3);
                                             @foreach($newarrival as $item)
                                             <div class="product-card">
                                                 <a class="thumb" href="{{route('single.service', $item->slug)}}"><img src="{{asset($item->image != null ? $item->image : 'no-product-image.jpg')}}" alt="img" />
-                                                    <div class="onsales-badges">
-                                                        <span class="badge bg-dark">new</span>
-                                                    </div>
                                                 </a>
                                                 <div class="product-content">
                                                     <a class="product-category" href="#?">{{$item->category_name}}</a>
                                                     <h3 class="product-title">
                                                         <a href="{{route('single.service', $item->slug)}}">{{$item->name}}</a>
                                                     </h3>
-                                                    <span class="price regular-price">
-                                                        ৳ 0
-                                                    </span>
                                                     <button class="product-btn btn btn-primary btn-hover-warning" onclick="addCart({{$item->id}})">
                                                         Add to cart
                                                     </button>
                                                 </div>
-                                                <!-- actions links start -->
-                                                <ul class="actions">
-                                                    <li class="action-item"><button class="action quick-view" data-bs-toggle="modal" data-bs-target="#quickview"><span class="lnr lnr-magnifier"></span></button></li>
-                                                    <li class="action-item"><button class="action wishlist" onclick="addWishlist({{$item->id}})"><span class="lnr lnr-heart"></span></button></li>
-                                                </ul>
-                                                <!-- actions links end -->
                                             </div>
                                             @endforeach
                                         </div>
@@ -442,19 +407,10 @@ $bann = array_chunk($banner, 3);
                                 <h3 class="product-title">
                                     <a href="{{route('single.service', $topsold_product[0]->slug)}}">{{$topsold_product[0]->name}}</a>
                                 </h3>
-                                <span class="price-lg onsale-price d-block mb-7">
-                                    ৳
-                                </span>
                                 <button class="product-btn-lg btn btn-primary btn-hover-warning" onclick="addCart({{$topsold_product[0]->id}})">
                                     Add to cart
                                 </button>
                             </div>
-                            <!-- actions links start -->
-                            <ul class="actions">
-                                <li class="action-item"><button class="action quick-view" data-bs-toggle="modal" data-bs-target="#quickview"><span class="lnr lnr-magnifier"></span></button></li>
-                                <li class="action-item"><button class="action wishlist" onclick="addWishlist({{$topsold_product[0]->id}})"><span class="lnr lnr-heart"></span></button></li>
-                            </ul>
-                            <!-- actions links end -->
                         </div>
                     </div>
                     <div class="col-lg-7 col-xl-8 mb-7 order-first order-lg-last">
@@ -476,28 +432,16 @@ $bann = array_chunk($banner, 3);
                                             @foreach($topsold as $item)
                                             <div class="product-card">
                                                 <a class="thumb" href="{{route('single.service', $item->slug)}}"><img src="{{asset($item->image != null ? $item->image : 'no-product-image.jpg')}}" alt="img" />
-                                                    <div class="onsales-badges">
-                                                        <span class="badge bg-dark">new</span>
-                                                    </div>
                                                 </a>
                                                 <div class="product-content">
                                                     <a class="product-category" href="#?">{{$item->category_name}}</a>
                                                     <h3 class="product-title">
                                                         <a href="{{route('single.service', $item->slug)}}">{{$item->name}}</a>
                                                     </h3>
-                                                    <span class="price regular-price">
-                                                        ৳
-                                                    </span>
                                                     <button class="product-btn btn btn-primary btn-hover-warning" onclick="addCart({{$item->id}})">
                                                         Add to cart
                                                     </button>
                                                 </div>
-                                                <!-- actions links start -->
-                                                <ul class="actions">
-                                                    <li class="action-item"><button class="action quick-view" data-bs-toggle="modal" data-bs-target="#quickview"><span class="lnr lnr-magnifier"></span></button></li>
-                                                    <li class="action-item"><button class="action wishlist" onclick="addWishlist({{$item->id}})"><span class="lnr lnr-heart"></span></button></li>
-                                                </ul>
-                                                <!-- actions links end -->
                                             </div>
                                             @endforeach
                                         </div>
@@ -527,19 +471,10 @@ $bann = array_chunk($banner, 3);
                                 <h3 class="product-title">
                                     <a href="{{route('single.service', $feature_product[0]->slug)}}">{{$feature_product[0]->name}}</a>
                                 </h3>
-                                <span class="price-lg onsale-price d-block mb-7">
-                                    ৳ 0
-                                </span>
                                 <button class="product-btn-lg btn btn-primary btn-hover-warning" onclick="addCart({{$feature_product[0]->id}})">
                                     Add to cart
                                 </button>
                             </div>
-                            <!-- actions links start -->
-                            <ul class="actions">
-                                <li class="action-item"><button class="action quick-view" data-bs-toggle="modal" data-bs-target="#quickview"><span class="lnr lnr-magnifier"></span></button></li>
-                                <li class="action-item"><button class="action wishlist" onclick="addWishlist({{$feature_product[0]->id}})"><span class="lnr lnr-heart"></span></button></li>
-                            </ul>
-                            <!-- actions links end -->
                         </div>
                     </div>
                     <div class="col-lg-7 col-xl-8 mb-7 order-first order-lg-last">
@@ -561,28 +496,16 @@ $bann = array_chunk($banner, 3);
                                             @foreach($feature as $item)
                                             <div class="product-card">
                                                 <a class="thumb" href="{{route('single.service', $item->slug)}}"><img src="{{asset($item->image != null ? $item->image : 'no-product-image.jpg')}}" alt="img" />
-                                                    <div class="onsales-badges">
-                                                        <span class="badge bg-dark">new</span>
-                                                    </div>
                                                 </a>
                                                 <div class="product-content">
                                                     <a class="product-category" href="#?">{{$item->category_name}}</a>
                                                     <h3 class="product-title">
                                                         <a href="{{route('single.service', $item->slug)}}">{{$item->name}}</a>
                                                     </h3>
-                                                    <span class="price regular-price">
-                                                        ৳ 0
-                                                    </span>
                                                     <button class="product-btn btn btn-primary btn-hover-warning" onclick="addCart({{$item->id}})">
                                                         Add to cart
                                                     </button>
                                                 </div>
-                                                <!-- actions links start -->
-                                                <ul class="actions">
-                                                    <li class="action-item"><button class="action quick-view" data-bs-toggle="modal" data-bs-target="#quickview"><span class="lnr lnr-magnifier"></span></button></li>
-                                                    <li class="action-item"><button class="action wishlist" onclick="addWishlist({{$item->id}})"><span class="lnr lnr-heart"></span></button></li>
-                                                </ul>
-                                                <!-- actions links end -->
                                             </div>
                                             @endforeach
                                         </div>
@@ -690,10 +613,6 @@ $bann = array_chunk($banner, 3);
                                                     <h3 class="product-title">
                                                         <a href="{{route('single.service', $item->slug)}}">{{$item->name}}</a>
                                                     </h3>
-                                                    <span class="price-lg regular-price">
-
-                                                        ৳ 0
-                                                    </span>
                                                 </div>
                                             </div>
                                         </div>

@@ -48,7 +48,7 @@ class CheckoutController extends Controller
                 }
 
                 $data                    = new Order();
-                $data->invoice           = $this->invoiceGenerate("Order", "WI");
+                $data->invoice           = $this->invoiceGenerate("Order", "AZ");
                 $data->date              = date("Y-m-d");
                 $data->customer_id       = Auth::guard('web')->user()->id;
                 $data->is_shipping       = isset($request->is_shipping) && $request->is_shipping == 1 ? $request->is_shipping : 0;
@@ -67,7 +67,7 @@ class CheckoutController extends Controller
                 foreach (Cart::content() as $item) {
                     $detail             = new OrderDetail();
                     $detail->order_id   = $data->id;
-                    $detail->product_id = $item->id;
+                    $detail->service_id = $item->id;
                     $detail->quantity   = $item->qty;
                     $detail->unit_price = $item->price;
                     $detail->total      = $item->price * $item->qty;

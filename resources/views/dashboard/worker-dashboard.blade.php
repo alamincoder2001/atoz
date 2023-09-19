@@ -1,5 +1,5 @@
 @extends("layouts.fronted_master")
-@section("title", " - Technician Dashboard")
+@section("title", " - Worker Dashboard")
 
 @section("content")
 
@@ -20,7 +20,7 @@
             <div class="myaccount-tab-menu nav" role="tablist">
                 <a href="#dashboad" data-bs-toggle="tab" aria-selected="true" role="tab" class="active"><i class="fa fa-tachometer"></i> Dashboard</a>
                 <a href="#account-info" data-bs-toggle="tab" class="" aria-selected="false" role="tab" tabindex="-1"><i class="fa fa-user"></i> Account Details</a>
-                <a href="{{route('technician.logout')}}"><i class="fa fa-sign-out"></i> Logout</a>
+                <a href="{{route('worker.logout')}}"><i class="fa fa-sign-out"></i> Logout</a>
             </div>
         </div>
         <!-- My Account Tab Menu End -->
@@ -35,7 +35,7 @@
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="technician-img-section">
-                                    <img src="{{asset(Auth::guard('technician')->user()->image != null ? Auth::guard('technician')->user()->image : 'nouser.png')}}" class="technicianImage" alt="">
+                                    <img src="{{asset(Auth::guard('worker')->user()->image != null ? Auth::guard('worker')->user()->image : 'nouser.png')}}" class="workerImage" alt="">
                                     <input type="file" name="image" class="form-control" onchange="imageUpdate(event)">
                                 </div>
                                 <span class="text-danger error-image"></span>
@@ -44,7 +44,7 @@
 
                         <div class="welcome mb-20">
                             <p>
-                                Hello, <strong>{{Auth::guard('technician')->user()->name}}</strong> (<a href="{{route('technician.logout')}}" class="logout"> Logout</a>)
+                                Hello, <strong>{{Auth::guard('worker')->user()->name}}</strong> (<a href="{{route('worker.logout')}}" class="logout"> Logout</a>)
                             </p>
                         </div>
 
@@ -62,25 +62,25 @@
                         <h3 class="p-0">Account Details</h3>
 
                         <div class="account-details-form">
-                            <form onsubmit="updateTechnician(event)">
+                            <form onsubmit="updateWorker(event)">
                                 <div class="row">
                                     <div class="col-lg-6 col-12 mb-5">
-                                        <input type="text" class="form-control" id="name" name="name" placeholder="Name" value="{{Auth::guard('technician')->user()->name}}">
+                                        <input type="text" class="form-control" id="name" name="name" placeholder="Name" value="{{Auth::guard('worker')->user()->name}}">
                                         <span class="text-danger error error-name"></span>
                                     </div>
 
                                     <div class="col-lg-6 col-12 mb-5">
-                                        <input type="text" class="form-control" id="username" name="username" placeholder="Username" value="{{Auth::guard('technician')->user()->username}}">
-                                        <span class="text-danger error error-username"></span>
+                                        <input type="text" class="form-control" id="father_name" name="father_name" placeholder="Father Name" value="{{Auth::guard('worker')->user()->father_name}}">
+                                        <span class="text-danger error error-father_name"></span>
                                     </div>
 
                                     <div class="col-lg-6 col-12 mb-5">
-                                        <input type="email" class="form-control" id="email" name="email" placeholder="Email" value="{{Auth::guard('technician')->user()->email}}">
-                                        <span class="text-danger error error-email"></span>
+                                        <input type="text" class="form-control" id="mother_name" name="mother_name" placeholder="Mother Name" value="{{Auth::guard('worker')->user()->mother_name}}">
+                                        <span class="text-danger error error-mother_name"></span>
                                     </div>
 
                                     <div class="col-12 col-lg-6 mb-5">
-                                        <input type="text" class="form-control" id="mobile" name="mobile" placeholder="Mobile" value="{{Auth::guard('technician')->user()->mobile}}">
+                                        <input type="text" class="form-control" id="mobile" name="mobile" placeholder="Mobile" value="{{Auth::guard('worker')->user()->mobile}}">
                                         <span class="text-danger error error-mobile"></span>
                                     </div>
 
@@ -88,7 +88,7 @@
                                         <select onchange="getUpazila(event)" style="height: 38px;border-radius:0;line-height:1;" name="district_id" id="district_id" class="form-select">
                                             <option value="">Select District</option>
                                             @foreach($districts as $item)
-                                            <option value="{{$item->id}}" {{Auth::guard('technician')->user()->district_id == $item->id ? 'selected':''}}>{{$item->name}}</option>
+                                            <option value="{{$item->id}}" {{Auth::guard('worker')->user()->district_id == $item->id ? 'selected':''}}>{{$item->name}}</option>
                                             @endforeach
                                         </select>
                                         <span class="text-danger error error-district_id"></span>
@@ -98,43 +98,18 @@
                                         <select style="height: 38px;border-radius:0;line-height:1;" name="thana_id" id="thana_id" class="form-select">
                                             <option value="">Select Upazila</option>
                                             @foreach($upazilas as $item)
-                                            <option value="{{$item->id}}" {{Auth::guard('technician')->user()->thana_id == $item->id ? 'selected':''}}>{{$item->name}}</option>
+                                            <option value="{{$item->id}}" {{Auth::guard('worker')->user()->thana_id == $item->id ? 'selected':''}}>{{$item->name}}</option>
                                             @endforeach
                                         </select>
                                         <span class="text-danger error error-thana_id"></span>
                                     </div>
-
                                     <div class="col-12 col-lg-6 mb-5">
-                                        <select style="height: 38px;border-radius:0;line-height:1;" name="gender" id="gender" class="form-select">
-                                            <option value="">Select Gender</option>
-                                            <option value="Male" {{Auth::guard('technician')->user()->gender == 'Male' ? 'selected':''}}>Male</option>
-                                            <option value="Female" {{Auth::guard('technician')->user()->gender == 'Female' ? 'selected':''}}>Female</option>
-                                            <option value="Others" {{Auth::guard('technician')->user()->gender == 'Others' ? 'selected':''}}>Others</option>
-                                        </select>
-                                        <span class="text-danger error error-gender"></span>
-                                    </div>
-                                    <div class="col-12 col-lg-6 mb-5">
-                                        <textarea class="form-control" name="address" id="address" placeholder="Address">{{Auth::guard('technician')->user()->address}}</textarea>
+                                        <textarea class="form-control" name="address" id="address" placeholder="Address">{{Auth::guard('worker')->user()->address}}</textarea>
                                     </div>
 
-                                    <div class="col-12 mb-5">
+                                    <!-- <div class="col-12 mb-5">
                                         <h4>Password change</h4>
-                                    </div>
-
-                                    <div class="col-lg-4 col-12 mb-5">
-                                        <input id="old_password" class="form-control" name="old_password" placeholder="Current Password" type="password">
-                                        <span class="text-danger error error-old_password"></span>
-                                    </div>
-
-                                    <div class="col-lg-4 col-12 mb-5">
-                                        <input id="new_password" class="form-control" name="new_password" placeholder="New Password" type="password">
-                                        <span class="text-danger error error-new_password"></span>
-                                    </div>
-
-                                    <div class="col-lg-4 col-12 mb-5">
-                                        <input id="confirm_password" class="form-control" name="confirm_password" placeholder="Confirm Password" type="password">
-                                        <span class="text-danger error error-confirm_password"></span>
-                                    </div>
+                                    </div> -->
 
                                     <div class="col-12">
                                         <button type="submit" class="btn btn-warning btn-hover-primary">Save Changes</button>
@@ -161,7 +136,7 @@
             let formdata = new FormData();
             formdata.append("image", event.target.files[0])
             $.ajax({
-                url: location.origin+"/technician-imageUpdate",
+                url: location.origin+"/worker-imageUpdate",
                 method: "POST",
                 data: formdata,
                 contentType: false,
@@ -171,7 +146,7 @@
                         $(".error-image").text(res.error.image);
                     }else{
                         $.notify(res, "success");
-                        document.querySelector(".technicianImage").setAttribute('src', window.URL.createObjectURL(event.target.files[0]))
+                        document.querySelector(".workerImage").setAttribute('src', window.URL.createObjectURL(event.target.files[0]))
                         event.target.value = "";
                     }
                 }
@@ -198,11 +173,11 @@
         }
     }
 
-    function updateTechnician(event) {
+    function updateWorker(event) {
         event.preventDefault();
         let formdata = new FormData(event.target)
         $.ajax({
-            url: location.origin+"/technician-update",
+            url: location.origin+"/worker-update",
             method: "POST",
             data: formdata,
             contentType: false,

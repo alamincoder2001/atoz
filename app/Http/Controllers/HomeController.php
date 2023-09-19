@@ -9,6 +9,7 @@ use App\Models\Setting;
 use App\Models\Category;
 use App\Models\Service;
 use App\Models\Technician;
+use App\Models\Worker;
 use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
@@ -23,9 +24,9 @@ class HomeController extends Controller
         $blog               = Blog::all();
         $slider             = Slider::latest()->get();
         $categories         = Category::with('service')->orderBy("name", "ASC")->get();
-        $technician         = Technician::where('status', '!=', 'p')->orderBy('id', "DESC")->get();
+        $worker         = Worker::with('thana')->orderBy('id', "DESC")->get();
         $isWebsiteCategoryProduct = Category::with('subcategory')->where('is_website', 'true')->get();
-        return view('website', compact("isWebsiteCategoryProduct", "technician", "categories", "blog", "newarrival_product", "feature_product", "popular_product", "topsold_product", "banner", "slider"));
+        return view('website', compact("isWebsiteCategoryProduct", "worker", "categories", "blog", "newarrival_product", "feature_product", "popular_product", "topsold_product", "banner", "slider"));
     }
 
     // Product
@@ -56,16 +57,16 @@ class HomeController extends Controller
         return view('blog', compact("blog"));
     }
 
-    public function technician()
+    public function worker()
     {
-        $technician = Technician::where('status', '!=', 'p')->orderBy('id', "DESC")->paginate(24);
-        return view('technician', compact("technician"));
+        $worker = Worker::with('thana')->orderBy('id', "DESC")->paginate(24);
+        return view('worker', compact("worker"));
     }
 
-    public function technicianDetails($id)
+    public function workerDetails($id)
     {
-        $technician = Technician::with('district', 'upazila')->find($id);
-        return view('technician-details', compact("technician"));
+        $worker = Worker::with('thana')->find($id);
+        return view('worker-details', compact("worker"));
     }
 
     public function contact()

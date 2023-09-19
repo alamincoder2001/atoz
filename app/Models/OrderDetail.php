@@ -11,8 +11,8 @@ class OrderDetail extends Model
 
     protected $guarded = ["id"];
 
-    public function product()
+    public function service()
     {
-        return $this->belongsTo(Product::class, "product_id", "id");
+        return $this->belongsTo(Service::class, "service_id", "id");
     }
 }

@@ -17,6 +17,11 @@ class CartController extends Controller
     {
         try {
             $product = Service::find($request->id);
+            foreach (Cart::content() as $key => $item) {
+                if ($item->id == $request->id) {
+                    return response()->json(["status" => false, "msg" => "Already added on cart", "content" => Cart::content(), "subtotal" => Cart::subtotal(), "cartCount" => Cart::content()->count()]);
+                }
+            }
             Cart::add([
                 'id'      => $request->id,
                 'name'    => $product->name,
@@ -26,9 +31,9 @@ class CartController extends Controller
                 'options' => ['image' => $product->image]
             ]);
 
-            return response()->json(["msg" => "Successfully Product Added to Cart", "content" => Cart::content(), "subtotal" => Cart::subtotal(), "cartCount" => Cart::content()->count()]);
+            return response()->json(["status" => true, "msg" => "Product Added to Cart", "content" => Cart::content(), "subtotal" => Cart::subtotal(), "cartCount" => Cart::content()->count()]);
         } catch (\Throwable $e) {
-            return "Opps! something went wrong ";
+            return "Opps! something went wrong";
         }
     }
 

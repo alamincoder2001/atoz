@@ -153,7 +153,7 @@
                             <a href="{{route('service')}}">Service</a>
                         </li>
                         <li>
-                            <a href="{{route('technician')}}">Technician</a>
+                            <a href="{{route('worker')}}">Worker</a>
                         </li>
                         <li>
                             <a href="{{route('blog')}}">Blog</a>
@@ -189,7 +189,7 @@
                     <p>Free Shipping for all Order</p>
 
                     <ul id="offcanvas-menu2" class="blog-ctry-menu blog-ctry-menu2">
-                        @if(Auth::guard('web')->check() || Auth::guard('technician')->check())
+                        @if(Auth::guard('web')->check() || Auth::guard('worker')->check())
                         @if(Auth::guard('web')->check())
                         <li>
                             <a href="javascript:void(0)">My Account</a>
@@ -207,10 +207,10 @@
                             <a href="javascript:void(0)">My Account</a>
                             <ul class="category-sub-menu">
                                 <li>
-                                    <a href="{{route('technician.dashboard')}}">Account</a>
+                                    <a href="{{route('worker.dashboard')}}">Account</a>
                                 </li>
                                 <li>
-                                    <a href="{{route('technician.logout')}}">Sign Out</a>
+                                    <a href="{{route('worker.logout')}}">Sign Out</a>
                                 </li>
                             </ul>
                         </li>

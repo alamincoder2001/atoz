@@ -17,8 +17,8 @@ class CheckAuthMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::guard("technician")->check()) {
-            return redirect('/technician-dashboard');
+        if (Auth::guard("worker")->check()) {
+            return redirect('/worker-dashboard');
         }
         if (Auth::guard("web")->check()) {
             return redirect('/customer-dashboard');

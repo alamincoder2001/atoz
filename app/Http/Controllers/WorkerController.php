@@ -2,19 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Technician;
+use App\Models\Worker;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
-class TechnicianController extends Controller
+class WorkerController extends Controller
 {
     public function index()
     {
-        if (Auth::guard('technician')->check()) {
-            return view("dashboard.technician-dashboard");
+        if (Auth::guard('worker')->check()) {
+            return view("dashboard.worker-dashboard");
         } else {
             return redirect("/login");
         }
@@ -27,24 +26,16 @@ class TechnicianController extends Controller
             if (!empty($request->old_password) || !empty($request->new_password) || !empty($request->confrim_password)) {
                 $validator = Validator::make($request->all(), [
                     "name"             => "required",
-                    "username"         => "required|unique:technicians,username," . $technician->id,
-                    "email"            => "required|unique:technicians,email," . $technician->id,
                     "mobile"           => "required",
                     "gender"           => "required",
                     "district_id"      => "required",
                     "thana_id"         => "required",
                     "address"          => "required",
-                    "old_password"     => "required",
-                    "new_password"     => "required",
-                    'confirm_password' => 'required_with:new_password|same:new_password'
                 ]);
             } else {
                 $validator = Validator::make($request->all(), [
                     "name"        => "required",
-                    "username"    => "required|unique:technicians,username," . $technician->id,
-                    "email"       => "required|unique:technicians,email," . $technician->id,
                     "mobile"      => "required",
-                    "gender"      => "required",
                     "district_id" => "required",
                     "thana_id"    => "required",
                     "address"     => "required",
@@ -54,7 +45,7 @@ class TechnicianController extends Controller
                 return response()->json(["error" => $validator->errors()]);
             }
 
-            $data = Technician::find($technician->id);
+            $data = Worker::find($technician->id);
             if (!empty($request->old_password) || !empty($request->new_password) || !empty($request->confrim_password)) {
                 if (Hash::check($request->old_password, $technician->password)) {
                     $data->password = Hash::make($request->new_password);
@@ -66,12 +57,11 @@ class TechnicianController extends Controller
             $data->username    = $request->username;
             $data->email       = $request->email;
             $data->mobile      = $request->mobile;
-            $data->gender      = $request->gender;
             $data->district_id = $request->district_id;
             $data->thana_id    = $request->thana_id;
             $data->address     = $request->address;
             $data->save();
-            return "Technician Profile Updated";
+            return "Worker Profile Updated";
         } catch (\Throwable $e) {
             return "Opps! Something went wrong";
         }
@@ -86,13 +76,13 @@ class TechnicianController extends Controller
             if ($validator->fails()) {
                 return response()->json(["error" => $validator->errors()]);
             }
-            $data = Technician::find(Auth::guard('technician')->user()->id);
+            $data = Worker::find(Auth::guard('worker')->user()->id);
             if ($request->hasFile('image')) {
                 $old = $data->image;
                 if (File::exists($old)) {
                     File::delete($old);
                 }
-                $data->image = $this->imageUpload($request, "image", "uploads/technicians");
+                $data->image = $this->imageUpload($request, "image", "uploads/workers");
             }
             $data->save();
             return "Image upload successfully";
@@ -103,16 +93,16 @@ class TechnicianController extends Controller
 
     public function logout()
     {
-        if (Auth::guard("technician")->check()) {
-            Auth::guard("technician")->logout();
+        if (Auth::guard("worker")->check()) {
+            Auth::guard("worker")->logout();
             return redirect("/");
         }
     }
 
-    public function filterTechnician(Request $request)
+    public function filterWorker(Request $request)
     {
         try{
-            $data = Technician::with('district', 'upazila')->where("thana_id", $request->thana_id)->where('status', '!=' ,'p')->get();
+            $data = Worker::with('thana')->where("thana_id", $request->thana_id)->get();
             return $data;
         }catch(\Throwable $e){
             return "Opps! something went wrong";

@@ -6,6 +6,7 @@ use App\Models\Worker;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class WorkerController extends Controller
@@ -54,6 +55,7 @@ class WorkerController extends Controller
             $data->worker_code = $request->worker_code;
             $data->name        = $request->name;
             $data->mobile      = $request->mobile;
+            $data->password    = Hash::make($request->mobile);
             $data->commission  = $request->commission;
             $data->father_name = $request->father_name;
             $data->mother_name = $request->mother_name;
@@ -100,6 +102,7 @@ class WorkerController extends Controller
             $data->worker_code = $request->worker_code;
             $data->name        = $request->name;
             $data->mobile      = $request->mobile;
+            $data->password    = Hash::make($request->mobile);
             $data->commission  = $request->commission;
             $data->father_name = $request->father_name;
             $data->mother_name = $request->mother_name;

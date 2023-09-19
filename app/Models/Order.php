@@ -13,6 +13,6 @@ class Order extends Model
 
     public function orderDetails()
     {
-        return $this->hasMany(OrderDetail::class)->with("product");
+        return $this->hasMany(OrderDetail::class)->with("service");
     }
 }

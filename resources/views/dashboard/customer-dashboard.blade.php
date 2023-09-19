@@ -27,12 +27,6 @@
                             </a>
                         </li>
                         <li class="nav-item mt-1">
-                            <a href="" onclick="Wishlist(event)" class="nav-link wishlistTable">
-                                <i class="bi bi-heart me-2"></i>
-                                Wishlist
-                            </a>
-                        </li>
-                        <li class="nav-item mt-1">
                             <a href="#" onclick="Setting(event)" class="nav-link setting">
                                 <i class="bi bi-gear me-2"></i>
                                 Settings
@@ -76,16 +70,6 @@
                                     <div class="card-body text-center">
                                         <i class="bi bi-cart-check"></i>
                                         <p>Completed Order</p>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-lg-4 mb-5">
-                            <a href="">
-                                <div class="card border-0" style="box-shadow: 3px 5px 10px #838383a3;" onclick="Wishlist(event)">
-                                    <div class="card-body text-center">
-                                        <i class="bi bi-heart"></i>
-                                        <p>Wishlist</p>
                                     </div>
                                 </div>
                             </a>
@@ -232,63 +216,6 @@
                                     @else
                                     <tr class="text-center">
                                         <td colspan="5">Order Not found in Table</td>
-                                    </tr>
-                                    @endif
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- wishlist table -->
-            <div class="col-12 col-lg-9 d-none item-section" id="wishlistTable">
-                <div class="mt-1">
-                    <div class="card border-0" style="box-shadow: 3px 5px 10px #838383a3;">
-                        <div class="card-body">
-                            <h4 class="m-0 text-center text-decoration-underline pb-3">All Wishlist</h4>
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Sl</th>
-                                        <th></th>
-                                        <th>Product</th>
-                                        <th>Qty</th>
-                                        <th>Price</th>
-                                        <th class="text-center">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @if(count($wishlists) > 0)
-                                    @foreach($wishlists as $key => $item)
-                                    <tr class="wishlist-{{$item->product->id}}">
-                                        <td>{{$key + 1}}</td>
-                                        <td>
-                                            <a class="m-0" href="{{asset($item->product->image != null ? $item->product->image : '/no-product-image.jpg')}}">
-                                                <img src="{{asset($item->product->image != null ? $item->product->image : '/no-product-image.jpg')}}" width="30" alt="img" />
-                                            </a>
-                                        </td>
-                                        <td>{{$item->product->name}}</td>
-                                        <td>
-                                            <input type="number" step="1" min="1" value="1" style="width: 60px;text-align: center;border: 1px solid lightgrey;">
-                                        </td>
-                                        <td>
-                                            @if(Auth::guard('web')->check() && Auth::guard('web')->user()->customer_type == 'wholesale')
-                                            ৳ {{$item->product->wholesale_rate}}
-                                            @else
-                                            ৳ {{$item->product->selling_rate}}
-                                            @endif
-                                        </td>
-                                        <td class="text-center">
-                                            <a style="cursor: pointer;" onclick="addCart({{$item->product->id}}, 'wishlist')" class="text-warning"><i class="bi bi-cart-plus"></i></a>
-                                            <a style="cursor: pointer;" onclick="deleteWishlist(event)" data-id="{{$item->product->id}}" class="text-danger"><i data-id="{{$item->product->id}}" class="bi bi-trash3"></i></a>
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                    @else
-                                    <tr>
-                                        <td colspan="6" class="text-center">
-                                            Product Not Found
-                                        </td>
                                     </tr>
                                     @endif
                                 </tbody>
@@ -516,31 +443,6 @@
         }
     }
 
-    function deleteWishlist(event) {
-        $.ajax({
-            url: location.origin + "/deletewishlist",
-            method: "POST",
-            data: {
-                product_id: event.target.getAttribute("data-id")
-            },
-            success: res => {
-                $(".wishlist-" + event.target.getAttribute("data-id")).remove();
-                $.notify(res.msg, "success")
-                if (res.content == 0) {
-                    let row = `
-                            <tr>
-                                <td colspan="6" class="text-center">
-                                    Product Not Found
-                                </td>
-                            </tr>
-                            `;
-                    $("#wishlistTable").find("table tbody").html(row)
-                }
-
-            }
-        })
-    }
-
     function Dashboard(event) {
         event.preventDefault();
         $('.login-register-area').find(".nav-link").removeClass("active")
@@ -556,16 +458,6 @@
             $('.login-register-area').find(".orderTable").addClass("active")
             $('.login-register-area').find(".item-section").addClass("d-none")
             $('.login-register-area').find("#orderTable").removeClass("d-none")
-        }
-    }
-    // wishlist table
-    function Wishlist(event) {
-        event.preventDefault();
-        if ($('.login-register-area').find(".wishlistTable").attr("class") == "nav-link wishlistTable") {
-            $('.login-register-area').find(".nav-link").removeClass("active")
-            $('.login-register-area').find(".wishlistTable").addClass("active")
-            $('.login-register-area').find(".item-section").addClass("d-none")
-            $('.login-register-area').find("#wishlistTable").removeClass("d-none")
         }
     }
 
@@ -604,7 +496,7 @@
             let row = `
                 <tr class="removeItem-${index}">
                     <td>${index + 1}</td>
-                    <td>${value.product.name}<input type="hidden" name="product_id[]" value="${value.product_id}" class="form-control" /></td>
+                    <td>${value.service.name}<input type="hidden" name="service_id[]" value="${value.service_id}" class="form-control" /></td>
                     <td style="width:15%;" class="text-center"><input type="number" name="quantity[]" oninput="QuantityUpdate(event, ${index})" step="0.01" min="0" value="${value.quantity}" class="form-control" /></td>
                     <td class="text-center">${value.unit_price}<input type="hidden" name="unitprice[]" value="${value.unit_price}" class="form-control unitprice-${index}" /></td>
                     <td class="text-center"><span class='totaltxt-${index}'>${value.total}</span><input type="hidden" name="total[]" value="${value.total}" class="form-control total-${index}" /></td>

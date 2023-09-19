@@ -4,12 +4,11 @@
             <div class="row">
                 <div class="col-12 col-sm-6">
                     <p>Email: <a class="header-top-link" href="https://gmail.com/">{{$profile->email}}</a></p>
-                    <p>Free Shipping for Minimum Quantity {{$profile->minimum_qty}}</p>
                 </div>
                 <div class="col-12 col-sm-6">
                     <div class="header-top-nav">
                         <ul class="d-flex flex-wrap justify-content-center align-items-center justify-content-sm-end">
-                            @if(Auth::guard('web')->check() || Auth::guard('technician')->check())
+                            @if(Auth::guard('web')->check() || Auth::guard('worker')->check())
                             @if(Auth::guard('web')->check())
                             <li class="dropdown top-nav-item">
                                 <a class="top-nav-link" href="#" role="button" id="account" data-bs-toggle="dropdown">My Account <i class="ion-ios-arrow-down"></i></a>
@@ -25,8 +24,8 @@
                                 <a class="top-nav-link" href="#" role="button" id="account" data-bs-toggle="dropdown">My Account <i class="ion-ios-arrow-down"></i></a>
                                 <!-- dropdown-menu start -->
                                 <ul class="dropdown-menu" aria-labelledby="account">
-                                    <li><a class="dropdown-item" href="{{route('technician.dashboard')}}">My Account</a></li>
-                                    <li><a class="dropdown-item" href="{{route('technician.logout')}}">Sign Out</a></li>
+                                    <li><a class="dropdown-item" href="{{route('worker.dashboard')}}">My Account</a></li>
+                                    <li><a class="dropdown-item" href="{{route('worker.logout')}}">Sign Out</a></li>
                                 </ul>
                                 <!-- dropdown-menu start -->
                             </li>
@@ -93,7 +92,7 @@
                                     <a class="main-menu-link {{Route::is('service')?'text-warning':''}}" href="{{route('service')}}">Service</a>
                                 </li>
                                 <li class="position-static main-menu-item">
-                                    <a class="main-menu-link {{Route::is('technician')?'text-warning':''}}" href="{{route('technician')}}">Technician</a>
+                                    <a class="main-menu-link {{Route::is('worker')?'text-warning':''}}" href="{{route('worker')}}">Worker</a>
                                 </li>
                                 <li class="main-menu-item">
                                     <a class="main-menu-link {{Route::is('blog')?'text-warning':''}}" href="{{route('blog')}}">Blog</a>
@@ -111,7 +110,7 @@
                                 </button>
 
                                 <div class="checkout-cart">
-                                    <ul class="checkout-scroll">
+                                    <ul class="checkout-scroll mb-3">
                                         @if(\Cart::content()->count() > 0)
                                         @foreach(\Cart::content() as $item)
                                         <li class="checkout-cart-list product-cart-remove-{{$item->rowId}}">
@@ -121,7 +120,7 @@
                                             </div>
                                             <div class="checkout-block">
                                                 <a class="product-name" href="{{route('service')}}">{{$item->name}}</a>
-                                                <span class="product-price">৳ {{ $item->price }}</span>
+                                                <!-- <span class="product-price">৳ {{ $item->price }}</span> -->
                                                 <a class="remove-cart" row-id="{{$item->rowId}}" onclick="removeCart(event)">
                                                     x
                                                 </a>
@@ -137,7 +136,7 @@
                                         @endif
                                     </ul>
 
-                                    <ul class="list-group checkout-sub-total">
+                                    <!-- <ul class="list-group checkout-sub-total">
                                         <li class="list-group-item">
                                             <span>Subtotal</span>
                                             <span class="subTotal">৳ <label>{{\Cart::subtotal()}}</label></span>
@@ -146,7 +145,7 @@
                                             <span>Total</span>
                                             <span class="Total">৳ <label>{{\Cart::subtotal()}}</label></span>
                                         </li>
-                                    </ul>
+                                    </ul> -->
 
                                     <!-- checkout-action button start -->
                                     <div class="checkout-action d-flex justify-content-center gap-3">

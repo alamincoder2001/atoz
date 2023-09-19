@@ -23,17 +23,17 @@
                             <button type="submit" style="width: 100%;" class="btn btn-primary">Login</button>
                         </form>
                     </div>
-                    <div class="card-body d-none TechnicianLogin">
-                        <form onsubmit="TechnicianLogin(event)">
-                            <h3 class="text-center">Technician</h3>
+                    <div class="card-body d-none WorkerLogin">
+                        <form onsubmit="WorkerLogin(event)">
+                            <h3 class="text-center">Worker</h3>
                             <div class="form-group mb-3">
-                                <input type="text" name="username" class="form-control" placeholder="Username" autocomplete="off">
-                                <span class="text-danger error-username error"></span>
+                                <input type="text" name="mobile" class="form-control" placeholder="Mobile" autocomplete="off">
+                                <span class="text-danger error-mobile error"></span>
                             </div>
-                            <div class="form-group mb-3">
+                            <!-- <div class="form-group mb-3">
                                 <input type="password" name="password" class="form-control" placeholder="Password" autocomplete="off">
                                 <span class="text-danger error-password error"></span>
-                            </div>
+                            </div> -->
                             <button type="submit" style="width: 100%;" class="btn btn-primary">Login</button>
                         </form>
                     </div>
@@ -43,7 +43,7 @@
                         <div class="text-center">
                             <h2 class="text-white">SignIn</h2>
                             <button type="button" onclick="toggleLoginBody(event)" value="Customer" class="btn btn-info mt-3 Customer d-none">SignIn as a Customer</button>
-                            <button type="button" onclick="toggleLoginBody(event)" value="Technician" class="btn btn-info mt-3 Technician">SignIn as a Technician</button>
+                            <button type="button" onclick="toggleLoginBody(event)" value="Worker" class="btn btn-info mt-3 Worker">SignIn as a Worker</button>
                         </div>
                     </div>
                 </div>
@@ -84,29 +84,29 @@
             }
         })
     }
-    function TechnicianLogin(event) {
+    function WorkerLogin(event) {
         event.preventDefault();
         let formdata = new FormData(event.target)
         $.ajax({
-            url: "/technician-login",
+            url: "/worker-login",
             method: "POST",
             data: formdata,
             processData: false,
             contentType: false,
             beforeSend: () => {
-                $(".TechnicianLogin .error").text("")
+                $(".WorkerLogin .error").text("")
             },
             success: res => {
                 if (res.error) {
                     $.each(res.error, (index, value) => {
-                        $(".TechnicianLogin .error-" + index).text(value)
+                        $(".WorkerLogin .error-" + index).text(value)
                     })
                 } else if (res.errors) {
-                    $(".TechnicianLogin .error-username").text(res.errors)
+                    $(".WorkerLogin .error-mobile").text(res.errors)
                 } else {
                     $.notify(res, "success");
                     $("form").trigger("reset")
-                    location.href = "/technician-dashboard"
+                    location.href = "/worker-dashboard"
                 }
             }
         })
@@ -114,17 +114,17 @@
 
     function toggleLoginBody(event) {
         $(".CustomerLogin .error").text("")
-        $(".TechnicianLogin .error").text("")
+        $(".WorkerLogin .error").text("")
         if (event.target.value == 'Customer') {
             $(".CustomerLogin").removeClass("d-none")
-            $(".TechnicianLogin").addClass("d-none")
+            $(".WorkerLogin").addClass("d-none")
             $(".Customer").addClass("d-none")
-            $(".Technician").removeClass("d-none")
+            $(".Worker").removeClass("d-none")
         }else {
             $(".CustomerLogin").addClass("d-none")
-            $(".TechnicianLogin").removeClass("d-none")
+            $(".WorkerLogin").removeClass("d-none")
             $(".Customer").removeClass("d-none")
-            $(".Technician").addClass("d-none")
+            $(".Worker").addClass("d-none")
         }
     }
 </script>

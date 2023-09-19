@@ -1,5 +1,5 @@
 @extends("layouts.fronted_master")
-@section("title", " - Product Page")
+@section("title", " - Service Page")
 @section("content")
 <form action="{{route('service')}}" method="GET">
     <nav class="breadcrumb-section">
@@ -8,7 +8,7 @@
                 <div class="col-12">
                     <ol class="breadcrumb bg-transparent m-0 p-0 align-items-center">
                         <li class="breadcrumb-item"><a href="{{route('website')}}">Home</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Shop</li>
+                        <li class="breadcrumb-item active" aria-current="page">Service</li>
                     </ol>
                 </div>
             </div>
@@ -19,7 +19,7 @@
         <div class="container">
             <div class="row mb-n7">
                 <div class="col-lg-8 col-xl-9">
-                    <img class="mb-4" src="{{asset('frontend')}}/assets/images/banner/shop-banner.jpg" alt="banner" />
+                    <!-- <img class="mb-4" src="{{asset('frontend')}}/assets/images/banner/shop-banner.jpg" alt="banner" /> -->
                     <div class="grid-nav-wraper bg-lighten2 mb-30">
                         <div class="row align-items-center">
                             <div class="col-12 col-md-6 mb-3 mb-md-0">
@@ -59,28 +59,16 @@
                                 <div class="col-xl-2 col-lg-3 col-sm-6 col-md-4">
                                     <div class="product-card">
                                         <a class="thumb" href="{{route('single.service', $item->slug)}}"><img src="{{asset($item->image != null ? $item->image : 'no-product-image.jpg')}}" alt="img" />
-                                            <div class="onsales-badges">
-                                                <span class="badge bg-dark">new</span>
-                                            </div>
                                         </a>
                                         <div class="product-content">
                                             <a class="product-category" href="#?">{{$item->category_name}}</a>
                                             <h3 class="product-title">
                                                 <a href="{{route('single.service', $item->slug)}}">{{$item->name}}</a>
                                             </h3>
-                                            <span class="price regular-price">
-                                                ৳ 0
-                                            </span>
                                             <button type="button" class="product-btn btn btn-primary btn-hover-warning" onclick="addCart({{$item->id}})">
                                                 Add to cart
                                             </button>
                                         </div>
-                                        <!-- actions links start -->
-                                        <ul class="actions">
-                                            <li class="action-item"><button type="button" class="action quick-view"><span class="lnr lnr-magnifier"></span></button></li>
-                                            <li class="action-item"><button type="button" class="action wishlist" onclick="addWishlist({{$item->id}})"><span class="lnr lnr-heart"></span></button></li>
-                                        </ul>
-                                        <!-- actions links end -->
                                     </div>
                                 </div>
                                 <!-- single slide End -->
@@ -98,9 +86,6 @@
                                                 <div class="product-card-list">
                                                     <a class="thumb" href="{{route('single.service', $item->slug)}}">
                                                         <img src="{{asset($item->image != null ? $item->image : 'no-product-image.jpg')}}" alt="img" />
-                                                        <div class="onsales-badges">
-                                                            <span class="badge bg-dark">new</span>
-                                                        </div>
                                                     </a>
                                                 </div>
                                             </div>
@@ -118,19 +103,10 @@
                                             </div>
                                             <div class="col-lg-3 mb-7">
                                                 <div class="product-content-list">
-                                                    <span class="price-list regular-price">
-                                                        ৳ 0
-                                                    </span>
                                                     <button type="button" class="product-btn-list btn btn-primary btn-hover-warning" onclick="addCart({{$item->id}})">
                                                         Add to cart
                                                     </button>
                                                 </div>
-                                                <!-- actions links start -->
-                                                <ul class="actions-list">
-                                                    <li class="action-item-list"><button type="button" class="action quick-view"><span class="lnr lnr-magnifier"></span></button></li>
-                                                    <li class="action-item-list"><button type="button" class="action wishlist" onclick="addWishlist({{$item->id}})"><span class="lnr lnr-heart"></span></button></li>
-                                                </ul>
-                                                <!-- actions links end -->
                                             </div>
                                         </div>
                                     </div>

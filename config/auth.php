@@ -40,9 +40,9 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
-        'technician' => [
+        'worker' => [
             'driver' => 'session',
-            'provider' => 'technicians',
+            'provider' => 'workers',
         ],
         'admin' => [
             'driver' => 'session',
@@ -72,9 +72,9 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
-        'technicians' => [
+        'workers' => [
             'driver' => 'eloquent',
-            'model' => App\Models\Technician::class,
+            'model' => App\Models\Worker::class,
         ],
         'admins' => [
             'driver' => 'eloquent',
@@ -109,8 +109,8 @@ return [
             'expire' => 60,
             'throttle' => 60,
         ],
-        'technicians' => [
-            'provider' => 'technicians',
+        'workers' => [
+            'provider' => 'workers',
             'table' => 'password_resets',
             'expire' => 60,
             'throttle' => 60,

@@ -1,15 +1,15 @@
 @extends("layouts.fronted_master")
-@section("title", " - Technician List")
+@section("title", " - Worker List")
 @section("content")
 <nav class="breadcrumb-section section-py bg-light2">
     <div class="container">
         <div class="row">
             <div class="col-12">
-                <h3 class="bread-crumb-title">Technician List</h3>
+                <h3 class="bread-crumb-title">Worker List</h3>
             </div>
         </div>
         <div class="p-3" style="background: #caedef;">
-            <form onsubmit="filterTechnician(event)">
+            <form onsubmit="filterWorker(event)">
                 <div class="row">
                     <div class="col-lg-3 pe-0">
                         <select onchange="getUpazila(event)" name="district_id" id="district_id" class="form-select">
@@ -37,9 +37,9 @@
 
 <section class="bg-light" style="padding-bottom: 25px;">
     <div class="container">
-        <div class="row technicianShow">
+        <div class="row workerShow">
             @if(Auth::guard('web')->check())
-            @foreach($technician as $item)
+            @foreach($worker as $item)
             @if(Auth::guard('web')->user()->district_id == $item->district_id)
             <div class="col-lg-3">
                 <div class="card" title="{{$item->name}}" style="cursor: pointer;position:relative;">
@@ -57,10 +57,10 @@
                             </li>
                             <li class="position-relative">
                                 <span class="fa fa-map-marker" style="position: absolute;left:-15px;top:0;"></span>
-                                <span>{{$item->address}}@if($item->address != null),@endif {{$item->upazila->name}}, {{$item->district->name}}</span>
+                                <span>{{$item->address}}@if($item->address != null),@endif {{$item->thana->name}}, {{$item->thana->district->name}}</span>
                             </li>
                             <li class="mt-2">
-                                <a href="{{route('technician.details', $item->id)}}" style="background: #2b46a8;padding: 5px;color: white;">Show Details</a>
+                                <a href="{{route('worker.details', $item->id)}}" style="background: #2b46a8;padding: 5px;color: white;">Show Details</a>
                             </li>
                         </ul>
                     </div>
@@ -68,7 +68,7 @@
             </div>
             @endif
             @endforeach
-            @foreach($technician as $item)
+            @foreach($worker as $item)
             @if(Auth::guard('web')->user()->district_id != $item->district_id)
             <div class="col-lg-3">
                 <div class="card" title="{{$item->name}}" style="cursor: pointer;position:relative;">
@@ -86,10 +86,10 @@
                             </li>
                             <li class="position-relative">
                                 <span class="fa fa-map-marker" style="position: absolute;left:-15px;top:0;"></span>
-                                <span>{{$item->address}}@if($item->address != null),@endif {{$item->upazila->name}}, {{$item->district->name}}</span>
+                                <span>{{$item->address}}@if($item->address != null),@endif {{$item->thana->name}}, {{$item->thana->district->name}}</span>
                             </li>
                             <li class="mt-2">
-                                <a href="{{route('technician.details', $item->id)}}" style="background: #2b46a8;padding: 5px;color: white;">Show Details</a>
+                                <a href="{{route('worker.details', $item->id)}}" style="background: #2b46a8;padding: 5px;color: white;">Show Details</a>
                             </li>
                         </ul>
                     </div>
@@ -98,7 +98,7 @@
             @endif
             @endforeach
             @else
-            @foreach($technician as $item)
+            @foreach($worker as $item)
             <div class="col-lg-3">
                 <div class="card" title="{{$item->name}}" style="cursor: pointer;position:relative;">
                     @if($item->status == 'v')
@@ -115,10 +115,10 @@
                             </li>
                             <li class="position-relative">
                                 <span class="fa fa-map-marker" style="position: absolute;left:-15px;top:0;"></span>
-                                <span>{{$item->address}}@if($item->address != null),@endif {{$item->upazila->name}}, {{$item->district->name}}</span>
+                                <span>{{$item->address}}@if($item->address != null),@endif {{$item->thana->name}}, {{$item->thana->district->name}}</span>
                             </li>
                             <li class="mt-2">
-                                <a href="{{route('technician.details', $item->id)}}" style="background: #2b46a8;padding: 5px;color: white;">Show Details</a>
+                                <a href="{{route('worker.details', $item->id)}}" style="background: #2b46a8;padding: 5px;color: white;">Show Details</a>
                             </li>
                         </ul>
                     </div>
@@ -152,7 +152,7 @@
         }
     }
 
-    function filterTechnician(event) {
+    function filterWorker(event) {
         event.preventDefault();
         if ($("#district_id").val() == "") {
             $(".error-district_id").text("District select first")
@@ -167,13 +167,13 @@
         let formdata = new FormData(event.target)
 
         $.ajax({
-            url: location.origin + "/filter-technician",
+            url: location.origin + "/filter-worker",
             method: "POST",
             data: formdata,
             processData: false,
             contentType: false,
             beforeSend: () => {
-                $(".technicianShow").html("")
+                $(".workerShow").html("")
                 $(".checkoutImage").removeClass("d-none")
             },
             success: res => {
@@ -192,23 +192,21 @@
                                                     </li>
                                                     <li class="position-relative">
                                                         <span class="fa fa-map-marker" style="position: absolute;left:-15px;top:0;"></span>
-                                                        <span>${value.address}${value.address != null ? ',':''} ${value.upazila.name}, ${value.district.name}</span>
+                                                        <span>${value.address}${value.address != null ? ',':''} ${value.thana.name}, ${value.thana.district.name}</span>
                                                     </li>
                                                 </ul>
                                             </div>
                                         </div>
                                     </div>`;
 
-                        $(".technicianShow").append(row)
+                        $(".workerShow").append(row)
                     })
                 } else {
-                    $(".technicianShow").html(`<div class="text-center">Not Found Data</div>`)
+                    $(".workerShow").html(`<div class="text-center">Not Found Data</div>`)
                 }
             },
             complete: () => {
-                setTimeout(() => {
-                    $(".checkoutImage").addClass("d-none")
-                }, 500)
+                $(".checkoutImage").addClass("d-none")
             }
         })
     }

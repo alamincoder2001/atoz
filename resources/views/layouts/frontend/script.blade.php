@@ -23,7 +23,11 @@
                 $(".cartImage").removeClass("d-none")
             },
             success: res => {
-                $.notify(res.msg, "success");
+                if(res.status){
+                    $.notify(res.msg, "success");
+                }else{
+                    $.notify(res.msg, "error");
+                }
                 $.each(res.content, (index, value) => {
                     let row = `
                         <li class="checkout-cart-list">
@@ -33,7 +37,7 @@
                             </div>
                             <div class="checkout-block">
                                 <a class="product-name" href="{{route('service')}}">${value.name}</a>
-                                <span class="product-price">৳ ${value.price}</span>
+                                <!--<span class="product-price">৳ ${value.price}</span>-->
                                 <a class="remove-cart" row-id="${value.rowId}" onclick="removeCart(event)">
                                     x
                                 </a>
