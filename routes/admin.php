@@ -111,10 +111,12 @@ Route::group(["prefix" => "admin"], function () {
     Route::post('/customer/status', [CustomerController::class, 'status'])->name("admin.customer.status");
     Route::get('/customer/fetch/{id?}', [CustomerController::class, 'fetch'])->name("admin.customer.fetch");
 
-    // technician route
+    // worker route
     Route::get('/worker', [WorkerController::class, 'create'])->name("admin.worker.create");
-    Route::get('/get-user/{id?}', [WorkerController::class, 'index'])->name("admin.worker.index");
+    Route::get('/get-worker/{id?}', [WorkerController::class, 'index'])->name("admin.worker.index");
+    Route::post('/worker', [WorkerController::class, 'store'])->name("admin.worker.store");
     Route::get('/worker/delete/{id}', [WorkerController::class, 'destroy'])->name("admin.worker.destroy");
+    Route::post('/update/worker', [WorkerController::class, 'update'])->name('admin.worker.update');
     Route::post('/worker/status', [WorkerController::class, 'status'])->name("admin.worker.status");
     Route::get('/worker/fetch/{id?}', [WorkerController::class, 'fetch'])->name("admin.worker.fetch");
     Route::post('/worker/rating', [WorkerController::class, 'rating'])->name("admin.worker.rating");

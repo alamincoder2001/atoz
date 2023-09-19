@@ -26,8 +26,6 @@
                                                 <span class="error-username error text-danger"></span>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-6">
                                         <div class="form-group row mb-2">
                                             <label for="name" class="col-md-3">Email<span
                                                     class="text-danger fw-bold">*</span></label>
@@ -35,6 +33,25 @@
                                                 <input type="email" id="email" v-model="form.email" class="form-control"
                                                     placeholder="Email" autocomplete="off">
                                                 <span class="error-email error text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group row mb-2">
+                                            <label for="district_id" class="col-md-3">District<span
+                                                    class="text-danger fw-bold">*</span></label>
+                                            <div class="col-md-9">
+                                                <v-select :options="districts" v-model="selectedDistrict" label="name"
+                                                    @input="onChangeDistrict"></v-select>
+                                                <span class="error-password error text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row mb-2">
+                                            <label for="thana_id" class="col-md-3">Thana<span
+                                                    class="text-danger fw-bold">*</span></label>
+                                            <div class="col-md-9">
+                                                <v-select :options="thanas" v-model="selectedThana" label="name"></v-select>
+                                                <span class="error-password error text-danger"></span>
                                             </div>
                                         </div>
                                         <div class="form-group row mb-2">
@@ -117,9 +134,17 @@ export default {
                 email: "",
                 role: "manager",
                 password: "",
+                district_id: "",
+                thana_id: "",
+                address: "",
             }),
             imageSrc: "/noImage.jpg",
             users: [],
+
+            districts: [],
+            selectedDistrict: null,
+            thanas: [],
+            selectedThana: null,
 
             columns: [
                 { label: "Image", field: "img", html: true, },
@@ -136,9 +161,31 @@ export default {
 
     created() {
         this.getUser();
+        this.getDistrict();
     },
 
     methods: {
+        getDistrict() {
+            axios.get("/admin/district/fetch")
+                .then(res => {
+                    this.districts = res.data.data
+                })
+        },
+        onChangeDistrict() {
+            if (this.selectedDistrict != null) {
+                this.thanas = [];
+                this.selectedThana = null;
+                this.getThana();
+            }
+        },
+        getThana() {
+            axios.get("/admin/thana/fetch")
+                .then(res => {
+                    this.thanas = res.data.data.filter(th => {
+                        return th.district_id == this.selectedDistrict.id
+                    })
+                })
+        },
         getUser() {
             axios.get("/admin/get-manager")
                 .then(res => {
@@ -151,6 +198,17 @@ export default {
         },
 
         saveUser() {
+            if (this.selectedDistrict == null) {
+                alert("District Select")
+                return
+            }
+            if (this.selectedThana == null) {
+                alert("Thana Select")
+                return
+            }
+            this.form.district_id = this.selectedDistrict.id;
+            this.form.thana_id = this.selectedThana.id;
+
             let url = "/admin/manager";
             if (this.form.id != '') {
                 url = "/admin/update/manager";
@@ -199,7 +257,20 @@ export default {
             this.form.username = val.username;
             this.form.email = val.email;
             this.form.role = val.role;
+            this.form.district_id = val.district_id;
+            this.form.thana_id = val.thana_id;
+            this.form.address = val.address;
             this.imageSrc = val.image != null ? '/' + val.image : "/noImage.jpg"
+
+            this.selectedDistrict = {
+                id: val.district_id,
+                name: val.thana.district.name,
+            }
+            this.getThana();
+            this.selectedThana = {
+                id: val.thana_id,
+                name: val.thana.name
+            }
         },
 
         deleteRow(id) {
@@ -233,8 +304,15 @@ export default {
             this.form.email = "";
             this.form.role = "manager";
             this.form.password = "";
+            this.form.district_id = "";
+            this.form.thana_id = "";
+            this.form.address = "";
             this.imageSrc = "/noImage.jpg",
                 delete (this.form.image)
+
+            this.selectedDistrict = null;
+            this.thanas = [];
+            this.selectedThana = null;
         }
     },
 }

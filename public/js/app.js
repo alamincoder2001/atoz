@@ -5355,10 +5355,17 @@ __webpack_require__.r(__webpack_exports__);
         username: "",
         email: "",
         role: "manager",
-        password: ""
+        password: "",
+        district_id: "",
+        thana_id: "",
+        address: ""
       }),
       imageSrc: "/noImage.jpg",
       users: [],
+      districts: [],
+      selectedDistrict: null,
+      thanas: [],
+      selectedThana: null,
       columns: [{
         label: "Image",
         field: "img",
@@ -5383,32 +5390,64 @@ __webpack_require__.r(__webpack_exports__);
   },
   created: function created() {
     this.getUser();
+    this.getDistrict();
   },
   methods: {
-    getUser: function getUser() {
+    getDistrict: function getDistrict() {
       var _this = this;
+      axios.get("/admin/district/fetch").then(function (res) {
+        _this.districts = res.data.data;
+      });
+    },
+    onChangeDistrict: function onChangeDistrict() {
+      if (this.selectedDistrict != null) {
+        this.thanas = [];
+        this.selectedThana = null;
+        this.getThana();
+      }
+    },
+    getThana: function getThana() {
+      var _this2 = this;
+      axios.get("/admin/thana/fetch").then(function (res) {
+        _this2.thanas = res.data.data.filter(function (th) {
+          return th.district_id == _this2.selectedDistrict.id;
+        });
+      });
+    },
+    getUser: function getUser() {
+      var _this3 = this;
       axios.get("/admin/get-manager").then(function (res) {
-        _this.users = res.data.data.map(function (c) {
+        _this3.users = res.data.data.map(function (c) {
           c.img = c.image == null ? '<img src="/noImage.jpg" width="40px">' : '<img src="/' + c.image + '" width="40px">';
           return c;
         });
       });
     },
     saveUser: function saveUser() {
-      var _this2 = this;
+      var _this4 = this;
+      if (this.selectedDistrict == null) {
+        alert("District Select");
+        return;
+      }
+      if (this.selectedThana == null) {
+        alert("Thana Select");
+        return;
+      }
+      this.form.district_id = this.selectedDistrict.id;
+      this.form.thana_id = this.selectedThana.id;
       var url = "/admin/manager";
       if (this.form.id != '') {
         url = "/admin/update/manager";
       }
       this.form.post(url).then(function (res) {
         if (res.data.status == "error") {
-          _this2.showError(res.data.msg);
+          _this4.showError(res.data.msg);
           return;
         }
         $.notify(res.data.msg, "success");
         if (res.data.status) {
-          _this2.clearData();
-          _this2.getUser();
+          _this4.clearData();
+          _this4.getUser();
         }
       });
     },
@@ -5440,28 +5479,40 @@ __webpack_require__.r(__webpack_exports__);
       this.form.username = val.username;
       this.form.email = val.email;
       this.form.role = val.role;
+      this.form.district_id = val.district_id;
+      this.form.thana_id = val.thana_id;
+      this.form.address = val.address;
       this.imageSrc = val.image != null ? '/' + val.image : "/noImage.jpg";
+      this.selectedDistrict = {
+        id: val.district_id,
+        name: val.thana.district.name
+      };
+      this.getThana();
+      this.selectedThana = {
+        id: val.thana_id,
+        name: val.thana.name
+      };
     },
     deleteRow: function deleteRow(id) {
-      var _this3 = this;
+      var _this5 = this;
       if (confirm("Are you sure want to delete this!")) {
         axios.post("/admin/manager/delete", {
           id: id
         }).then(function (res) {
           $.notify(res.data, "success");
-          _this3.getUser();
+          _this5.getUser();
         });
       }
     },
     imageUrl: function imageUrl(event) {
-      var _this4 = this;
+      var _this6 = this;
       if (event.target.files[0]) {
         var img = new Image();
         img.src = window.URL.createObjectURL(event.target.files[0]);
         img.onload = function () {
           if (img.width === 150 && img.height === 150) {
-            _this4.imageSrc = window.URL.createObjectURL(event.target.files[0]);
-            _this4.form.image = event.target.files[0];
+            _this6.imageSrc = window.URL.createObjectURL(event.target.files[0]);
+            _this6.form.image = event.target.files[0];
           } else {
             alert("This image ".concat(img.width, "px X ").concat(img.height, "px but require image 150px X 150px"));
           }
@@ -5475,7 +5526,13 @@ __webpack_require__.r(__webpack_exports__);
       this.form.email = "";
       this.form.role = "manager";
       this.form.password = "";
+      this.form.district_id = "";
+      this.form.thana_id = "";
+      this.form.address = "";
       this.imageSrc = "/noImage.jpg", delete this.form.image;
+      this.selectedDistrict = null;
+      this.thanas = [];
+      this.selectedThana = null;
     }
   }
 });
@@ -6495,11 +6552,17 @@ __webpack_require__.r(__webpack_exports__);
       linkHref: location.origin,
       form: new Form({
         id: "",
+        worker_code: "",
         name: "",
         mobile: "",
         father_name: "",
         mother_name: "",
-        password: ""
+        commission: 0,
+        district_id: "",
+        thana_id: "",
+        address: "",
+        reference: "",
+        image: ""
       }),
       imageSrc: "/noImage.jpg",
       workers: [],
@@ -6546,6 +6609,7 @@ __webpack_require__.r(__webpack_exports__);
     onChangeDistrict: function onChangeDistrict() {
       if (this.selectedDistrict != null) {
         this.thanas = [];
+        this.selectedThana = null;
         this.getThana();
       }
     },
@@ -6560,7 +6624,8 @@ __webpack_require__.r(__webpack_exports__);
     getWorker: function getWorker() {
       var _this3 = this;
       axios.get("/admin/get-worker").then(function (res) {
-        _this3.workers = res.data.data.map(function (c) {
+        _this3.form.worker_code = res.data.worker_code;
+        _this3.workers = res.data.workers.map(function (c) {
           c.img = c.image == null ? '<img src="/noImage.jpg" width="40px">' : '<img src="/' + c.image + '" width="40px">';
           return c;
         });
@@ -6568,6 +6633,16 @@ __webpack_require__.r(__webpack_exports__);
     },
     saveWorker: function saveWorker() {
       var _this4 = this;
+      if (this.selectedDistrict == null) {
+        alert("District Select");
+        return;
+      }
+      if (this.selectedThana == null) {
+        alert("Thana Select");
+        return;
+      }
+      this.form.district_id = this.selectedDistrict.id;
+      this.form.thana_id = this.selectedThana.id;
       var url = "/admin/worker";
       if (this.form.id != '') {
         url = "/admin/update/worker";
@@ -6608,11 +6683,26 @@ __webpack_require__.r(__webpack_exports__);
     },
     editRow: function editRow(val) {
       this.form.id = val.id;
+      this.form.worker_code = val.worker_code;
       this.form.name = val.name;
       this.form.father_name = val.father_name;
       this.form.mother_name = val.mother_name;
-      this.form.role = val.role;
+      this.form.mobile = val.mobile;
+      this.form.commission = val.commission;
+      this.form.district_id = val.district_id;
+      this.form.thana_id = val.thana_id;
+      this.form.address = val.address;
+      this.form.reference = val.reference;
       this.imageSrc = val.image != null ? '/' + val.image : "/noImage.jpg";
+      this.selectedDistrict = {
+        id: val.district_id,
+        name: val.thana.district.name
+      };
+      this.getThana();
+      this.selectedThana = {
+        id: val.thana_id,
+        name: val.thana.name
+      };
     },
     deleteRow: function deleteRow(id) {
       var _this5 = this;
@@ -6642,12 +6732,20 @@ __webpack_require__.r(__webpack_exports__);
     },
     clearData: function clearData() {
       this.form.id = "";
+      this.form.worker_code = "";
       this.form.name = "";
       this.form.father_name = "";
       this.form.mother_name = "";
-      this.form.role = "manager";
-      this.form.password = "";
+      this.form.mobile = "";
+      this.form.commission = 0;
+      this.form.district_id = "";
+      this.form.thana_id = "";
+      this.form.address = "";
+      this.form.reference = "";
       this.imageSrc = "/noImage.jpg", delete this.form.image;
+      this.selectedDistrict = null;
+      this.thanas = [];
+      this.selectedThana = null;
     }
   }
 });
@@ -7173,9 +7271,7 @@ var render = function render() {
     }
   }), _vm._v(" "), _c("span", {
     staticClass: "error-username error text-danger"
-  })])])]), _vm._v(" "), _c("div", {
-    staticClass: "col-md-6"
-  }, [_c("div", {
+  })])]), _vm._v(" "), _c("div", {
     staticClass: "form-group row mb-2"
   }, [_vm._m(2), _vm._v(" "), _c("div", {
     staticClass: "col-md-9"
@@ -7204,9 +7300,50 @@ var render = function render() {
     }
   }), _vm._v(" "), _c("span", {
     staticClass: "error-email error text-danger"
-  })])]), _vm._v(" "), _c("div", {
+  })])])]), _vm._v(" "), _c("div", {
+    staticClass: "col-md-6"
+  }, [_c("div", {
     staticClass: "form-group row mb-2"
   }, [_vm._m(3), _vm._v(" "), _c("div", {
+    staticClass: "col-md-9"
+  }, [_c("v-select", {
+    attrs: {
+      options: _vm.districts,
+      label: "name"
+    },
+    on: {
+      input: _vm.onChangeDistrict
+    },
+    model: {
+      value: _vm.selectedDistrict,
+      callback: function callback($$v) {
+        _vm.selectedDistrict = $$v;
+      },
+      expression: "selectedDistrict"
+    }
+  }), _vm._v(" "), _c("span", {
+    staticClass: "error-password error text-danger"
+  })], 1)]), _vm._v(" "), _c("div", {
+    staticClass: "form-group row mb-2"
+  }, [_vm._m(4), _vm._v(" "), _c("div", {
+    staticClass: "col-md-9"
+  }, [_c("v-select", {
+    attrs: {
+      options: _vm.thanas,
+      label: "name"
+    },
+    model: {
+      value: _vm.selectedThana,
+      callback: function callback($$v) {
+        _vm.selectedThana = $$v;
+      },
+      expression: "selectedThana"
+    }
+  }), _vm._v(" "), _c("span", {
+    staticClass: "error-password error text-danger"
+  })], 1)]), _vm._v(" "), _c("div", {
+    staticClass: "form-group row mb-2"
+  }, [_vm._m(5), _vm._v(" "), _c("div", {
     staticClass: "col-md-9"
   }, [_c("input", {
     directives: [{
@@ -7233,7 +7370,7 @@ var render = function render() {
     }
   }), _vm._v(" "), _c("span", {
     staticClass: "error-password error text-danger"
-  })])]), _vm._v(" "), _vm._m(4)])])]), _vm._v(" "), _c("div", {
+  })])]), _vm._v(" "), _vm._m(6)])])]), _vm._v(" "), _c("div", {
     staticClass: "col-md-2 d-flex justify-content-center align-items-center"
   }, [_c("div", {
     staticClass: "form-group ImageBackground"
@@ -7354,6 +7491,28 @@ var staticRenderFns = [function () {
       "for": "name"
     }
   }, [_vm._v("Email"), _c("span", {
+    staticClass: "text-danger fw-bold"
+  }, [_vm._v("*")])]);
+}, function () {
+  var _vm = this,
+    _c = _vm._self._c;
+  return _c("label", {
+    staticClass: "col-md-3",
+    attrs: {
+      "for": "district_id"
+    }
+  }, [_vm._v("District"), _c("span", {
+    staticClass: "text-danger fw-bold"
+  }, [_vm._v("*")])]);
+}, function () {
+  var _vm = this,
+    _c = _vm._self._c;
+  return _c("label", {
+    staticClass: "col-md-3",
+    attrs: {
+      "for": "thana_id"
+    }
+  }, [_vm._v("Thana"), _c("span", {
     staticClass: "text-danger fw-bold"
   }, [_vm._v("*")])]);
 }, function () {
@@ -9718,6 +9877,35 @@ var render = function render() {
     directives: [{
       name: "model",
       rawName: "v-model",
+      value: _vm.form.worker_code,
+      expression: "form.worker_code"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      type: "text",
+      id: "worker_code",
+      autocomplete: "off",
+      readonly: ""
+    },
+    domProps: {
+      value: _vm.form.worker_code
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.$set(_vm.form, "worker_code", $event.target.value);
+      }
+    }
+  }), _vm._v(" "), _c("span", {
+    staticClass: "error-name error text-danger"
+  })])]), _vm._v(" "), _c("div", {
+    staticClass: "form-group row mb-2"
+  }, [_vm._m(1), _vm._v(" "), _c("div", {
+    staticClass: "col-md-9"
+  }, [_c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
       value: _vm.form.name,
       expression: "form.name"
     }],
@@ -9741,7 +9929,7 @@ var render = function render() {
     staticClass: "error-name error text-danger"
   })])]), _vm._v(" "), _c("div", {
     staticClass: "form-group row mb-2"
-  }, [_vm._m(1), _vm._v(" "), _c("div", {
+  }, [_vm._m(2), _vm._v(" "), _c("div", {
     staticClass: "col-md-9"
   }, [_c("input", {
     directives: [{
@@ -9770,7 +9958,7 @@ var render = function render() {
     staticClass: "error-mobile error text-danger"
   })])]), _vm._v(" "), _c("div", {
     staticClass: "form-group row mb-2"
-  }, [_vm._m(2), _vm._v(" "), _c("div", {
+  }, [_vm._m(3), _vm._v(" "), _c("div", {
     staticClass: "col-md-9"
   }, [_c("input", {
     directives: [{
@@ -9799,7 +9987,7 @@ var render = function render() {
     staticClass: "error-father_name error text-danger"
   })])]), _vm._v(" "), _c("div", {
     staticClass: "form-group row mb-2"
-  }, [_vm._m(3), _vm._v(" "), _c("div", {
+  }, [_vm._m(4), _vm._v(" "), _c("div", {
     staticClass: "col-md-9"
   }, [_c("input", {
     directives: [{
@@ -9830,7 +10018,36 @@ var render = function render() {
     staticClass: "col-md-6"
   }, [_c("div", {
     staticClass: "form-group row mb-2"
-  }, [_vm._m(4), _vm._v(" "), _c("div", {
+  }, [_vm._m(5), _vm._v(" "), _c("div", {
+    staticClass: "col-md-9"
+  }, [_c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.form.commission,
+      expression: "form.commission"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      type: "number",
+      id: "commission",
+      placeholder: "%",
+      autocomplete: "off"
+    },
+    domProps: {
+      value: _vm.form.commission
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.$set(_vm.form, "commission", $event.target.value);
+      }
+    }
+  }), _vm._v(" "), _c("span", {
+    staticClass: "error-commission error text-danger"
+  })])]), _vm._v(" "), _c("div", {
+    staticClass: "form-group row mb-2"
+  }, [_vm._m(6), _vm._v(" "), _c("div", {
     staticClass: "col-md-9"
   }, [_c("v-select", {
     attrs: {
@@ -9851,7 +10068,7 @@ var render = function render() {
     staticClass: "error-password error text-danger"
   })], 1)]), _vm._v(" "), _c("div", {
     staticClass: "form-group row mb-2"
-  }, [_vm._m(5), _vm._v(" "), _c("div", {
+  }, [_vm._m(7), _vm._v(" "), _c("div", {
     staticClass: "col-md-9"
   }, [_c("v-select", {
     attrs: {
@@ -9869,7 +10086,7 @@ var render = function render() {
     staticClass: "error-password error text-danger"
   })], 1)]), _vm._v(" "), _c("div", {
     staticClass: "form-group row mb-2"
-  }, [_vm._m(6), _vm._v(" "), _c("div", {
+  }, [_vm._m(8), _vm._v(" "), _c("div", {
     staticClass: "col-md-9"
   }, [_c("textarea", {
     directives: [{
@@ -9881,7 +10098,7 @@ var render = function render() {
     staticClass: "form-control",
     attrs: {
       id: "address",
-      placeholder: "Mother Name",
+      placeholder: "Address",
       autocomplete: "off"
     },
     domProps: {
@@ -9897,7 +10114,7 @@ var render = function render() {
     staticClass: "error-address error text-danger"
   })])]), _vm._v(" "), _c("div", {
     staticClass: "form-group row mb-2"
-  }, [_vm._m(7), _vm._v(" "), _c("div", {
+  }, [_vm._m(9), _vm._v(" "), _c("div", {
     staticClass: "col-md-9"
   }, [_c("textarea", {
     directives: [{
@@ -9909,7 +10126,7 @@ var render = function render() {
     staticClass: "form-control",
     attrs: {
       id: "reference",
-      placeholder: "Mother Name",
+      placeholder: "Reference",
       autocomplete: "off"
     },
     domProps: {
@@ -9923,7 +10140,7 @@ var render = function render() {
     }
   }), _vm._v(" "), _c("span", {
     staticClass: "error-reference error text-danger"
-  })])]), _vm._v(" "), _vm._m(8)])])]), _vm._v(" "), _c("div", {
+  })])]), _vm._v(" "), _vm._m(10)])])]), _vm._v(" "), _c("div", {
     staticClass: "col-md-2 d-flex justify-content-center align-items-center"
   }, [_c("div", {
     staticClass: "form-group ImageBackground"
@@ -10011,6 +10228,17 @@ var staticRenderFns = [function () {
   return _c("label", {
     staticClass: "col-md-3",
     attrs: {
+      "for": "worker_code"
+    }
+  }, [_vm._v("Code"), _c("span", {
+    staticClass: "text-danger fw-bold"
+  }, [_vm._v("*")])]);
+}, function () {
+  var _vm = this,
+    _c = _vm._self._c;
+  return _c("label", {
+    staticClass: "col-md-3",
+    attrs: {
       "for": "name"
     }
   }, [_vm._v("Name"), _c("span", {
@@ -10035,7 +10263,7 @@ var staticRenderFns = [function () {
     attrs: {
       "for": "father_name"
     }
-  }, [_vm._v("Father Name"), _c("span", {
+  }, [_vm._v("Father"), _c("span", {
     staticClass: "text-danger fw-bold"
   }, [_vm._v("*")])]);
 }, function () {
@@ -10046,7 +10274,18 @@ var staticRenderFns = [function () {
     attrs: {
       "for": "mother_name"
     }
-  }, [_vm._v("Mother Name"), _c("span", {
+  }, [_vm._v("Mother"), _c("span", {
+    staticClass: "text-danger fw-bold"
+  }, [_vm._v("*")])]);
+}, function () {
+  var _vm = this,
+    _c = _vm._self._c;
+  return _c("label", {
+    staticClass: "col-md-3 pe-md-0",
+    attrs: {
+      "for": "commission"
+    }
+  }, [_vm._v("Commission"), _c("span", {
     staticClass: "text-danger fw-bold"
   }, [_vm._v("*")])]);
 }, function () {
@@ -10101,7 +10340,7 @@ var staticRenderFns = [function () {
   }, [_c("label", {
     staticClass: "col-md-3",
     attrs: {
-      "for": "name"
+      "for": ""
     }
   }), _vm._v(" "), _c("div", {
     staticClass: "col-md-9"

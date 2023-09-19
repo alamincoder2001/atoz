@@ -28,9 +28,10 @@ class WorkerController extends Controller
 
     public function index()
     {
-        $data = Worker::latest()->get();
+        $workers = Worker::with('thana')->latest()->get();
+        $worker_code = $this->generateCode("Worker", "W");
 
-        return response()->json(["data" => $data]);
+        return response()->json(["workers" => $workers, "worker_code" => $worker_code]);
     }
 
     public function store(Request $request)
@@ -50,8 +51,10 @@ class WorkerController extends Controller
 
         try {
             $data              = new Worker();
+            $data->worker_code = $request->worker_code;
             $data->name        = $request->name;
             $data->mobile      = $request->mobile;
+            $data->commission  = $request->commission;
             $data->father_name = $request->father_name;
             $data->mother_name = $request->mother_name;
             $data->district_id = $request->district_id;
@@ -94,8 +97,10 @@ class WorkerController extends Controller
         try {
             $data = Worker::find($request->id);
 
+            $data->worker_code = $request->worker_code;
             $data->name        = $request->name;
             $data->mobile      = $request->mobile;
+            $data->commission  = $request->commission;
             $data->father_name = $request->father_name;
             $data->mother_name = $request->mother_name;
             $data->district_id = $request->district_id;

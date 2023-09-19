@@ -31,7 +31,7 @@ class AreaManagerController extends Controller
     public function index()
     {
         $authId = Auth::guard('admin')->user()->id;
-        $data = Admin::where("role", "manager")->where('id', '!=', $authId)->get();
+        $data = Admin::with('thana')->where("role", "manager")->where('id', '!=', $authId)->get();
 
         return response()->json(["data" => $data]);
     }
@@ -56,12 +56,15 @@ class AreaManagerController extends Controller
         }
 
         try {
-            $data           = new Admin();
-            $data->name     = $request->name;
-            $data->username = $request->username;
-            $data->email    = $request->email;
-            $data->role     = 'manager';
-            $data->password = Hash::make($request->password);
+            $data              = new Admin();
+            $data->name        = $request->name;
+            $data->username    = $request->username;
+            $data->email       = $request->email;
+            $data->district_id = $request->district_id;
+            $data->thana_id    = $request->thana_id;
+            $data->address     = $request->address;
+            $data->role        = 'manager';
+            $data->password    = Hash::make($request->password);
             if ($request->hasFile('image')) {
                 $data->image    = $this->imageUpload($request, 'image', 'uploads/admins');
             }
@@ -100,9 +103,12 @@ class AreaManagerController extends Controller
         try {
             $data = Admin::find($request->id);
 
-            $data->name     = $request->name;
-            $data->username = $request->username;
-            $data->email    = $request->email;
+            $data->name        = $request->name;
+            $data->username    = $request->username;
+            $data->email       = $request->email;
+            $data->district_id = $request->district_id;
+            $data->thana_id    = $request->thana_id;
+            $data->address     = $request->address;
             if (!empty($request->password)) {
                 $data->password = Hash::make($request->password);
             }

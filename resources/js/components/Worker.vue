@@ -9,6 +9,15 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group row mb-2">
+                                            <label for="worker_code" class="col-md-3">Code<span
+                                                    class="text-danger fw-bold">*</span></label>
+                                            <div class="col-md-9">
+                                                <input type="text" id="worker_code" v-model="form.worker_code"
+                                                    class="form-control" autocomplete="off" readonly>
+                                                <span class="error-name error text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row mb-2">
                                             <label for="name" class="col-md-3">Name<span
                                                     class="text-danger fw-bold">*</span></label>
                                             <div class="col-md-9">
@@ -27,7 +36,7 @@
                                             </div>
                                         </div>
                                         <div class="form-group row mb-2">
-                                            <label for="father_name" class="col-md-3">Father Name<span
+                                            <label for="father_name" class="col-md-3">Father<span
                                                     class="text-danger fw-bold">*</span></label>
                                             <div class="col-md-9">
                                                 <input type="text" id="father_name" v-model="form.father_name"
@@ -36,7 +45,7 @@
                                             </div>
                                         </div>
                                         <div class="form-group row mb-2">
-                                            <label for="mother_name" class="col-md-3">Mother Name<span
+                                            <label for="mother_name" class="col-md-3">Mother<span
                                                     class="text-danger fw-bold">*</span></label>
                                             <div class="col-md-9">
                                                 <input type="text" id="mother_name" v-model="form.mother_name"
@@ -46,6 +55,15 @@
                                         </div>
                                     </div>
                                     <div class="col-md-6">
+                                        <div class="form-group row mb-2">
+                                            <label for="commission" class="col-md-3 pe-md-0">Commission<span
+                                                    class="text-danger fw-bold">*</span></label>
+                                            <div class="col-md-9">
+                                                <input type="number" id="commission" v-model="form.commission"
+                                                    class="form-control" placeholder="%" autocomplete="off">
+                                                <span class="error-commission error text-danger"></span>
+                                            </div>
+                                        </div>
                                         <div class="form-group row mb-2">
                                             <label for="district_id" class="col-md-3">District<span
                                                     class="text-danger fw-bold">*</span></label>
@@ -69,7 +87,7 @@
                                                     class="text-danger fw-bold">*</span></label>
                                             <div class="col-md-9">
                                                 <textarea id="address" v-model="form.address" class="form-control"
-                                                    placeholder="Mother Name" autocomplete="off"></textarea>
+                                                    placeholder="Address" autocomplete="off"></textarea>
                                                 <span class="error-address error text-danger"></span>
                                             </div>
                                         </div>
@@ -78,13 +96,13 @@
                                                     class="text-danger fw-bold">*</span></label>
                                             <div class="col-md-9">
                                                 <textarea id="reference" v-model="form.reference" class="form-control"
-                                                    placeholder="Mother Name" autocomplete="off"></textarea>
+                                                    placeholder="Reference" autocomplete="off"></textarea>
                                                 <span class="error-reference error text-danger"></span>
                                             </div>
                                         </div>
 
                                         <div class="form-group row text-end">
-                                            <label for="name" class="col-md-3"></label>
+                                            <label for="" class="col-md-3"></label>
                                             <div class="col-md-9">
                                                 <button type="submit" class="btn btn-success text-light shadow-none">
                                                     <i class="fa fa-floppy-o pe-1" aria-hidden="true"></i>
@@ -144,11 +162,17 @@ export default {
             linkHref: location.origin,
             form: new Form({
                 id: "",
+                worker_code: "",
                 name: "",
                 mobile: "",
                 father_name: "",
                 mother_name: "",
-                password: "",
+                commission: 0,
+                district_id: "",
+                thana_id: "",
+                address: "",
+                reference: "",
+                image: "",
             }),
             imageSrc: "/noImage.jpg",
             workers: [],
@@ -186,6 +210,7 @@ export default {
         onChangeDistrict() {
             if (this.selectedDistrict != null) {
                 this.thanas = [];
+                this.selectedThana = null;
                 this.getThana();
             }
         },
@@ -200,7 +225,8 @@ export default {
         getWorker() {
             axios.get("/admin/get-worker")
                 .then(res => {
-                    this.workers = res.data.data.map(c => {
+                    this.form.worker_code = res.data.worker_code
+                    this.workers = res.data.workers.map(c => {
                         c.img = c.image == null ? '<img src="/noImage.jpg" width="40px">' : '<img src="/' + c.image + '" width="40px">'
                         return c;
                     })
@@ -209,6 +235,16 @@ export default {
         },
 
         saveWorker() {
+            if (this.selectedDistrict == null) {
+                alert("District Select")
+                return
+            }
+            if (this.selectedThana == null) {
+                alert("Thana Select")
+                return
+            }
+            this.form.district_id = this.selectedDistrict.id;
+            this.form.thana_id = this.selectedThana.id;
             let url = "/admin/worker";
             if (this.form.id != '') {
                 url = "/admin/update/worker";
@@ -253,11 +289,27 @@ export default {
 
         editRow(val) {
             this.form.id = val.id;
+            this.form.worker_code = val.worker_code;
             this.form.name = val.name;
             this.form.father_name = val.father_name;
             this.form.mother_name = val.mother_name;
-            this.form.role = val.role;
-            this.imageSrc = val.image != null ? '/' + val.image : "/noImage.jpg"
+            this.form.mobile = val.mobile;
+            this.form.commission = val.commission;
+            this.form.district_id = val.district_id;
+            this.form.thana_id = val.thana_id;
+            this.form.address = val.address;
+            this.form.reference = val.reference;
+            this.imageSrc = val.image != null ? '/' + val.image : "/noImage.jpg";
+
+            this.selectedDistrict = {
+                id: val.district_id,
+                name: val.thana.district.name,
+            }
+            this.getThana();
+            this.selectedThana = {
+                id: val.thana_id,
+                name: val.thana.name
+            }
         },
 
         deleteRow(id) {
@@ -286,13 +338,22 @@ export default {
 
         clearData() {
             this.form.id = "";
+            this.form.worker_code = "";
             this.form.name = "";
             this.form.father_name = "";
             this.form.mother_name = "";
-            this.form.role = "manager";
-            this.form.password = "";
+            this.form.mobile = "";
+            this.form.commission = 0;
+            this.form.district_id = "";
+            this.form.thana_id = "";
+            this.form.address = "";
+            this.form.reference = "";
             this.imageSrc = "/noImage.jpg",
                 delete (this.form.image)
+
+            this.selectedDistrict = null;
+            this.thanas = [];
+            this.selectedThana = null;
         }
     },
 }
