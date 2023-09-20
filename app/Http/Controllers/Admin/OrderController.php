@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderDetail;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
@@ -40,15 +41,22 @@ class OrderController extends Controller
 
     public function fetch(Request $request)
     {
-        $clauses = '';
+        $clauses = "";
+        $areaId = $request->thanaId;
+        if (Auth::guard('admin')->user()->role == 'manager') {
+            $areaId = Auth::guard()->user()->thana_id;
+        }
         if (isset($request->dateFrom) && !empty($request->dateFrom)) {
             $clauses .= " AND o.date BETWEEN '$request->dateFrom' AND '$request->dateTo'";
         }
-        if (isset($request->searchBy) && !empty($request->searchBy)) {
-            $clauses .= " AND o.status = '$request->searchBy'";
-        }
+        // if (isset($request->Status) && !empty($request->Status)) {
+        //     $clauses .= " AND o.status = '$request->Status'";
+        // }
         if (isset($request->id) && !empty($request->id)) {
             $clauses .= " AND o.id = '$request->id'";
+        }
+        if (isset($request->thanaId) && !empty($request->thanaId)) {
+            $clauses .= " AND cth.id = '$request->thanaId'";
         }
         $orders = DB::select("SELECT
                             o.*,
@@ -58,6 +66,7 @@ class OrderController extends Controller
                             c.address,
                             c.mobile,
                             cd.name as customer_district_name,
+                            cth.id as thanaId,
                             cth.name as customer_thana_name,
                             sd.name as shipping_district_name,
                             sth.name as shipping_thana_name
@@ -74,12 +83,9 @@ class OrderController extends Controller
         foreach ($orders as $order) {
             $order->orderDetails = DB::select("SELECT
                                     od.*,
-                                    p.name,
-                                    un.name as unit_name
-                                FROM
-                                    order_details AS od
-                                LEFT JOIN products AS p ON p.id = od.product_id
-                                LEFT JOIN units AS un ON un.id = p.unit_id
+                                    s.name
+                                FROM order_details AS od
+                                LEFT JOIN services s ON s.id = od.service_id
                                 WHERE od.order_id = ?", [$order->id]);
         }
 
@@ -125,7 +131,7 @@ class OrderController extends Controller
                 foreach($request->orderDetails as $item){
                     $detail             = new OrderDetail();
                     $detail->order_id   = $request->id;
-                    $detail->product_id = $item['product_id'];
+                    $detail->service_id = $item['service_id'];
                     $detail->quantity   = $item['quantity'];
                     $detail->unit_price = $item['unit_price'];
                     $detail->total      = $item['total'];

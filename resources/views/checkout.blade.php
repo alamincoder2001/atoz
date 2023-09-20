@@ -75,13 +75,13 @@
                             </div>
                         </form>
                         <div class="additional-info-wrap">
-                            <h4 class="title">Additional information</h4>
+                            <!-- <h4 class="title">Additional information</h4> -->
                             <div class="additional-info">
                                 <label class="mb-2">Order notes</label>
                                 <textarea name="note" placeholder="Notes about your order, e.g. special notes for delivery. "></textarea>
                             </div>
                         </div>
-                        <div class="checkout-account">
+                        <!-- <div class="checkout-account">
                             <input id="ship" class="checkout-toggle" type="checkbox" value="1" name="is_shipping" />
                             <label for="ship" style="cursor: pointer;">Ship to a different address?</label>
                         </div>
@@ -129,7 +129,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
                 <div class="col-lg-5 mt-4 mt-lg-0">
@@ -139,21 +139,21 @@
                             <div class="your-order-product-info">
                                 <div class="your-order-top">
                                     <ul>
-                                        <li>Product</li>
-                                        <li>Total</li>
+                                        <li>Service</li>
+                                        <li>Quantity</li>
                                     </ul>
                                 </div>
                                 <div class="your-order-middle">
                                     <ul>
                                         @foreach(\Cart::content() as $item)
                                         <li>
-                                            <span class="order-middle-left">{{$item->name}} X {{$item->qty}}</span>
-                                            <span class="order-price">৳ <label> {{$item->price * $item->qty}}</span>
+                                            <span class="order-middle-left">{{$item->name}}</span>
+                                            <span class="order-price"> {{$item->qty}} </span>
                                         </li>
                                         @endforeach
                                     </ul>
                                 </div>
-                                <div class="your-order-bottom">
+                                <!-- <div class="your-order-bottom">
                                     <ul>
                                         <li class="your-order-shipping">SubTotal</li>
                                         <li>৳ <span class="checkoutsubTotal">{{ str_replace(",", "", \Cart::subtotal()) }}</span></li>
@@ -185,9 +185,9 @@
                                         <li class="order-total">Total</li>
                                         <li>৳ <span class="checkoutcartTotal">{{number_format($total, 2)}}</span></li>
                                     </ul>
-                                </div>
+                                </div> -->
                             </div>
-                            <div class="payment-method">
+                            <!-- <div class="payment-method">
                                 <div class="payment-accordion element-mrg">
                                     <div class="panel-group" id="accordion">
                                         <div class="panel payment-accordion">
@@ -208,7 +208,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                         <div class="Place-order mt-25">
                             <button type="submit" class="btn btn-warning btn-lg w-100 btn-hover-primary">Place Order</button>
@@ -262,6 +262,8 @@
     function OrderPlace(event) {
         event.preventDefault();
         let formdata = new FormData(event.target);
+        formdata.append('shipping_charge', 0);
+        formdata.append('payment_type', 'Cash');
         $.ajax({
             url: location.origin+"/place-order",
             method: "POST",

@@ -48,6 +48,6 @@ class User extends Authenticatable
 
     public function thana()
     {
-        return $this->belongsTo(Thana::class, "thana_id", "id");
+        return $this->belongsTo(Thana::class, "thana_id", "id")->with("district");
     }
 }

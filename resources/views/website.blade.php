@@ -219,7 +219,7 @@
                                 <div class="swiper-wrapper">
                                     @if(Auth::guard('web')->check())
                                     @foreach($worker as $item)
-                                    @if(Auth::guard('web')->user()->district_id == $item->district_id)
+                                    @if(Auth::guard('web')->user()->thana->district_id == $item->district_id)
                                         <div class="swiper-slide">
                                             <div class="product-card" style="position:relative;height:200px;border: 1px solid #cdcdcd;">
                                                 @if($item->status == 'v')
@@ -230,14 +230,14 @@
                                                     <h3 class="product-title mt-3">
                                                         <a href="">{{$item->name}}</a>
                                                     </h3>
-                                                    <span>Location: {{$item->upazila->name}}, {{$item->district->name}}</span>
+                                                    <span>Location: {{$item->thana->name}}, {{$item->thana->district->name}}</span>
                                                 </div>
                                             </div>
                                         </div>
                                     @endif
                                     @endforeach
                                     @foreach($worker as $item)
-                                    @if(Auth::guard('web')->user()->district_id != $item->district_id)
+                                    @if(Auth::guard('web')->user()->thana->district_id != $item->district_id)
                                         <div class="swiper-slide">
                                             <div class="product-card" style="position:relative;height:200px;border: 1px solid #cdcdcd;">
                                                 @if($item->status == 'v')
@@ -248,7 +248,7 @@
                                                     <h3 class="product-title mt-3">
                                                         <a href="">{{$item->name}}</a>
                                                     </h3>
-                                                    <span>Location: {{$item->upazila->name}}, {{$item->district->name}}</span>
+                                                    <span>Location: {{$item->thana->name}}, {{$item->thana->district->name}}</span>
                                                 </div>
                                             </div>
                                         </div>

@@ -5,10 +5,11 @@
 
 .card-header i {
     padding: 12px;
-    border-top-left-radius: 25px;
-    border-bottom-right-radius: 25px;
+    /* border-top-left-radius: 25px;
+    border-bottom-right-radius: 25px; */
     font-size: 25px;
     color: #fff;
+    border-radius: 50%;
 }
 </style>
 <template>

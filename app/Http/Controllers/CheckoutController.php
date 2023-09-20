@@ -81,7 +81,7 @@ class CheckoutController extends Controller
             }
         } catch (\Throwable $e) {
             DB::rollBack();
-            return "Opps! something went wrong ";
+            return "Opps! something went wrong ".$e->getMessage();
         }
     }
 }

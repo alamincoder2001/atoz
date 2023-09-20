@@ -52,13 +52,19 @@
                         </li>
                     </ul>
                 </li>
-                <li class="sidebar-item">
+                <li class="sidebar-item {{Request::is('admin.order.index') || Request::is('admin.order.delivery') || Request::is('admin.order.canceled') ? 'selected':''}}">
                     <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-cart-plus"></i><span class="hide-menu"> Order Module </span></a>
                     <ul aria-expanded="false" class="collapse first-level">
-                        <li class="sidebar-item">
-                            <a href="{{route('admin.order.index')}}" class="sidebar-link {{Request::is('admin.order.index') ? 'active':''}}"><i class="fas fa-cart-plus"></i><span class="hide-menu"> Pending Order</span></a>
+                        <li class="sidebar-item {{Request::is('admin.order.index') ? 'active':''}}">
+                            <a href="{{route('admin.order.index')}}" class="sidebar-link {{Request::is('admin.order.index') ? 'active':''}}"><i class="fas fa-cart-plus"></i><span class="hide-menu"> Order List </span></a>
+                        </li>
+                        <!-- <li class="sidebar-item {{Request::is('admin.order.proccessing') ? 'active':''}}">
                             <a href="{{route('admin.order.proccessing')}}" class="sidebar-link {{Request::is('admin.order.proccessing') ? 'active':''}}"><i class="fas fa-cart-plus"></i><span class="hide-menu"> On Proccessing Order </span></a>
-                            <a href="{{route('admin.order.delivery')}}" class="sidebar-link {{Request::is('admin.order.delivery') ? 'active':''}}"><i class="fas fa-cart-plus"></i><span class="hide-menu"> Delivered Order </span></a>
+                        </li> -->
+                        <li class="sidebar-item {{Request::is('admin.order.delivery') ? 'active':''}}">
+                            <a href="{{route('admin.order.delivery')}}" class="sidebar-link {{Request::is('admin.order.delivery') ? 'active':''}}"><i class="fas fa-cart-plus"></i><span class="hide-menu"> Completed Order </span></a>
+                        </li>
+                        <li class="sidebar-item {{Request::is('admin.order.canceled') ? 'active':''}}">
                             <a href="{{route('admin.order.canceled')}}" class="sidebar-link {{Request::is('admin.order.canceled') ? 'active':''}}"><i class="fas fa-cart-plus"></i><span class="hide-menu"> Canceled Order </span></a>
                         </li>
                     </ul>

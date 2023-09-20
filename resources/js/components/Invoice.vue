@@ -29,18 +29,12 @@
             <table class="table table-bordered table-sm">
                 <thead style="background: #2f8cff">
                     <tr>
-                        <th class="text-white text-center">Sl</th>
+                        <th class="text-white">Sl</th>
                         <th class="text-white text-center">
                             Description
                         </th>
                         <th class="text-white text-center">
                             Quantity
-                        </th>
-                        <th class="text-white text-center">
-                            Unit Price
-                        </th>
-                        <th class="text-white text-center">
-                            Total
                         </th>
                     </tr>
                 </thead>
@@ -51,10 +45,6 @@
                         <td class="text-center">
                             {{ item.quantity }}
                         </td>
-                        <td class="text-center">
-                            {{ item.unit_price }}
-                        </td>
-                        <td class="text-end">{{ item.total }}</td>
                     </tr>
                 </tbody>
             </table>
