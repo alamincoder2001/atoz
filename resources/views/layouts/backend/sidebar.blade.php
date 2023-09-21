@@ -58,9 +58,9 @@
                         <li class="sidebar-item {{Request::is('admin.order.index') ? 'active':''}}">
                             <a href="{{route('admin.order.index')}}" class="sidebar-link {{Request::is('admin.order.index') ? 'active':''}}"><i class="fas fa-cart-plus"></i><span class="hide-menu"> Order List </span></a>
                         </li>
-                        <!-- <li class="sidebar-item {{Request::is('admin.order.proccessing') ? 'active':''}}">
-                            <a href="{{route('admin.order.proccessing')}}" class="sidebar-link {{Request::is('admin.order.proccessing') ? 'active':''}}"><i class="fas fa-cart-plus"></i><span class="hide-menu"> On Proccessing Order </span></a>
-                        </li> -->
+                        <li class="sidebar-item {{Request::is('admin.order.assign') ? 'active':''}}">
+                            <a href="{{route('admin.order.assign')}}" class="sidebar-link {{Request::is('admin.order.assign') ? 'active':''}}"><i class="fas fa-dolly-flatbed"></i><span class="hide-menu"> Assign Order </span></a>
+                        </li>
                         <li class="sidebar-item {{Request::is('admin.order.delivery') ? 'active':''}}">
                             <a href="{{route('admin.order.delivery')}}" class="sidebar-link {{Request::is('admin.order.delivery') ? 'active':''}}"><i class="fas fa-cart-plus"></i><span class="hide-menu"> Completed Order </span></a>
                         </li>

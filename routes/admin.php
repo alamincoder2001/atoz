@@ -83,6 +83,8 @@ Route::group(["prefix" => "admin"], function () {
     //order route
     Route::get('/order', [OrderController::class, 'index'])->name('admin.order.index');
     Route::get('/order-proccessing', [OrderController::class, 'proccessing'])->name('admin.order.proccessing');
+    Route::get('/order-assign', [OrderController::class, 'assign'])->name('admin.order.assign');
+    Route::post('/order/assign-worker', [OrderController::class, 'assignWorker'])->name('admin.order.assignworker');
     Route::get('/order-delivery', [OrderController::class, 'delivery'])->name('admin.order.delivery');
     Route::get('/order-canceled', [OrderController::class, 'canceled'])->name('admin.order.canceled');
     Route::post('/order/fetch', [OrderController::class, 'fetch'])->name('admin.order.fetch');

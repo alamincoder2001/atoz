@@ -20,6 +20,10 @@ class OrderController extends Controller
     {
         return view("admin.order.index");
     }
+    public function assign()
+    {
+        return view("admin.order.assign");
+    }
     public function proccessing()
     {
         return view("admin.order.proccess");
@@ -69,7 +73,9 @@ class OrderController extends Controller
                             cth.id as thanaId,
                             cth.name as customer_thana_name,
                             sd.name as shipping_district_name,
-                            sth.name as shipping_thana_name
+                            sth.name as shipping_thana_name,
+                            (SELECT count(*) FROM order_details od WHERE od.order_id = o.id) as totaldetail,
+                            (SELECT count(*) FROM order_details od WHERE od.order_id = o.id AND od.worker_id is not null) as totalassign
                         FROM orders AS o
                         LEFT JOIN users AS c ON c.id = o.customer_id
                         LEFT JOIN thanas cth ON cth.id = c.id
@@ -83,9 +89,11 @@ class OrderController extends Controller
         foreach ($orders as $order) {
             $order->orderDetails = DB::select("SELECT
                                     od.*,
-                                    s.name
+                                    s.name,
+                                    ifnull(w.name, 'N/A') as worker_name
                                 FROM order_details AS od
                                 LEFT JOIN services s ON s.id = od.service_id
+                                LEFT JOIN workers w ON w.id = od.worker_id
                                 WHERE od.order_id = ?", [$order->id]);
         }
 
@@ -101,6 +109,19 @@ class OrderController extends Controller
         return "Order Cancel Successfully";
     }
 
+    // status change
+    public function assignWorker(Request $request)
+    {
+        try{
+            $data = OrderDetail::where("id", $request->id)->first();
+            $data->worker_id = $request->worker_id;
+            $data->updated_at = date("Y-m-d");
+            $data->save();
+            return "Service assign successfully";
+        }catch(\Throwable $e){
+            return "Opps! something went wrong";
+        }
+    }
     // status change
     public function changeStatus(Request $request)
     {

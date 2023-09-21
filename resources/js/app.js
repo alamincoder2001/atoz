@@ -34,6 +34,7 @@ Vue.component("Blog", require("./components/Blog.vue").default);
 Vue.component("create-user", require("./components/CreateUser.vue").default);
 Vue.component("create-manager", require("./components/AreaManager.vue").default);
 Vue.component("Orderlist", require("./components/OrderList.vue").default);
+Vue.component("order-assign", require("./components/OrderAssign.vue").default);
 Vue.component("proccess-order", require("./components/processOrder.vue").default);
 Vue.component("delivered-order", require("./components/deliveredOrder.vue").default);
 Vue.component("cancel-order", require("./components/cancelOrder.vue").default);

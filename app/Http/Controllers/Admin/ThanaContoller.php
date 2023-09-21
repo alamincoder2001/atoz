@@ -24,7 +24,7 @@ class ThanaContoller extends Controller
         if ($id != null) {
             $data = Thana::find($id);
         } else {
-            $data = Thana::with('district')->get();
+            $data = Thana::with('district')->orderBy('name', 'asc')->get();
         }
         return response()->json(["data" => $data]);
     }

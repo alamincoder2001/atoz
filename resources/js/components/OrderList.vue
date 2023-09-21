@@ -91,7 +91,7 @@
                                 </tr>
                                 <tr v-for="(service, sl) in item.orderDetails.slice(1)">
                                     <td colspan="5" :rowspan="item.orderDetails.length - 1" v-if="sl == 0"></td>
-                                    <td>{{ service.name }}</td>
+                                    <td class="text-center">{{ service.name }}</td>
                                     <td class="text-center">{{ service.quantity }}</td>
                                     <td></td>
                                 </tr>
