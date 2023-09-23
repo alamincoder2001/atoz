@@ -7,6 +7,7 @@ use App\Models\Permission;
 use App\Models\AdminAccess;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -20,12 +21,12 @@ class AdminAccessController extends Controller
 
     public function create()
     {
-        // $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
-        //     ->pluck('permissions')
-        //     ->toArray();
-        // if (!in_array("userEntry", $access)) {
-        //     return view("admin.unauthorize");
-        // }
+        $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("userEntry", $access)) {
+            return view("admin.unauthorize");
+        }
         return view("admin.user.create");
     }
 
@@ -151,12 +152,12 @@ class AdminAccessController extends Controller
     // permission edit
     public function permissionEdit($id)
     {
-        // $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
-        //     ->pluck('permissions')
-        //     ->toArray();
-        // if (!in_array("userAccess", $access)) {
-        //     return view("admin.unauthorize");
-        // }
+        $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("userAccess", $access)) {
+            return view("admin.unauthorize");
+        }
 
         $user = Admin::find($id);
         $userAccess = AdminAccess::where('admin_id', $id)->pluck('permissions')->toArray();

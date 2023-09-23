@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use Carbon\Carbon;
 use App\Models\Category;
+use App\Models\AdminAccess;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 
@@ -19,6 +21,12 @@ class CategoryController extends Controller
 
     public function index()
     {
+        $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("categoryEntry", $access)) {
+            return view("admin.unauthorize");
+        }
         return view("admin.category.index");
     }
 

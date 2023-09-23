@@ -53,8 +53,6 @@
                                                 <span class="error-mother_name error text-danger"></span>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-6">
                                         <div class="form-group row mb-2">
                                             <label for="commission" class="col-md-3 pe-md-0">Commission<span
                                                     class="text-danger fw-bold">*</span></label>
@@ -64,13 +62,23 @@
                                                 <span class="error-commission error text-danger"></span>
                                             </div>
                                         </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group row mb-2">
+                                            <label for="manager_id" class="col-md-3">Manager<span
+                                                    class="text-danger fw-bold">*</span></label>
+                                            <div class="col-md-9">
+                                                <v-select :options="managers" v-model="selectedManager" label="name"></v-select>
+                                                <span class="error-manager_id error text-danger"></span>
+                                            </div>
+                                        </div>
                                         <div class="form-group row mb-2">
                                             <label for="district_id" class="col-md-3">District<span
                                                     class="text-danger fw-bold">*</span></label>
                                             <div class="col-md-9">
                                                 <v-select :options="districts" v-model="selectedDistrict" label="name"
                                                     @input="onChangeDistrict"></v-select>
-                                                <span class="error-password error text-danger"></span>
+                                                <span class="error-district_id error text-danger"></span>
                                             </div>
                                         </div>
                                         <div class="form-group row mb-2">
@@ -168,6 +176,7 @@ export default {
                 father_name: "",
                 mother_name: "",
                 commission: 0,
+                manager_id: "",
                 district_id: "",
                 thana_id: "",
                 address: "",
@@ -181,6 +190,8 @@ export default {
             selectedDistrict: null,
             thanas: [],
             selectedThana: null,
+            managers: [],
+            selectedManager: null,
             columns: [
                 { label: "Image", field: "img", html: true, },
                 { label: 'Name', field: 'name' },
@@ -198,9 +209,16 @@ export default {
     created() {
         this.getWorker();
         this.getDistrict();
+        this.getAreaManager();
     },
 
     methods: {
+        getAreaManager() {
+            axios.get("/admin/get-manager")
+                .then(res => {
+                    this.managers = res.data.data;
+                })
+        },
         getDistrict() {
             axios.get("/admin/district/fetch")
                 .then(res => {
@@ -243,6 +261,11 @@ export default {
                 alert("Thana Select")
                 return
             }
+            if (this.selectedManager == null) {
+                alert("Thana Select")
+                return
+            }
+            this.form.manager_id = this.selectedManager.id;
             this.form.district_id = this.selectedDistrict.id;
             this.form.thana_id = this.selectedThana.id;
             let url = "/admin/worker";
@@ -295,12 +318,21 @@ export default {
             this.form.mother_name = val.mother_name;
             this.form.mobile = val.mobile;
             this.form.commission = val.commission;
+            this.form.manager_id = val.manager_id;
             this.form.district_id = val.district_id;
             this.form.thana_id = val.thana_id;
             this.form.address = val.address;
             this.form.reference = val.reference;
             this.imageSrc = val.image != null ? '/' + val.image : "/noImage.jpg";
 
+            if (val.manager_id) {
+                this.selectedManager = {
+                    id: val.manager_id,
+                    name: val.manager.name,
+                }
+            }else{
+                this.selectedManager = null
+            }
             this.selectedDistrict = {
                 id: val.district_id,
                 name: val.thana.district.name,
@@ -354,6 +386,7 @@ export default {
             this.selectedDistrict = null;
             this.thanas = [];
             this.selectedThana = null;
+            this.selectedManager = null;
         }
     },
 }

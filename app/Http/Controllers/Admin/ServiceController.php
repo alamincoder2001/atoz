@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Service;
+use App\Models\AdminAccess;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 
@@ -19,6 +21,12 @@ class ServiceController extends Controller
 
     public function index()
     {
+        $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("serviceEntry", $access)) {
+            return view("admin.unauthorize");
+        }
         return view("admin.service.index");
     }
 
@@ -112,6 +120,12 @@ class ServiceController extends Controller
     // published product
     public function published()
     {
+        $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("servicepublishEntry", $access)) {
+            return view("admin.unauthorize");
+        }
         return view("admin.service.published");
     }
 

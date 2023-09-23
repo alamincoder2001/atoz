@@ -15,6 +15,10 @@ class Worker extends Authenticatable
 
     protected $guarded = ['id'];
 
+    public function manager()
+    {
+        return $this->belongsTo(Admin::class, 'manager_id', 'id');
+    }
     public function thana()
     {
         return $this->belongsTo(Thana::class, 'thana_id', 'id')->with('district');

@@ -6517,6 +6517,7 @@ __webpack_require__.r(__webpack_exports__);
         father_name: "",
         mother_name: "",
         commission: 0,
+        manager_id: "",
         district_id: "",
         thana_id: "",
         address: "",
@@ -6529,6 +6530,8 @@ __webpack_require__.r(__webpack_exports__);
       selectedDistrict: null,
       thanas: [],
       selectedThana: null,
+      managers: [],
+      selectedManager: null,
       columns: [{
         label: "Image",
         field: "img",
@@ -6557,12 +6560,19 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     this.getWorker();
     this.getDistrict();
+    this.getAreaManager();
   },
   methods: {
-    getDistrict: function getDistrict() {
+    getAreaManager: function getAreaManager() {
       var _this = this;
+      axios.get("/admin/get-manager").then(function (res) {
+        _this.managers = res.data.data;
+      });
+    },
+    getDistrict: function getDistrict() {
+      var _this2 = this;
       axios.get("/admin/district/fetch").then(function (res) {
-        _this.districts = res.data.data;
+        _this2.districts = res.data.data;
       });
     },
     onChangeDistrict: function onChangeDistrict() {
@@ -6573,25 +6583,25 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     getThana: function getThana() {
-      var _this2 = this;
+      var _this3 = this;
       axios.get("/admin/thana/fetch").then(function (res) {
-        _this2.thanas = res.data.data.filter(function (th) {
-          return th.district_id == _this2.selectedDistrict.id;
+        _this3.thanas = res.data.data.filter(function (th) {
+          return th.district_id == _this3.selectedDistrict.id;
         });
       });
     },
     getWorker: function getWorker() {
-      var _this3 = this;
+      var _this4 = this;
       axios.get("/admin/get-worker").then(function (res) {
-        _this3.form.worker_code = res.data.worker_code;
-        _this3.workers = res.data.workers.map(function (c) {
+        _this4.form.worker_code = res.data.worker_code;
+        _this4.workers = res.data.workers.map(function (c) {
           c.img = c.image == null ? '<img src="/noImage.jpg" width="40px">' : '<img src="/' + c.image + '" width="40px">';
           return c;
         });
       });
     },
     saveWorker: function saveWorker() {
-      var _this4 = this;
+      var _this5 = this;
       if (this.selectedDistrict == null) {
         alert("District Select");
         return;
@@ -6600,6 +6610,11 @@ __webpack_require__.r(__webpack_exports__);
         alert("Thana Select");
         return;
       }
+      if (this.selectedManager == null) {
+        alert("Thana Select");
+        return;
+      }
+      this.form.manager_id = this.selectedManager.id;
       this.form.district_id = this.selectedDistrict.id;
       this.form.thana_id = this.selectedThana.id;
       var url = "/admin/worker";
@@ -6608,13 +6623,13 @@ __webpack_require__.r(__webpack_exports__);
       }
       this.form.post(url).then(function (res) {
         if (res.data.status == "error") {
-          _this4.showError(res.data.msg);
+          _this5.showError(res.data.msg);
           return;
         }
         $.notify(res.data.msg, "success");
         if (res.data.status) {
-          _this4.clearData();
-          _this4.getWorker();
+          _this5.clearData();
+          _this5.getWorker();
         }
       });
     },
@@ -6648,11 +6663,20 @@ __webpack_require__.r(__webpack_exports__);
       this.form.mother_name = val.mother_name;
       this.form.mobile = val.mobile;
       this.form.commission = val.commission;
+      this.form.manager_id = val.manager_id;
       this.form.district_id = val.district_id;
       this.form.thana_id = val.thana_id;
       this.form.address = val.address;
       this.form.reference = val.reference;
       this.imageSrc = val.image != null ? '/' + val.image : "/noImage.jpg";
+      if (val.manager_id) {
+        this.selectedManager = {
+          id: val.manager_id,
+          name: val.manager.name
+        };
+      } else {
+        this.selectedManager = null;
+      }
       this.selectedDistrict = {
         id: val.district_id,
         name: val.thana.district.name
@@ -6664,25 +6688,25 @@ __webpack_require__.r(__webpack_exports__);
       };
     },
     deleteRow: function deleteRow(id) {
-      var _this5 = this;
+      var _this6 = this;
       if (confirm("Are you sure want to delete this!")) {
         axios.post("/admin/worker/delete", {
           id: id
         }).then(function (res) {
           $.notify(res.data, "success");
-          _this5.getWorker();
+          _this6.getWorker();
         });
       }
     },
     imageUrl: function imageUrl(event) {
-      var _this6 = this;
+      var _this7 = this;
       if (event.target.files[0]) {
         var img = new Image();
         img.src = window.URL.createObjectURL(event.target.files[0]);
         img.onload = function () {
           if (img.width === 150 && img.height === 150) {
-            _this6.imageSrc = window.URL.createObjectURL(event.target.files[0]);
-            _this6.form.image = event.target.files[0];
+            _this7.imageSrc = window.URL.createObjectURL(event.target.files[0]);
+            _this7.form.image = event.target.files[0];
           } else {
             alert("This image ".concat(img.width, "px X ").concat(img.height, "px but require image 150px X 150px"));
           }
@@ -6705,6 +6729,7 @@ __webpack_require__.r(__webpack_exports__);
       this.selectedDistrict = null;
       this.thanas = [];
       this.selectedThana = null;
+      this.selectedManager = null;
     }
   }
 });
@@ -10114,9 +10139,7 @@ var render = function render() {
     }
   }), _vm._v(" "), _c("span", {
     staticClass: "error-mother_name error text-danger"
-  })])])]), _vm._v(" "), _c("div", {
-    staticClass: "col-md-6"
-  }, [_c("div", {
+  })])]), _vm._v(" "), _c("div", {
     staticClass: "form-group row mb-2"
   }, [_vm._m(5), _vm._v(" "), _c("div", {
     staticClass: "col-md-9"
@@ -10145,9 +10168,29 @@ var render = function render() {
     }
   }), _vm._v(" "), _c("span", {
     staticClass: "error-commission error text-danger"
-  })])]), _vm._v(" "), _c("div", {
+  })])])]), _vm._v(" "), _c("div", {
+    staticClass: "col-md-6"
+  }, [_c("div", {
     staticClass: "form-group row mb-2"
   }, [_vm._m(6), _vm._v(" "), _c("div", {
+    staticClass: "col-md-9"
+  }, [_c("v-select", {
+    attrs: {
+      options: _vm.managers,
+      label: "name"
+    },
+    model: {
+      value: _vm.selectedManager,
+      callback: function callback($$v) {
+        _vm.selectedManager = $$v;
+      },
+      expression: "selectedManager"
+    }
+  }), _vm._v(" "), _c("span", {
+    staticClass: "error-manager_id error text-danger"
+  })], 1)]), _vm._v(" "), _c("div", {
+    staticClass: "form-group row mb-2"
+  }, [_vm._m(7), _vm._v(" "), _c("div", {
     staticClass: "col-md-9"
   }, [_c("v-select", {
     attrs: {
@@ -10165,10 +10208,10 @@ var render = function render() {
       expression: "selectedDistrict"
     }
   }), _vm._v(" "), _c("span", {
-    staticClass: "error-password error text-danger"
+    staticClass: "error-district_id error text-danger"
   })], 1)]), _vm._v(" "), _c("div", {
     staticClass: "form-group row mb-2"
-  }, [_vm._m(7), _vm._v(" "), _c("div", {
+  }, [_vm._m(8), _vm._v(" "), _c("div", {
     staticClass: "col-md-9"
   }, [_c("v-select", {
     attrs: {
@@ -10186,7 +10229,7 @@ var render = function render() {
     staticClass: "error-password error text-danger"
   })], 1)]), _vm._v(" "), _c("div", {
     staticClass: "form-group row mb-2"
-  }, [_vm._m(8), _vm._v(" "), _c("div", {
+  }, [_vm._m(9), _vm._v(" "), _c("div", {
     staticClass: "col-md-9"
   }, [_c("textarea", {
     directives: [{
@@ -10214,7 +10257,7 @@ var render = function render() {
     staticClass: "error-address error text-danger"
   })])]), _vm._v(" "), _c("div", {
     staticClass: "form-group row mb-2"
-  }, [_vm._m(9), _vm._v(" "), _c("div", {
+  }, [_vm._m(10), _vm._v(" "), _c("div", {
     staticClass: "col-md-9"
   }, [_c("textarea", {
     directives: [{
@@ -10240,7 +10283,7 @@ var render = function render() {
     }
   }), _vm._v(" "), _c("span", {
     staticClass: "error-reference error text-danger"
-  })])]), _vm._v(" "), _vm._m(10)])])]), _vm._v(" "), _c("div", {
+  })])]), _vm._v(" "), _vm._m(11)])])]), _vm._v(" "), _c("div", {
     staticClass: "col-md-2 d-flex justify-content-center align-items-center"
   }, [_c("div", {
     staticClass: "form-group ImageBackground"
@@ -10386,6 +10429,17 @@ var staticRenderFns = [function () {
       "for": "commission"
     }
   }, [_vm._v("Commission"), _c("span", {
+    staticClass: "text-danger fw-bold"
+  }, [_vm._v("*")])]);
+}, function () {
+  var _vm = this,
+    _c = _vm._self._c;
+  return _c("label", {
+    staticClass: "col-md-3",
+    attrs: {
+      "for": "manager_id"
+    }
+  }, [_vm._v("Manager"), _c("span", {
     staticClass: "text-danger fw-bold"
   }, [_vm._v("*")])]);
 }, function () {

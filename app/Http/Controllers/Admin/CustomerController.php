@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\User;
+use App\Models\AdminAccess;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 
 class CustomerController extends Controller
@@ -17,6 +19,12 @@ class CustomerController extends Controller
 
     public function index()
     {
+        $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("customerList", $access)) {
+            return view("admin.unauthorize");
+        }
         return view("admin.customer.index");
     }
 
@@ -57,12 +65,12 @@ class CustomerController extends Controller
 
     public function status(Request $request)
     {
-        try{
+        try {
             $data = User::find($request->id);
             $data->status = $request->setStatus;
             $data->save();
             return "Status change successfully";
-        }catch(\Throwable $e){
+        } catch (\Throwable $e) {
             return "Opps! something went wrong";
         }
     }

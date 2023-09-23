@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Worker;
+use App\Models\AdminAccess;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -18,18 +20,18 @@ class WorkerController extends Controller
 
     public function create()
     {
-        // $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
-        //     ->pluck('permissions')
-        //     ->toArray();
-        // if (!in_array("userEntry", $access)) {
-        //     return view("admin.unauthorize");
-        // }
+        $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("workerEntry", $access)) {
+            return view("admin.unauthorize");
+        }
         return view("admin.worker.create");
     }
 
     public function index()
     {
-        $workers = Worker::with('thana')->latest()->get();
+        $workers = Worker::with('thana', 'manager')->latest()->get();
         $worker_code = $this->generateCode("Worker", "W");
 
         return response()->json(["workers" => $workers, "worker_code" => $worker_code]);
@@ -59,6 +61,7 @@ class WorkerController extends Controller
             $data->commission  = $request->commission;
             $data->father_name = $request->father_name;
             $data->mother_name = $request->mother_name;
+            $data->manager_id  = $request->manager_id;
             $data->district_id = $request->district_id;
             $data->thana_id    = $request->thana_id;
             $data->address     = $request->address;
@@ -106,6 +109,7 @@ class WorkerController extends Controller
             $data->commission  = $request->commission;
             $data->father_name = $request->father_name;
             $data->mother_name = $request->mother_name;
+            $data->manager_id  = $request->manager_id;
             $data->district_id = $request->district_id;
             $data->thana_id    = $request->thana_id;
             $data->address     = $request->address;
@@ -151,6 +155,12 @@ class WorkerController extends Controller
     //assign work
     public function assignService()
     {
+        $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("assignWorkerService", $access)) {
+            return view("admin.unauthorize");
+        }
         return view('admin.worker.assign');
     }
 }

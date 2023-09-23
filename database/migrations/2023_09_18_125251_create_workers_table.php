@@ -22,6 +22,7 @@ class CreateWorkersTable extends Migration
             $table->string("mobile", 15)->unique();
             $table->string("password");
             $table->decimal("commission");
+            $table->integer('manager_id')->nullable();
             $table->integer('district_id')->nullable();
             $table->integer('thana_id')->nullable();
             $table->string("address")->nullable();

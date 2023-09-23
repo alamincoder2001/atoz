@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Order;
+use App\Models\AdminAccess;
+use App\Models\OrderDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Models\Order;
-use App\Models\OrderDetail;
 use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
@@ -18,19 +19,43 @@ class OrderController extends Controller
 
     public function index()
     {
+        $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("orderList", $access)) {
+            return view("admin.unauthorize");
+        }
         return view("admin.order.index");
     }
     public function assign()
     {
+        $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("orderAssign", $access)) {
+            return view("admin.unauthorize");
+        }
         return view("admin.order.assign");
     }
 
     public function delivery()
     {
+        $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("orderComplete", $access)) {
+            return view("admin.unauthorize");
+        }
         return view("admin.order.delivery");
     }
     public function canceled()
     {
+        $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("orderCancel", $access)) {
+            return view("admin.unauthorize");
+        }
         return view("admin.order.canceled");
     }
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Admin;
+use App\Models\AdminAccess;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -19,12 +20,12 @@ class AreaManagerController extends Controller
 
     public function create()
     {
-        // $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
-        //     ->pluck('permissions')
-        //     ->toArray();
-        // if (!in_array("userEntry", $access)) {
-        //     return view("admin.unauthorize");
-        // }
+        $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("areaManagerEntry", $access)) {
+            return view("admin.unauthorize");
+        }
         return view("admin.manager.create");
     }
 
