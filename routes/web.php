@@ -54,6 +54,7 @@ Route::post("/worker-update", [WorkerController::class, 'update'])->name('worker
 Route::post("/worker-imageUpdate", [WorkerController::class, 'imageUpdate'])->name('worker.imageUpdate');
 Route::get("/worker-logout", [WorkerController::class, 'logout'])->name('worker.logout');
 Route::post("/filter-worker", [WorkerController::class, 'filterWorker'])->name('filter.worker');
+Route::post("/order-status-update", [WorkerController::class, 'statusUpdate'])->name('workerorder.status.update');
 // get data from database
 Route::get("/getUpazila/{id}", [HomeController::class, "getUpazila"]);
 Route::get('/setting/fetch', [HomeController::class, 'fetch'])->name('setting.fetch');

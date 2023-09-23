@@ -82,16 +82,13 @@ Route::group(["prefix" => "admin"], function () {
 
     //order route
     Route::get('/order', [OrderController::class, 'index'])->name('admin.order.index');
-    Route::get('/order-proccessing', [OrderController::class, 'proccessing'])->name('admin.order.proccessing');
     Route::get('/order-assign', [OrderController::class, 'assign'])->name('admin.order.assign');
     Route::post('/order/assign-worker', [OrderController::class, 'assignWorker'])->name('admin.order.assignworker');
     Route::get('/order-delivery', [OrderController::class, 'delivery'])->name('admin.order.delivery');
     Route::get('/order-canceled', [OrderController::class, 'canceled'])->name('admin.order.canceled');
     Route::post('/order/fetch', [OrderController::class, 'fetch'])->name('admin.order.fetch');
-    Route::post('/order/status', [OrderController::class, 'changeStatus'])->name('admin.order.status');
     Route::post('/order/delete', [OrderController::class, 'destroy'])->name('admin.order.destroy');
     Route::get('/order/invoice/{invoice}', [OrderController::class, 'invoice'])->name('admin.order.invoice');
-    Route::post('/order/update', [OrderController::class, 'update'])->name("admin.order.update");
     Route::get('/order/report', [OrderController::class, 'report'])->name("admin.order.report");
     Route::post('/order/commission', [OrderController::class, 'getCommission'])->name("admin.order.commission");
 
@@ -114,6 +111,7 @@ Route::group(["prefix" => "admin"], function () {
     Route::get('/customer/fetch/{id?}', [CustomerController::class, 'fetch'])->name("admin.customer.fetch");
 
     // worker route
+    Route::get('/worker/assign-service', [WorkerController::class, 'assignService'])->name("admin.worker.assignservice");
     Route::get('/worker', [WorkerController::class, 'create'])->name("admin.worker.create");
     Route::get('/get-worker/{id?}', [WorkerController::class, 'index'])->name("admin.worker.index");
     Route::post('/worker', [WorkerController::class, 'store'])->name("admin.worker.store");

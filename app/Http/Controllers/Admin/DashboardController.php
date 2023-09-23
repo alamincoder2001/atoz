@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use App\Models\Worker;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -27,20 +29,28 @@ class DashboardController extends Controller
     {
         $month = date("m");
         $year = date("Y");
+        $today = date('Y-m-d');
         $dayNumber = date('t', mktime(0, 0, 0, $month, 1, $year));
 
         $todayOrder = DB::select("SELECT sm.*
         FROM orders sm
-        WHERE sm.date = date('Y-m-d') AND sm.status = 'pending'
+        WHERE sm.date = '$today' AND sm.status = 'pending'
         ");
-        $monthOrder = DB::select("SELECT sm.*
+        $pendingOrder = DB::select("SELECT sm.*
         FROM orders sm
-        WHERE MONTH(sm.date) = '$month' AND sm.status = 'pending'
+        WHERE sm.status = 'pending'
         ");
         $yearOrder = DB::select("SELECT sm.*
         FROM orders sm
         WHERE YEAR(sm.date) = '$year' AND sm.status = 'pending'
         ");
+        $complete = DB::select("SELECT sm.*
+            FROM orders sm WHERE sm.status = 'complete'
+        ");
+        $cancel = DB::select("SELECT sm.*
+            FROM orders sm WHERE sm.status = 'cancel'
+        ");
+
 
         $dayRecord = DB::select("SELECT 
         IFNULL(SUM(sm.total), 0 ) AS sales_amount
@@ -94,12 +104,12 @@ class DashboardController extends Controller
             array_push($yearlyRecord, $sale);
         }
 
-        // top sold product
+        // top sold service
         $topSold = DB::select("SELECT
                         s.name AS service_name,
                         SUM(od.quantity) as qty
                     FROM order_details od
-                    JOIN services s ON s.id = od.product_id
+                    JOIN services s ON s.id = od.service_id
                     JOIN orders o ON o.id = od.order_id
                     WHERE o.status != 'cancel' AND o.status != 'pending'
                     GROUP BY service_name LIMIT 5");
@@ -109,22 +119,29 @@ class DashboardController extends Controller
                             ifnull(SUM(o.total), 0) as total_amount
                             FROM orders o
                             JOIN users c ON c.id = o.customer_id
-                            WHERE c.customer_type = 'wholesale' 
-                            AND o.status != 'pending' 
+                            WHERE o.status != 'pending' 
                             AND o.status != 'cancel'
                             GROUP BY name LIMIT 5");
 
+        $worker = '';
+        if (Auth::guard('admin')->user()->role == 'manager') {
+            $worker = Worker::where("thana_id", Auth::guard('admin')->user()->thana_id)->get();
+        }
+        if ((Auth::guard('admin')->user()->role == 'admin') || (Auth::guard('admin')->user()->role == 'superadmin')) {
+            $worker = Worker::get();
+        }
+
         return response()->json([
-            'today_order'       => $todayOrder,
-            'month_order'       => $monthOrder,
-            'year_order'        => $yearOrder,
-            'today_sale_record' => $dayRecord,
-            'month_sale_record' => $monthRecord,
-            'year_sale_record'  => $yearRecord,
-            'monthly_record'    => $monthlyRecord,
-            'yearly_record'     => $yearlyRecord,
-            'topSold'           => $topSold,
-            'topCustomer'       => $topCustomer,
+            'today_order'    => $todayOrder,
+            'pending_order'  => $pendingOrder,
+            'year_order'     => $yearOrder,
+            'completed'      => $complete,
+            'cancel'         => $cancel,
+            'topSold'        => $topSold,
+            'topCustomer'    => $topCustomer,
+            'manager'        => Admin::where('role', 'manager')->get(),
+            'worker'         => $worker,
+            'customer'       => User::get(),
         ]);
     }
 

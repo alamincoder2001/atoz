@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
+use App\Models\OrderDetail;
 use App\Models\Worker;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,7 +15,8 @@ class WorkerController extends Controller
     public function index()
     {
         if (Auth::guard('worker')->check()) {
-            return view("dashboard.worker-dashboard");
+            $data['orders'] = OrderDetail::with('service')->where('worker_id', Auth::guard('worker')->user()->id)->latest()->get();
+            return view("dashboard.worker-dashboard", $data);
         } else {
             return redirect("/login");
         }
@@ -22,40 +25,23 @@ class WorkerController extends Controller
     public function update(Request $request)
     {
         try {
-            $technician = Auth::guard('technician')->user();
-            if (!empty($request->old_password) || !empty($request->new_password) || !empty($request->confrim_password)) {
-                $validator = Validator::make($request->all(), [
-                    "name"             => "required",
-                    "mobile"           => "required",
-                    "gender"           => "required",
-                    "district_id"      => "required",
-                    "thana_id"         => "required",
-                    "address"          => "required",
-                ]);
-            } else {
-                $validator = Validator::make($request->all(), [
-                    "name"        => "required",
-                    "mobile"      => "required",
-                    "district_id" => "required",
-                    "thana_id"    => "required",
-                    "address"     => "required",
-                ]);
-            }
+            $technician = Auth::guard('worker')->user();
+
+            $validator = Validator::make($request->all(), [
+                "name"             => "required",
+                "mobile"           => "required",
+                "district_id"      => "required",
+                "thana_id"         => "required",
+                "address"          => "required",
+            ]);
             if ($validator->fails()) {
                 return response()->json(["error" => $validator->errors()]);
             }
 
-            $data = Worker::find($technician->id);
-            if (!empty($request->old_password) || !empty($request->new_password) || !empty($request->confrim_password)) {
-                if (Hash::check($request->old_password, $technician->password)) {
-                    $data->password = Hash::make($request->new_password);
-                } else {
-                    return response()->json(["errors" => "Old password does not match"]);
-                }
-            }
+            $data              = Worker::find($technician->id);
             $data->name        = $request->name;
-            $data->username    = $request->username;
-            $data->email       = $request->email;
+            $data->father_name = $request->father_name;
+            $data->mother_name = $request->mother_name;
             $data->mobile      = $request->mobile;
             $data->district_id = $request->district_id;
             $data->thana_id    = $request->thana_id;
@@ -63,7 +49,7 @@ class WorkerController extends Controller
             $data->save();
             return "Worker Profile Updated";
         } catch (\Throwable $e) {
-            return "Opps! Something went wrong";
+            return "Opps! Something went wrong" . $e->getMessage();
         }
     }
 
@@ -101,11 +87,38 @@ class WorkerController extends Controller
 
     public function filterWorker(Request $request)
     {
-        try{
+        try {
             $data = Worker::with('thana')->where("thana_id", $request->thana_id)->get();
             return $data;
-        }catch(\Throwable $e){
+        } catch (\Throwable $e) {
             return "Opps! something went wrong";
+        }
+    }
+
+    public function statusUpdate(Request $request)
+    {
+        try {
+            $data = OrderDetail::where('id', $request->id)->first();
+            $orderId = $data->order_id;
+
+            $data->status = $request->status;
+            $data->update();
+
+            $msg = "";
+            if ($request->status == 'proccess') {
+                $msg = 'Service proccessing successfully';
+            }
+            if ($request->status == 'complete') {
+                $msg = 'Service complete successfully';
+            }
+            $orderdetail = OrderDetail::where('order_id', $orderId)->get();
+            $ordercomplete = OrderDetail::where('order_id', $orderId)->where('status', 'complete')->get();
+            if (count($orderdetail) == count($ordercomplete)) {
+                Order::where('id', $orderId)->update(['status' => 'complete']);
+            }
+            return response()->json(['status' => true, 'msg' => $msg]);
+        } catch (\Throwable $e) {
+            return response()->json(['status' => false, 'msg' => $e->getMessage()]);
         }
     }
 }

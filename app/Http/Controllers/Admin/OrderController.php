@@ -24,10 +24,7 @@ class OrderController extends Controller
     {
         return view("admin.order.assign");
     }
-    public function proccessing()
-    {
-        return view("admin.order.proccess");
-    }
+
     public function delivery()
     {
         return view("admin.order.delivery");
@@ -46,21 +43,21 @@ class OrderController extends Controller
     public function fetch(Request $request)
     {
         $clauses = "";
-        $areaId = $request->thanaId;
-        if (Auth::guard('admin')->user()->role == 'manager') {
-            $areaId = Auth::guard()->user()->thana_id;
-        }
+        // $areaId = $request->thanaId;
+        // if (Auth::guard('admin')->user()->role == 'manager') {
+        //     $areaId = Auth::guard()->user()->thana_id;
+        // }
         if (isset($request->dateFrom) && !empty($request->dateFrom)) {
             $clauses .= " AND o.date BETWEEN '$request->dateFrom' AND '$request->dateTo'";
         }
-        // if (isset($request->Status) && !empty($request->Status)) {
-        //     $clauses .= " AND o.status = '$request->Status'";
-        // }
+        if (isset($request->status) && !empty($request->status)) {
+            $clauses .= " AND o.status = '$request->status'";
+        }
         if (isset($request->id) && !empty($request->id)) {
             $clauses .= " AND o.id = '$request->id'";
         }
         if (isset($request->thanaId) && !empty($request->thanaId)) {
-            $clauses .= " AND cth.id = '$request->thanaId'";
+            $clauses .= " AND c.thana_id = '$request->thanaId'";
         }
         $orders = DB::select("SELECT
                             o.*,
@@ -78,9 +75,9 @@ class OrderController extends Controller
                             (SELECT count(*) FROM order_details od WHERE od.order_id = o.id AND od.worker_id is not null) as totalassign
                         FROM orders AS o
                         LEFT JOIN users AS c ON c.id = o.customer_id
-                        LEFT JOIN thanas cth ON cth.id = c.id
+                        LEFT JOIN thanas cth ON cth.id = c.thana_id
                         LEFT JOIN districts cd ON cd.id = cth.id
-                        LEFT JOIN thanas sth ON sth.id = o.shipping_thana
+                        LEFT JOIN thanas sth ON sth.id = c.thana_id
                         LEFT JOIN districts sd ON sd.id = sth.id
                         WHERE 1=1
                         $clauses ORDER BY o.invoice DESC                            
@@ -106,32 +103,20 @@ class OrderController extends Controller
         $data = Order::find($request->id);
         $data->status = "cancel";
         $data->save();
+        OrderDetail::where('order_id', $request->id)->update(['status' => 'cancel']);
         return "Order Cancel Successfully";
     }
 
     // status change
     public function assignWorker(Request $request)
     {
-        try{
+        try {
             $data = OrderDetail::where("id", $request->id)->first();
             $data->worker_id = $request->worker_id;
             $data->updated_at = date("Y-m-d");
             $data->save();
             return "Service assign successfully";
-        }catch(\Throwable $e){
-            return "Opps! something went wrong";
-        }
-    }
-    // status change
-    public function changeStatus(Request $request)
-    {
-        try{
-            $data = Order::where("id", $request->id)->first();
-            $data->status = $request->Status;
-            $data->updated_at = date("Y-m-d");
-            $data->save();
-            return "Order ".$request->Status." successfully";
-        }catch(\Throwable $e){
+        } catch (\Throwable $e) {
             return "Opps! something went wrong";
         }
     }
@@ -140,16 +125,16 @@ class OrderController extends Controller
 
     public function update(Request $request)
     {
-        try{
+        try {
             if (count($request->orderDetails) > 0) {
-                
+
                 $data = Order::find($request->id);
                 $data->subtotal = $request->subtotal;
                 $data->total = $request->total;
                 $data->save();
-    
+
                 OrderDetail::where("order_id", $request->id)->delete();
-                foreach($request->orderDetails as $item){
+                foreach ($request->orderDetails as $item) {
                     $detail             = new OrderDetail();
                     $detail->order_id   = $request->id;
                     $detail->service_id = $item['service_id'];
@@ -157,14 +142,13 @@ class OrderController extends Controller
                     $detail->unit_price = $item['unit_price'];
                     $detail->total      = $item['total'];
                     $detail->save();
-    
                 }
-    
+
                 return "Order Update successfully";
-            }else{
+            } else {
                 return "Cart is empty";
             }
-        }catch(\Throwable $e){
+        } catch (\Throwable $e) {
             return "Opps! something went wrong";
         }
     }
@@ -176,9 +160,9 @@ class OrderController extends Controller
 
     public function getCommission(Request $request)
     {
-        try{
+        try {
             $clauses = "";
-            if(!empty($request->dateFrom)){
+            if (!empty($request->dateFrom)) {
                 $clauses .= "AND o.date BETWEEN '$request->dateFrom' AND '$request->dateTo'";
             }
             $query = DB::select("SELECT
@@ -192,8 +176,8 @@ class OrderController extends Controller
                                 GROUP BY id");
 
             return $query;
-        }catch(\Throwable $e){
+        } catch (\Throwable $e) {
             return "Opps! something went wrong";
         }
     }
-} 
+}

@@ -147,4 +147,10 @@ class WorkerController extends Controller
             ]);
         }
     }
+
+    //assign work
+    public function assignService()
+    {
+        return view('admin.worker.assign');
+    }
 }

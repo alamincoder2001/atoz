@@ -21,6 +21,7 @@ class CreateOrderDetailsTable extends Migration
             $table->integer("quantity");
             $table->decimal("unit_price");
             $table->decimal("total");
+            $table->char('status', 20)->default('pending')->comment('pending','proccess','complete');
             $table->timestamps();
         });
     }

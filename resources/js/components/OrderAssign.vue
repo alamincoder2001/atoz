@@ -75,7 +75,7 @@
                                     <td class="text-center">{{ item.orderDetails[0].quantity }}</td>
                                     <td class="text-center">{{ item.orderDetails[0].worker_name }}</td>
                                     <td>
-                                        <button @click="modalShow(item.orderDetails[0])" type="button" class="btn btn-danger btn-sm shadow-none fas fa-user"></button>
+                                        <button @click="modalShow(item.orderDetails[0], item.thanaId)" type="button" class="btn btn-danger btn-sm shadow-none fas fa-user"></button>
                                     </td>
                                 </tr>
                                 <tr :style="{background: item.totaldetail == item.totalassign ? 'green': ''}" :class="item.totaldetail == item.totalassign ? 'text-white': ''" v-for="(service, sl) in item.orderDetails.slice(1)">
@@ -84,7 +84,7 @@
                                     <td class="text-center">{{ service.quantity }}</td>
                                     <td class="text-center">{{ service.worker_name }}</td>
                                     <td>
-                                        <button @click="modalShow(service)" type="button" class="btn btn-danger btn-sm shadow-none fas fa-user"></button>
+                                        <button @click="modalShow(service, item.thanaId)" type="button" class="btn btn-danger btn-sm shadow-none fas fa-user"></button>
                                     </td>
                                 </tr>
                                 <tr>
@@ -236,6 +236,7 @@ export default {
 
     created() {
         this.getThana();
+        this.getOrder();
         this.adminId = this.$attrs.admin_id
         this.role = this.$attrs.role
     },
@@ -246,30 +247,25 @@ export default {
                 this.thanas = res.data.data;
             });
         },
-        getWorker(){
+        getWorker(thana_id){
             axios.get("/admin/get-worker").then((res) => {
-                this.workers = res.data.workers.filter(w => w.thana_id == this.selectedThana.id);
+                this.workers = res.data.workers.filter(w => w.thana_id == thana_id);
             });
         },
         onChangeSearch() {
             this.selectedThana = null;
         },
         getOrder() {
-            if (this.selectedThana == null) {
-                alert("Area Select");
-                return
-            }
             this.filter.thanaId = this.selectedThana == null ? null : this.selectedThana.id
 
             axios.post("/admin/order/fetch", this.filter).then((res) => {
                 this.orders = res.data.orders.filter(order => order.status != 'cancel');
             });
-
-            this.getWorker();
         },
 
-        modalShow(service){
+        modalShow(service, thana_id){
             $('#staticBackdrop').modal('show');
+            this.getWorker(thana_id);
             this.modalData = service;
             this.selectedWorker = null;
             if (service.worker_id) {
@@ -281,10 +277,6 @@ export default {
         },
 
         assignWork(){
-            // if (this.selectedWorker == null) {
-            //     alert("Worker Select");
-            //     return
-            // }
             let filter = {
                 id: this.modalData.id,
                 worker_id: this.selectedWorker == null ? null : this.selectedWorker.id

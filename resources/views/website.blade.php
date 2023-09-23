@@ -1,5 +1,5 @@
 @extends("layouts.fronted_master")
-@section("title", " - Home")
+@section("title", "Website - Home")
 @section("content")
 <div class="container">
     <div class="row">
@@ -332,7 +332,7 @@ $bann = array_chunk($banner, 3);
             <div class="tab-pane fade show active" id="newarrival">
                 @if(count($newarrival_product) != 0)
                 <div class="row mb-n7">
-                    <div class="col-lg-5 col-xl-4 mb-7">
+                    <!-- <div class="col-lg-5 col-xl-4 mb-7">
                         <div class="product-card-large">
                             <a class="thumb" href="{{route('single.service', $newarrival_product[0]->slug)}}"><img class="d-block mx-auto" src="{{asset($newarrival_product[0]->image != null ? $newarrival_product[0]->image : 'no-product-image.jpg')}}" alt="img" />
                             </a>
@@ -346,7 +346,7 @@ $bann = array_chunk($banner, 3);
                                 </button>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="col-lg-7 col-xl-8 mb-7 order-first order-lg-last">
                         <div class="product-carousel2">
                             <div class="d-none d-sm-block swiper-navination-arrows">
@@ -398,7 +398,7 @@ $bann = array_chunk($banner, 3);
             <div class="tab-pane fade" id="bestseller">
                 @if(count($topsold_product) != 0)
                 <div class="row mb-n7">
-                    <div class="col-lg-5 col-xl-4 mb-7">
+                    <!-- <div class="col-lg-5 col-xl-4 mb-7">
                         <div class="product-card-large">
                             <a class="thumb" href="{{route('single.service', $topsold_product[0]->slug)}}"><img class="d-block mx-auto" src="{{asset($topsold_product[0]->image != null ? $topsold_product[0]->image : 'no-product-image.jpg')}}" alt="img" />
                             </a>
@@ -412,7 +412,7 @@ $bann = array_chunk($banner, 3);
                                 </button>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="col-lg-7 col-xl-8 mb-7 order-first order-lg-last">
                         <div class="product-carousel2">
                             <div class="d-none d-sm-block swiper-navination-arrows">
@@ -425,7 +425,7 @@ $bann = array_chunk($banner, 3);
                             </div>
                             <div class="swiper-container">
                                 <div class="swiper-wrapper">
-                                    @foreach(array_chunk($topsold_product, 2) as $topsold)
+                                    @foreach(array_chunk(array_slice($topsold_product, 1), 2) as $topsold)
                                     <!-- single slide Start -->
                                     <div class="swiper-slide">
                                         <div class="product-list">
@@ -462,7 +462,7 @@ $bann = array_chunk($banner, 3);
             <div class="tab-pane fade" id="featuredproducts">
                 @if(count($feature_product) != 0)
                 <div class="row mb-n7">
-                    <div class="col-lg-5 col-xl-4 mb-7">
+                    <!-- <div class="col-lg-5 col-xl-4 mb-7">
                         <div class="product-card-large">
                             <a class="thumb" href="{{route('single.service', $feature_product[0]->slug)}}"><img class="d-block mx-auto" src="{{asset($feature_product[0]->image != null ? $feature_product[0]->image : 'no-product-image.jpg')}}" alt="img" />
                             </a>
@@ -476,7 +476,7 @@ $bann = array_chunk($banner, 3);
                                 </button>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="col-lg-7 col-xl-8 mb-7 order-first order-lg-last">
                         <div class="product-carousel2">
                             <div class="d-none d-sm-block swiper-navination-arrows">

@@ -5,7 +5,7 @@
                 <div class="card-header">
                     <form @submit.prevent="getOrder">
                         <div class="row">
-                            <div class="col-6 col-md-2" v-if="role != 'manager'"
+                            <div class="col-6 col-md-2 mb-1" v-if="role != 'manager'"
                                 :class="role != 'manager' ? '' : 'd-none'">
                                 <div class="form-group m-0">
                                     <select class="form-select shadow-none" v-model="searchBy" @change="onChangeSearch">
@@ -14,13 +14,22 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-6 col-md-3" v-if="searchBy == 'thana'"
+                            <div class="col-6 col-md-3 mb-1" v-if="searchBy == 'thana'"
                                 :class="searchBy == 'thana' ? '' : 'd-none'">
                                 <div class="form-group m-0">
                                     <v-select id="thanas" :options="thanas" v-model="selectedThana" label="name"></v-select>
                                 </div>
                             </div>
-                            <div class="col-6 col-md-2">
+                            <div class="col-6 col-md-2 mb-1">
+                                <div class="form-group m-0">
+                                    <select class="form-select shadow-none" v-model="filter.status">
+                                        <option value="">All</option>
+                                        <option value="pending">Pending</option>
+                                        <option value="complete">Completed</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-2 mb-1">
                                 <div class="form-group m-0">
                                     <select class="form-select shadow-none" v-model="recordType">
                                         <option value="without">Without Detail</option>
@@ -28,17 +37,17 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-6 col-md-2">
+                            <div class="col-6 col-md-2 mb-1">
                                 <div class="form-group m-0">
                                     <input type="date" class="form-control" v-model="filter.dateFrom" />
                                 </div>
                             </div>
-                            <div class="col-6 col-md-2">
+                            <div class="col-6 col-md-2 mb-1">
                                 <div class="form-group m-0">
                                     <input type="date" class="form-control" v-model="filter.dateTo" />
                                 </div>
                             </div>
-                            <div class="col-6 col-md-1">
+                            <div class="col-6 col-md-1 mb-1">
                                 <div class="form-group m-0">
                                     <button type="submit" class="btn btn-info btn-sm shadow-none px-3">
                                         Submit
@@ -60,6 +69,7 @@
                                 <th style="text-align: center;color:white;">Status</th>
                                 <th style="text-align: center;color:white;">Service Name</th>
                                 <th style="text-align: center;color:white;">Quantity</th>
+                                <th style="text-align: center;color:white;">Worker Name</th>
                                 <th style="text-align: center; width: 12%;color:white;"> Action </th>
                             </tr>
                         </thead>
@@ -70,11 +80,12 @@
                                     <td class="text-center"> {{ item.invoice }} </td>
                                     <td class="text-center"> {{ formatDate(item.date) }} </td>
                                     <td class="text-center"> {{ item.name }} </td>
-                                    <td class="text-center text-capitalize"> {{ item.status }} </td>
+                                    <td class="text-center text-capitalize" v-html="statusText( item.status)"></td>
                                     <td class="text-center">{{ item.orderDetails[0].name }}</td>
                                     <td class="text-center">{{ item.orderDetails[0].quantity }}</td>
+                                    <td class="text-center">{{ item.orderDetails[0].worker_name }}</td>
                                     <td style="width: 15%">
-                                        <div class="input-group gap-2 justify-content-end">
+                                        <div class="input-group gap-2 justify-content-center">
                                             <a :href="`${'/admin/order/invoice/' + item.invoice}`" target="_blank"
                                                 title="Order Invoice" style="background: none"
                                                 class="shadow-none outline-none border-0">
@@ -93,13 +104,14 @@
                                     <td colspan="5" :rowspan="item.orderDetails.length - 1" v-if="sl == 0"></td>
                                     <td class="text-center">{{ service.name }}</td>
                                     <td class="text-center">{{ service.quantity }}</td>
+                                    <td class="text-center">{{ service.worker_name }}</td>
                                     <td></td>
                                 </tr>
                                 <tr style="font-weight:bold;">
                                     <td colspan="6" style="font-weight:normal;"><strong>Note: </strong>{{ item.note }}</td>
                                     <td style="text-align:center;">Total Quantity<br>{{ item.orderDetails.reduce((prev,
                                         curr) => { return prev + parseFloat(curr.quantity) }, 0) }}</td>
-                                    <td style="text-align:left;">
+                                    <td colspan="2" style="text-align:right;">
                                         Total: 0<br>
                                         Paid: 0<br>
                                     </td>
@@ -142,9 +154,9 @@
                                         <span>Total: {{ item.total }}</span><br />
                                         <span>Shipping Cost: {{ item.shipping_charge }}</span>
                                     </td>
-                                    <td class="text-center text-capitalize"> {{ item.status }} </td>
+                                    <td class="text-center text-capitalize" v-html="statusText( item.status)"> </td>
                                     <td style="width: 15%">
-                                        <div class="input-group gap-2 justify-content-end">
+                                        <div class="input-group gap-2 justify-content-center">
                                             <a :href="`${'/admin/order/invoice/' + item.invoice}`" target="_blank"
                                                 title="Order Invoice" style="background: none"
                                                 class="shadow-none outline-none border-0">
@@ -183,6 +195,7 @@ export default {
             searchBy: "",
             recordType: 'without',
             filter: {
+                status: "",
                 dateFrom: "",
                 dateTo: "",
             },
@@ -203,6 +216,17 @@ export default {
     },
 
     methods: {
+        statusText(status){
+            let texT = "";
+            if (status == 'pending') {
+                texT = "<span class='badge bg-danger'>pending</span>"
+            }
+            if (status == 'complete') {
+                texT = "<span class='badge bg-success'>completed</span>"
+            }
+
+            return texT;
+        },
         getThana() {
             axios.get("/admin/thana/fetch").then((res) => {
                 this.thanas = res.data.data;

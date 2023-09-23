@@ -17,10 +17,10 @@
         <!-- Column -->
         <div class="col-md-2 col-6">
             <div class="card">
-                <div class="card-header d-flex justify-content-center p-0">
-                    <i class="fas fa-shopping-cart bg-warning"></i>
+                <div class="card-header d-flex justify-content-center py-2 px-0">
+                    <i class="fas fa-shopping-cart bg-dark"></i>
                 </div>
-                <div class="box bg-warning text-center">
+                <div class="box bg-dark text-center">
                     <h3 class="font-light text-white fontSize">Today's Order</h3>
                     <h4 class="text-white">{{ todayOrder }}</h4>
                 </div>
@@ -29,60 +29,72 @@
         <!-- Column -->
         <div class="col-md-2 col-6">
             <div class="card">
-                <div class="card-header d-flex justify-content-center p-0">
-                    <i class="fas fa-shopping-cart bg-danger"></i>
-                </div>
-                <div class="box bg-danger text-center">
-                    <h3 class="font-light text-white fontSize">Monthly Order</h3>
-                    <h4 class="text-white">{{ monthOrder }}</h4>
-                </div>
-            </div>
-        </div>
-        <!-- Column -->
-        <div class="col-md-2 col-6">
-            <div class="card">
-                <div class="card-header d-flex justify-content-center p-0">
-                    <i class="fas fa-shopping-cart bg-info"></i>
-                </div>
-                <div class="box bg-info text-center">
-                    <h3 class="font-light text-white fontSize">Yearly Order</h3>
-                    <h4 class="text-white">{{ yearOrder }}</h4>
-                </div>
-            </div>
-        </div>
-        <!-- Column -->
-        <div class="col-md-2 col-6">
-            <div class="card">
-                <div class="card-header d-flex justify-content-center p-0">
+                <div class="card-header d-flex justify-content-center py-2 px-0">
                     <i class="fas fa-shopping-cart bg-warning"></i>
                 </div>
                 <div class="box bg-warning text-center">
-                    <h3 class="font-light text-white fontSize"> Today's Sale </h3>
-                    <h4 class="text-white"> {{ totdaySale }} </h4>
+                    <h3 class="font-light text-white fontSize">Pending Order</h3>
+                    <h4 class="text-white">{{ pendingOrder }}</h4>
                 </div>
             </div>
         </div>
         <!-- Column -->
         <div class="col-md-2 col-6">
             <div class="card">
-                <div class="card-header d-flex justify-content-center p-0">
+                <div class="card-header d-flex justify-content-center py-2 px-0">
+                    <i class="fas fa-shopping-cart bg-success"></i>
+                </div>
+                <div class="box bg-success text-center">
+                    <h3 class="font-light text-white fontSize">Completed Order</h3>
+                    <h4 class="text-white">{{ completedOrder }}</h4>
+                </div>
+            </div>
+        </div>
+        <!-- Column -->
+        <div class="col-md-2 col-6">
+            <div class="card">
+                <div class="card-header d-flex justify-content-center py-2 px-0">
                     <i class="fas fa-shopping-cart bg-danger"></i>
                 </div>
                 <div class="box bg-danger text-center">
-                    <h3 class="font-light text-white fontSize"> Monthly Sale </h3>
-                    <h4 class="text-white">{{ monthlySale }}</h4>
+                    <h3 class="font-light text-white fontSize">Cancel Order</h3>
+                    <h4 class="text-white">{{ canceldOrder }}</h4>
                 </div>
             </div>
         </div>
         <!-- Column -->
         <div class="col-md-2 col-6">
             <div class="card">
-                <div class="card-header d-flex justify-content-center p-0">
-                    <i class="fas fa-shopping-cart bg-info"></i>
+                <div class="card-header d-flex justify-content-center py-2 px-0">
+                    <i class="fas fa-users bg-primary"></i>
+                </div>
+                <div class="box bg-primary text-center">
+                    <h3 class="font-light text-white fontSize"> Area Manager </h3>
+                    <h4 class="text-white"> {{ manager }} </h4>
+                </div>
+            </div>
+        </div>
+        <!-- Column -->
+        <div class="col-md-2 col-6">
+            <div class="card">
+                <div class="card-header d-flex justify-content-center py-2 px-0">
+                    <i class="fas fa-users bg-info"></i>
                 </div>
                 <div class="box bg-info text-center">
-                    <h3 class="font-light text-white fontSize"> Yearly Sale </h3>
-                    <h4 class="text-white"> {{ yearlySale }} </h4>
+                    <h3 class="font-light text-white fontSize"> Worker </h3>
+                    <h4 class="text-white">{{ worker }}</h4>
+                </div>
+            </div>
+        </div>
+        <!-- Column -->
+        <div class="col-md-2 col-6">
+            <div class="card">
+                <div class="card-header d-flex justify-content-center py-2 px-0">
+                    <i class="fas fa-users bg-secondary"></i>
+                </div>
+                <div class="box bg-secondary text-center">
+                    <h3 class="font-light text-white fontSize"> Customer </h3>
+                    <h4 class="text-white"> {{ customer }} </h4>
                 </div>
             </div>
         </div>
@@ -93,12 +105,13 @@
 export default {
     data() {
         return {
-            todayOrder: 0,
-            monthOrder: 0,
-            yearOrder: 0,
-            totdaySale: 0,
-            monthlySale: 0,
-            yearlySale: 0,
+            todayOrder    : 0,
+            pendingOrder    : 0,
+            completedOrder: 0,
+            canceldOrder: 0,
+            worker        : 0,
+            manager       : 0,
+            customer      : 0,
         }
     },
 
@@ -111,13 +124,14 @@ export default {
             axios.get("/admin/get-profit")
                 .then(res => {
                     //other
-                    this.totdaySale = res.data.today_sale_record[0].sales_amount
-                    this.monthlySale = res.data.month_sale_record[0].sales_amount
-                    this.yearlySale = res.data.year_sale_record[0].sales_amount
+                    this.worker = res.data.worker.length
+                    this.manager = res.data.manager.length
+                    this.customer = res.data.customer.length
 
-                    this.totdayOrder = res.data.today_order.length
-                    this.monthOrder = res.data.month_order.length
-                    this.yearOrder = res.data.year_order.length
+                    this.todayOrder = res.data.today_order.length
+                    this.pendingOrder = res.data.pending_order.length
+                    this.completedOrder = res.data.completed.length
+                    this.canceldOrder = res.data.cancel.length
                 })
         }
     },
