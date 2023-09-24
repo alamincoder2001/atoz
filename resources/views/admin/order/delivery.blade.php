@@ -6,5 +6,5 @@
 @section("breadcrumb_item", "Delivered Order List")
 
 @section("content")
-    <delivered-order></delivered-order>
+    <delivered-order admin_id="{{Auth::guard('admin')->user()->id}}" role="{{Auth::guard('admin')->user()->role}}"></delivered-order>
 @endsection

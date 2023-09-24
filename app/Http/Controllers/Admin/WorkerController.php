@@ -62,6 +62,7 @@ class WorkerController extends Controller
             $data->name        = $request->name;
             $data->mobile      = $request->mobile;
             $data->password    = Hash::make($request->mobile);
+            $data->nid         = $request->nid;
             $data->commission  = $request->commission;
             $data->father_name = $request->father_name;
             $data->mother_name = $request->mother_name;
@@ -110,6 +111,7 @@ class WorkerController extends Controller
             $data->name        = $request->name;
             $data->mobile      = $request->mobile;
             $data->password    = Hash::make($request->mobile);
+            $data->nid         = $request->nid;
             $data->commission  = $request->commission;
             $data->father_name = $request->father_name;
             $data->mother_name = $request->mother_name;

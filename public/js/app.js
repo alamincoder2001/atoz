@@ -6523,6 +6523,7 @@ __webpack_require__.r(__webpack_exports__);
         father_name: "",
         mother_name: "",
         commission: 0,
+        nid: "",
         manager_id: "",
         district_id: "",
         thana_id: "",
@@ -6699,6 +6700,7 @@ __webpack_require__.r(__webpack_exports__);
       this.form.mother_name = val.mother_name;
       this.form.mobile = val.mobile;
       this.form.commission = val.commission;
+      this.form.nid = val.nid;
       this.form.manager_id = val.manager_id;
       this.form.district_id = val.district_id;
       this.form.thana_id = val.thana_id;
@@ -6758,6 +6760,7 @@ __webpack_require__.r(__webpack_exports__);
       this.form.mother_name = "";
       this.form.mobile = "";
       this.form.commission = 0;
+      this.form.nid = "";
       this.form.district_id = "";
       this.form.thana_id = "";
       this.form.address = "";
@@ -10263,6 +10266,40 @@ var render = function render() {
     staticClass: "form-group row mb-2"
   }, [_vm._m(9), _vm._v(" "), _c("div", {
     staticClass: "col-md-9"
+  }, [_c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.form.nid,
+      expression: "form.nid"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      type: "text",
+      id: "nid",
+      placeholder: "NID",
+      autocomplete: "off"
+    },
+    domProps: {
+      value: _vm.form.nid
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.$set(_vm.form, "nid", $event.target.value);
+      }
+    }
+  }), _vm._v(" "), _c("span", {
+    staticClass: "error-nid error text-danger"
+  })])]), _vm._v(" "), _c("div", {
+    staticClass: "form-group row mb-2"
+  }, [_c("label", {
+    staticClass: "col-md-3",
+    attrs: {
+      "for": "address"
+    }
+  }, [_vm._v("Address")]), _vm._v(" "), _c("div", {
+    staticClass: "col-md-9"
   }, [_c("textarea", {
     directives: [{
       name: "model",
@@ -10289,7 +10326,12 @@ var render = function render() {
     staticClass: "error-address error text-danger"
   })])]), _vm._v(" "), _c("div", {
     staticClass: "form-group row mb-2"
-  }, [_vm._m(10), _vm._v(" "), _c("div", {
+  }, [_c("label", {
+    staticClass: "col-md-3",
+    attrs: {
+      "for": "reference"
+    }
+  }, [_vm._v("Reference")]), _vm._v(" "), _c("div", {
     staticClass: "col-md-9"
   }, [_c("textarea", {
     directives: [{
@@ -10315,7 +10357,7 @@ var render = function render() {
     }
   }), _vm._v(" "), _c("span", {
     staticClass: "error-reference error text-danger"
-  })])]), _vm._v(" "), _vm._m(11)])])]), _vm._v(" "), _c("div", {
+  })])]), _vm._v(" "), _vm._m(10)])])]), _vm._v(" "), _c("div", {
     staticClass: "col-md-2 d-flex justify-content-center align-items-center"
   }, [_c("div", {
     staticClass: "form-group ImageBackground"
@@ -10502,20 +10544,9 @@ var staticRenderFns = [function () {
   return _c("label", {
     staticClass: "col-md-3",
     attrs: {
-      "for": "address"
+      "for": "nid"
     }
-  }, [_vm._v("Address"), _c("span", {
-    staticClass: "text-danger fw-bold"
-  }, [_vm._v("*")])]);
-}, function () {
-  var _vm = this,
-    _c = _vm._self._c;
-  return _c("label", {
-    staticClass: "col-md-3",
-    attrs: {
-      "for": "reference"
-    }
-  }, [_vm._v("Reference"), _c("span", {
+  }, [_vm._v("NID"), _c("span", {
     staticClass: "text-danger fw-bold"
   }, [_vm._v("*")])]);
 }, function () {

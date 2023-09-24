@@ -93,8 +93,16 @@
                                         </div>
 
                                         <div class="form-group row mb-2">
-                                            <label for="address" class="col-md-3">Address<span
+                                            <label for="nid" class="col-md-3">NID<span
                                                     class="text-danger fw-bold">*</span></label>
+                                            <div class="col-md-9">
+                                                <input type="text" id="nid" v-model="form.nid" class="form-control"
+                                                    placeholder="NID" autocomplete="off">
+                                                <span class="error-nid error text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row mb-2">
+                                            <label for="address" class="col-md-3">Address</label>
                                             <div class="col-md-9">
                                                 <textarea id="address" v-model="form.address" class="form-control"
                                                     placeholder="Address" autocomplete="off"></textarea>
@@ -102,8 +110,7 @@
                                             </div>
                                         </div>
                                         <div class="form-group row mb-2">
-                                            <label for="reference" class="col-md-3">Reference<span
-                                                    class="text-danger fw-bold">*</span></label>
+                                            <label for="reference" class="col-md-3">Reference</label>
                                             <div class="col-md-9">
                                                 <textarea id="reference" v-model="form.reference" class="form-control"
                                                     placeholder="Reference" autocomplete="off"></textarea>
@@ -184,6 +191,7 @@ export default {
                 father_name: "",
                 mother_name: "",
                 commission: 0,
+                nid: "",
                 manager_id: "",
                 district_id: "",
                 thana_id: "",
@@ -351,6 +359,7 @@ export default {
             this.form.mother_name = val.mother_name;
             this.form.mobile = val.mobile;
             this.form.commission = val.commission;
+            this.form.nid = val.nid;
             this.form.manager_id = val.manager_id;
             this.form.district_id = val.district_id;
             this.form.thana_id = val.thana_id;
@@ -411,6 +420,7 @@ export default {
             this.form.mother_name = "";
             this.form.mobile = "";
             this.form.commission = 0;
+            this.form.nid = "";
             this.form.district_id = "";
             this.form.thana_id = "";
             this.form.address = "";
