@@ -19,8 +19,9 @@ class CreateOrderDetailsTable extends Migration
             $table->integer("worker_id")->nullable();
             $table->integer("service_id");
             $table->integer("quantity");
-            $table->decimal("unit_price");
-            $table->decimal("total");
+            $table->decimal("bill_amount");
+            $table->decimal("paid_amount");
+            $table->decimal("due");
             $table->char('status', 20)->default('pending')->comment('pending','proccess','complete');
             $table->timestamps();
         });

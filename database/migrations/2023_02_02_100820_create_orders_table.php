@@ -26,6 +26,7 @@ class CreateOrdersTable extends Migration
             $table->decimal("subtotal");
             $table->decimal("shipping_charge");
             $table->decimal("total");
+            $table->decimal("due");
             $table->string("payment_type");
             $table->text("note")->nullable();
             $table->char('status', 20)->default('pending')->comment('pending', 'complete');

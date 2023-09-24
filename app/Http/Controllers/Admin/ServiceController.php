@@ -116,31 +116,4 @@ class ServiceController extends Controller
             return response()->json(['status' => true, 'msg' => $e->getMessage()]);
         }
     }
-
-    // published product
-    public function published()
-    {
-        $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
-            ->pluck('permissions')
-            ->toArray();
-        if (!in_array("servicepublishEntry", $access)) {
-            return view("admin.unauthorize");
-        }
-        return view("admin.service.published");
-    }
-
-    public function savePublished(Request $request)
-    {
-        try {
-            $data             = Service::find($request->service_id);
-            $data->is_arrival = $request->is_arrival;
-            $data->is_feature = $request->is_feature;
-            $data->is_popular = $request->is_popular;
-            $data->is_topsold = $request->is_topsold;
-            $data->save();
-            return response()->json(['status' => true, 'msg' => 'Service Published successfully']);
-        } catch (\Throwable $e) {
-            return response()->json(['status' => true, 'msg' => $e->getMessage()]);
-        }
-    }
 }

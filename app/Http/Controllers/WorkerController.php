@@ -101,6 +101,11 @@ class WorkerController extends Controller
             $data = OrderDetail::where('id', $request->id)->first();
             $orderId = $data->order_id;
 
+            if ($request->status == 'complete') {
+                $data->bill_amount = $request->billAmount;
+                $data->paid_amount = $request->paidAmount;
+                $data->due         = $request->dueAmount;
+            }
             $data->status = $request->status;
             $data->update();
 
@@ -114,7 +119,12 @@ class WorkerController extends Controller
             $orderdetail = OrderDetail::where('order_id', $orderId)->get();
             $ordercomplete = OrderDetail::where('order_id', $orderId)->where('status', 'complete')->get();
             if (count($orderdetail) == count($ordercomplete)) {
-                Order::where('id', $orderId)->update(['status' => 'complete']);
+                $order = Order::where('id', $orderId)->first();
+                $order->subtotal = array_sum(array_column($ordercomplete->toArray(), 'bill_amount'));
+                $order->total = array_sum(array_column($ordercomplete->toArray(), 'paid_amount'));
+                $order->due = array_sum(array_column($ordercomplete->toArray(), 'due'));
+                $order->status = 'complete';
+                $order->update();
             }
             return response()->json(['status' => true, 'msg' => $msg]);
         } catch (\Throwable $e) {

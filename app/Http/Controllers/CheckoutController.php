@@ -59,18 +59,20 @@ class CheckoutController extends Controller
                 $data->subtotal          = str_replace(",", "", Cart::subtotal());
                 $data->shipping_charge   = isset($request->is_shipping) && $request->is_shipping == 1 ? $request->shipping_charge : $request->shipping_charge;
                 $data->total             = $data->subtotal + $data->shipping_charge;
+                $data->due               = 0;
                 $data->payment_type      = $request->payment_type;
                 $data->note              = $request->note;
                 $data->save();
 
                 // order Details
                 foreach (Cart::content() as $item) {
-                    $detail             = new OrderDetail();
-                    $detail->order_id   = $data->id;
-                    $detail->service_id = $item->id;
-                    $detail->quantity   = $item->qty;
-                    $detail->unit_price = $item->price;
-                    $detail->total      = $item->price * $item->qty;
+                    $detail              = new OrderDetail();
+                    $detail->order_id    = $data->id;
+                    $detail->service_id  = $item->id;
+                    $detail->quantity    = $item->qty;
+                    $detail->bill_amount = 0;
+                    $detail->paid_amount = 0;
+                    $detail->due         = 0;
                     $detail->save();
                 }
                 Cart::destroy();

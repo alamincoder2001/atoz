@@ -58,17 +58,17 @@
                     <td class="text-end">{{ modalData.subtotal }}</td>
                 </tr>
                 <tr>
-                    <td style="width: 47%;">Shipping Charge</td>
+                    <td style="width: 47%;">Paid</td>
                     <td>:</td>
-                    <td class="text-end">{{ modalData.shipping_charge }}</td>
+                    <td class="text-end">{{ modalData.total }}</td>
                 </tr>
                 <tr>
                     <td colspan="3" style="border-bottom: 1px dashed gray;"></td>
                 </tr>
                 <tr>
-                    <td style="width: 47%;">Total</td>
+                    <td style="width: 47%;">Due</td>
                     <td>:</td>
-                    <td class="text-end">{{ modalData.total }}</td>
+                    <td class="text-end">{{ modalData.due }}</td>
                 </tr>
             </table>
         </div>

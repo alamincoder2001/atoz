@@ -162,7 +162,7 @@
                                     @if($pending->count() > 0)
                                     @foreach($pending as $key => $item)
                                     <tr>
-                                    <td>{{$key + 1}}</td>
+                                        <td>{{$key + 1}}</td>
                                         <td>{{$item->invoice}}</td>
                                         <td>{{date("d-m-Y", strtotime($item->date))}}</td>
                                         <td class="text-danger text-capitalize">{{$item->status}}</td>
@@ -285,7 +285,7 @@
                                                 <div class="form-gorup">
                                                     <label for="thana_id">Upazila</label>
                                                     <select name="thana_id" id="thana_id" class="form-select shadow-none">
-                                                    <option value="">Select Upazila</option>
+                                                        <option value="">Select Upazila</option>
                                                         @foreach($upazilas as $item)
                                                         <option value="{{$item->id}}" {{Auth::guard('web')->user()->thana_id == $item->id ? 'selected':''}}>{{$item->name}}</option>
                                                         @endforeach
@@ -339,35 +339,33 @@
 </div>
 
 <div class="modal fade myModal" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Order Invoice: <span></span></h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form onsubmit="QuantitySubmit(event)">
-            <input type="hidden" name="orderId" class="orderId">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Sl</th>
-                        <th class="text-center">Product Name</th>
-                        <th class="text-center">Quantity</th>
-                        <th class="text-center">Price</th>
-                        <th class="text-center">Total</th>
-                        <th class="text-center">Action</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-            <div class="text-center">
-                <button class="btn btn-success" type="submit">Submit</button>
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Order Invoice: <span></span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-        </form>
-      </div>
+            <div class="modal-body">
+                <form onsubmit="QuantitySubmit(event)">
+                    <input type="hidden" name="orderId" class="orderId">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Sl</th>
+                                <th class="text-center">Service Name</th>
+                                <th class="text-center">Quantity</th>
+                                <th class="text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                    <div class="text-center">
+                        <button class="btn btn-success" type="submit">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 @endsection
@@ -379,7 +377,7 @@
             let formdata = new FormData();
             formdata.append("image", event.target.files[0])
             $.ajax({
-                url: location.origin+"/customer-imageUpdate",
+                url: location.origin + "/customer-imageUpdate",
                 method: "POST",
                 data: formdata,
                 contentType: false,
@@ -387,7 +385,7 @@
                 success: res => {
                     if (res.error) {
                         $(".error-image").text(res.error.image);
-                    }else{
+                    } else {
                         $.notify(res, "success");
                         document.querySelector(".imageShow").setAttribute('src', window.URL.createObjectURL(event.target.files[0]))
                         event.target.value = "";
@@ -402,7 +400,7 @@
         event.preventDefault();
         let formdata = new FormData(event.target)
         $.ajax({
-            url: location.origin+"/customer-update",
+            url: location.origin + "/customer-update",
             method: "POST",
             data: formdata,
             contentType: false,
@@ -411,13 +409,13 @@
                 $("#setting").find(".error").text("")
             },
             success: res => {
-                if(res.error){
+                if (res.error) {
                     $.each(res.error, (index, value) => {
-                        $("#setting").find(".error-"+index).text(value)
+                        $("#setting").find(".error-" + index).text(value)
                     })
-                }else if(res.errors){
+                } else if (res.errors) {
                     $("#setting").find(".error-old_password").text(res.errors)
-                }else{
+                } else {
                     $.notify(res, "success")
                 }
             }
@@ -486,7 +484,7 @@
     }
 
     // show Modal
-    function showModal(rowData){
+    function showModal(rowData) {
         $(".myModal .modal-body .table tbody").html("")
         $(".myModal").modal("show")
         $(".myModal .modal-title span").text(rowData.invoice)
@@ -497,9 +495,7 @@
                 <tr class="removeItem-${index}">
                     <td>${index + 1}</td>
                     <td>${value.service.name}<input type="hidden" name="service_id[]" value="${value.service_id}" class="form-control" /></td>
-                    <td style="width:15%;" class="text-center"><input type="number" name="quantity[]" oninput="QuantityUpdate(event, ${index})" step="0.01" min="0" value="${value.quantity}" class="form-control" /></td>
-                    <td class="text-center">${value.unit_price}<input type="hidden" name="unitprice[]" value="${value.unit_price}" class="form-control unitprice-${index}" /></td>
-                    <td class="text-center"><span class='totaltxt-${index}'>${value.total}</span><input type="hidden" name="total[]" value="${value.total}" class="form-control total-${index}" /></td>
+                    <td class="text-center">${value.quantity}<input type="hidden" name="quantity[]" value="${value.quantity}" class="form-control quantity-${index}" /></td>
                     <td class="text-center" style="width:8%;">
                         <button onclick="deleteItem(${index})" type="button"><i class='fa fa-trash'></i></button>
                     </td>
@@ -510,27 +506,19 @@
         })
     }
 
-    function QuantityUpdate(event, sl){
-        let qty       = event.target.value;
-        let unitprice = $(".myModal").find('.unitprice-'+sl).val();
-        let calculate = Number(qty)*parseFloat(unitprice);
-        $(".myModal").find(".total-"+sl).val(calculate.toFixed(2))
-        $(".myModal").find(".totaltxt-"+sl).text(calculate.toFixed(2))
-    }
-
-    function deleteItem(sl){
-        $(".myModal").find(".removeItem-"+sl).remove()
+    function deleteItem(sl) {
+        $(".myModal").find(".removeItem-" + sl).remove()
     }
 
     // save
-    function QuantitySubmit(event){
+    function QuantitySubmit(event) {
         event.preventDefault();
         let formdata = new FormData(event.target)
         $.ajax({
-            url: location.origin+"/order-edit",
+            url: location.origin + "/order-edit",
             method: "POST",
             data: formdata,
-            processData:false,
+            processData: false,
             contentType: false,
             success: res => {
                 $.notify(res, "success")
@@ -540,11 +528,13 @@
     }
 
     // order cancel
-    function OrderCancel(id){
+    function OrderCancel(id) {
         $.ajax({
-            url: location.origin+"/order-delete",
+            url: location.origin + "/order-delete",
             method: "POST",
-            data: {id: id},
+            data: {
+                id: id
+            },
             success: res => {
                 $.notify(res, "success")
             }

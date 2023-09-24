@@ -14,7 +14,7 @@
                     <a class="sidebar-link waves-effect waves-dark sidebar-link {{Request::is('admin.dashboard') ? 'active':''}}" href="{{route('admin.dashboard')}}" aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span class="hide-menu">Dashboard</span></a>
                 </li>
                 @endif
-                @if(in_array("sliderEntry", $access) || in_array("bannerEntry", $access) || in_array("categoryEntry", $access) || in_array("partnerEntry", $access) || in_array("newsandeventEntry", $access))
+                @if(in_array("sliderEntry", $access) || in_array("bannerEntry", $access) || in_array("categoryEntry", $access) || in_array("partnerEntry", $access) || in_array("newsandeventEntry", $access) || in_array("serviceEntry", $access))
                 <li class="sidebar-item">
                     <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-earth"></i><span class="hide-menu"> Website Content </span></a>
                     <ul aria-expanded="false" class="collapse first-level">
@@ -43,21 +43,9 @@
                             <a href="{{route('admin.blog.index')}}" class="sidebar-link {{Request::is('admin.blog.index') ? 'active':''}}"><i class="fas fa-handshake"></i><span class="hide-menu"> News & Events Entry</span></a>
                         </li>
                         @endif
-                    </ul>
-                </li>
-                @endif
-                @if(in_array("serviceEntry", $access) || in_array("servicepublishEntry", $access))
-                <li class="sidebar-item">
-                    <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="fab fa-product-hunt"></i><span class="hide-menu"> Service Module </span></a>
-                    <ul aria-expanded="false" class="collapse first-level">
                         @if(in_array("serviceEntry", $access))
                         <li class="sidebar-item">
                             <a href="{{route('admin.service.index')}}" class="sidebar-link {{Request::is('admin.service.index') ? 'active':''}}"><i class="fab fa-product-hunt"></i><span class="hide-menu"> Service Entry </span></a>
-                        </li>
-                        @endif
-                        @if(in_array("servicepublishEntry", $access))
-                        <li class="sidebar-item">
-                            <a href="{{route('admin.service.published')}}" class="sidebar-link {{Request::is('admin.service.published') ? 'active':''}}"><i class="fas fa-upload"></i><span class="hide-menu"> Service Published Entry </span></a>
                         </li>
                         @endif
                     </ul>

@@ -90,9 +90,13 @@
                                         </td>
                                         <td>
                                             @if($item->status == 'pending')
-                                            <button onclick="changeStatus(event, {{$item->id}}, '{{$item->status}}')" type="button" style="padding: 5px;" class="btn btn-xs btn-warning shadow-none"> <i class="fa fa-spinner"></i> </button>
+                                            <form onsubmit="changeStatus(event)">
+                                                <input type="hidden" name="id" value="{{$item->id}}">
+                                                <input type="hidden" name="status" value="proccess">
+                                                <button type="submit" style="padding: 5px;" class="btn btn-xs btn-warning shadow-none"> <i class="fa fa-spinner"></i> </button>
+                                            </form>
                                             @elseif($item->status == 'proccess')
-                                            <button onclick="changeStatus(event, {{$item->id}}, '{{$item->status}}')" type="button" style="padding: 5px;" class="btn btn-xs btn-success shadow-none"> <i class="fa fa-check-square-o"></i> </button>
+                                            <button onclick="showModal(event, {{$item->id}})" type="button" style="padding: 5px;" class="btn btn-xs btn-success shadow-none"> <i class="fa fa-check-square-o"></i> </button>
                                             @else
                                             @endif
                                         </td>
@@ -177,6 +181,49 @@
         </div>
         <!-- My Account Tab Content End -->
     </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Worker Deal</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form onsubmit="changeStatus(event)">
+                    <input type="hidden" id="id" name="id">
+                    <input type="hidden" id="status" name="status">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="billAmount">Bill Amount</label>
+                                    <input type="number" min="0" step="0.01" class="form-control" id="billAmount" oninput="calculateTotal(event)" name="billAmount" value="0" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="paidAmount">Paid Amount</label>
+                                    <input type="number" min="0" step="0.01" class="form-control" id="paidAmount" oninput="calculateTotal(event)" name="paidAmount" value="0" />
+                                </div>
+                            </div>
+                            <div class="col-md-12 mt-2">
+                                <div class="form-group">
+                                    <label for="dueAmount">Due Amount</label>
+                                    <input type="number" min="0" step="0.01" class="form-control" id="dueAmount" oninput="calculateTotal(event)" name="dueAmount" value="0" readonly />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success">Completed</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 
@@ -252,23 +299,30 @@
         })
     }
 
-    function changeStatus(event, id, status) {
+    function showModal(event, id) {
+        $("#staticBackdrop").modal('show');
+        $("#staticBackdrop").find('#id').val(id);
+        $("#staticBackdrop").find('#status').val('complete');
+    }
+
+    function calculateTotal(event) {
+        let billAmount = $("#staticBackdrop").find('#billAmount').val();
+        let paidAmount = $("#staticBackdrop").find('#paidAmount').val();
+
+        let dueAmount = (billAmount - paidAmount);
+        $("#staticBackdrop").find('#dueAmount').val(parseFloat(dueAmount).toFixed(2));
+    }
+
+    function changeStatus(event) {
         event.preventDefault();
         if (confirm("Are you sure !!")) {
-            let Status;
-            if (status == 'pending') {
-                Status = 'proccess';
-            }
-            if (status == 'proccess') {
-                Status = 'complete';
-            }
+            let formdata = new FormData(event.target);
             $.ajax({
                 url: "/order-status-update",
                 method: "POST",
-                data: {
-                    id: id,
-                    status: Status
-                },
+                data: formdata,
+                processData: false,
+                contentType: false,
                 success: res => {
                     if (res.status) {
                         $.notify(res.msg, "success");

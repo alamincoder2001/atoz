@@ -64,8 +64,6 @@ Route::group(["prefix" => "admin"], function () {
     Route::get('/service/fetch/{id?}', [ServiceController::class, 'fetch'])->name('admin.service.fetch');
     Route::post('/service', [ServiceController::class, 'store'])->name('admin.service.store');
     Route::post('/service/delete', [ServiceController::class, 'destroy'])->name('admin.service.destroy');
-    Route::get("service/published", [ServiceController::class, 'published'])->name("admin.service.published");
-    Route::post("service/published", [ServiceController::class, 'savePublished'])->name("admin.service.savepublished");
     // Administration route
 
     // district Route

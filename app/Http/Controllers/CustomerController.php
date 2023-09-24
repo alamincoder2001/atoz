@@ -19,7 +19,7 @@ class CustomerController extends Controller
         if (Auth::guard('web')->check()) {
             $orders = Order::with("orderDetails")->where("customer_id", Auth::guard("web")->user()->id)->orderBy("invoice", "DESC")->get();
             $pending = Order::with("orderDetails")->where("customer_id", Auth::guard("web")->user()->id)->where("status", "pending")->orderBy("invoice", "DESC")->get();
-            $complete = Order::with("orderDetails")->where("customer_id", Auth::guard("web")->user()->id)->where("status", "delivery")->orderBy("invoice", "DESC")->get();
+            $complete = Order::with("orderDetails")->where("customer_id", Auth::guard("web")->user()->id)->where("status", "complete")->orderBy("invoice", "DESC")->get();
             return view("dashboard.customer-dashboard", compact("orders", "pending", "complete"));
         } else {
             return redirect("/login");
@@ -114,43 +114,32 @@ class CustomerController extends Controller
 
     public function OrderEdit(Request $request)
     {
-        try{
+        try {
             OrderDetail::where("order_id", $request->orderId)->delete();
-            foreach($request->service_id as $key => $val){
+            foreach ($request->service_id as $key => $val) {
                 $detail = new OrderDetail();
                 $detail->order_id = $request->orderId;
                 $detail->service_id = $val;
-                $detail->quantity = $request->quantity[$key];
-                $detail->unit_price = $request->unitprice[$key];
-                $detail->total = $request->total[$key];
+                $detail->quantity = 1;
+                $detail->bill_amount = 0;
+                $detail->paid_amount = 0;
+                $detail->due = 0;
+                $detail->status = 'pending';
                 $detail->save();
             }
             return "Order edit successfully";
-        }catch(\Throwable $e){
+        } catch (\Throwable $e) {
             return "Opps! something went wrong";
         }
     }
 
     public function OrderDelete(Request $request)
     {
-        try{
+        try {
             Order::find($request->id)->update(['status' => "cancel"]);
+            OrderDetail::where("order_id", $request->id)->update(['status' => "cancel"]);
             return "Order cancel successfully";
-        }catch(\Throwable $e){
-            return "Opps! something went wrong";
-        }
-    }
-
-    public function customerRating(Request $request)
-    {
-        try{
-            if(Auth::guard('web')->check()){
-                Technician::find($request->id)->update(['customer_rating' => $request->rating]);
-                return "Rating change successfully";
-            }else{
-                return ["error" => "Login first"];
-            }
-        }catch(\Throwable $e){
+        } catch (\Throwable $e) {
             return "Opps! something went wrong";
         }
     }

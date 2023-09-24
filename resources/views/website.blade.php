@@ -142,7 +142,7 @@
                             <div class="swiper-container">
                                 <div class="swiper-wrapper">
                                     <!-- single slide Start -->
-                                    @foreach($feature_product as $item)
+                                    @foreach($services as $item)
                                     <div class="swiper-slide">
                                         <div class="product-card" style="height:350px;">
                                             <a class="thumb" href="{{route('single.service', $item->slug)}}"><img src="{{asset($item->image != null ? $item->image : 'no-product-image.jpg')}}" alt="img" />
@@ -174,7 +174,7 @@
                                     <!-- single slide End -->
                                 </div>
                             </div>
-                            @if(count($feature_product) == 0)
+                            @if(count($services) == 0)
                             <div class="text-center">
                                 <img src="{{asset('no-product.png')}}" width="300">
                             </div>
@@ -330,23 +330,8 @@ $bann = array_chunk($banner, 3);
 
         <div class="tab-content">
             <div class="tab-pane fade show active" id="newarrival">
-                @if(count($newarrival_product) != 0)
+                @if(count($services) != 0)
                 <div class="row mb-n7">
-                    <!-- <div class="col-lg-5 col-xl-4 mb-7">
-                        <div class="product-card-large">
-                            <a class="thumb" href="{{route('single.service', $newarrival_product[0]->slug)}}"><img class="d-block mx-auto" src="{{asset($newarrival_product[0]->image != null ? $newarrival_product[0]->image : 'no-product-image.jpg')}}" alt="img" />
-                            </a>
-                            <div class="product-content">
-                                <a class="product-category" href="#?">{{$newarrival_product[0]->category_name}}</a>
-                                <h3 class="product-title">
-                                    <a href="{{route('single.service', $newarrival_product[0]->slug)}}">{{$newarrival_product[0]->name}}</a>
-                                </h3>
-                                <button class="product-btn-lg btn btn-primary btn-hover-warning" onclick="addCart({{$newarrival_product[0]->id}})">
-                                    Add to cart
-                                </button>
-                            </div>
-                        </div>
-                    </div> -->
                     <div class="col-lg-7 col-xl-8 mb-7 order-first order-lg-last">
                         <div class="product-carousel2">
                             <div class="d-none d-sm-block swiper-navination-arrows">
@@ -359,11 +344,11 @@ $bann = array_chunk($banner, 3);
                             </div>
                             <div class="swiper-container">
                                 <div class="swiper-wrapper">
-                                    @foreach(array_chunk($newarrival_product, 2) as $newarrival)
+                                    @foreach($services->chunk(2) as $service)
                                     <!-- single slide Start -->
                                     <div class="swiper-slide">
                                         <div class="product-list">
-                                            @foreach($newarrival as $item)
+                                            @foreach($service as $item)
                                             <div class="product-card">
                                                 <a class="thumb" href="{{route('single.service', $item->slug)}}"><img src="{{asset($item->image != null ? $item->image : 'no-product-image.jpg')}}" alt="img" />
                                                 </a>
@@ -396,18 +381,18 @@ $bann = array_chunk($banner, 3);
             </div>
 
             <div class="tab-pane fade" id="bestseller">
-                @if(count($topsold_product) != 0)
+                @if(count($services) != 0)
                 <div class="row mb-n7">
                     <!-- <div class="col-lg-5 col-xl-4 mb-7">
                         <div class="product-card-large">
-                            <a class="thumb" href="{{route('single.service', $topsold_product[0]->slug)}}"><img class="d-block mx-auto" src="{{asset($topsold_product[0]->image != null ? $topsold_product[0]->image : 'no-product-image.jpg')}}" alt="img" />
+                            <a class="thumb" href="{{route('single.service', $services[0]->slug)}}"><img class="d-block mx-auto" src="{{asset($services[0]->image != null ? $services[0]->image : 'no-product-image.jpg')}}" alt="img" />
                             </a>
                             <div class="product-content">
-                                <a class="product-category" href="#?">{{$topsold_product[0]->category_name}}</a>
+                                <a class="product-category" href="#?">{{$services[0]->category_name}}</a>
                                 <h3 class="product-title">
-                                    <a href="{{route('single.service', $topsold_product[0]->slug)}}">{{$topsold_product[0]->name}}</a>
+                                    <a href="{{route('single.service', $services[0]->slug)}}">{{$services[0]->name}}</a>
                                 </h3>
-                                <button class="product-btn-lg btn btn-primary btn-hover-warning" onclick="addCart({{$topsold_product[0]->id}})">
+                                <button class="product-btn-lg btn btn-primary btn-hover-warning" onclick="addCart({{$services[0]->id}})">
                                     Add to cart
                                 </button>
                             </div>
@@ -425,11 +410,11 @@ $bann = array_chunk($banner, 3);
                             </div>
                             <div class="swiper-container">
                                 <div class="swiper-wrapper">
-                                    @foreach(array_chunk(array_slice($topsold_product, 1), 2) as $topsold)
+                                    @foreach($services->chunk(2) as $service)
                                     <!-- single slide Start -->
                                     <div class="swiper-slide">
                                         <div class="product-list">
-                                            @foreach($topsold as $item)
+                                            @foreach($service as $item)
                                             <div class="product-card">
                                                 <a class="thumb" href="{{route('single.service', $item->slug)}}"><img src="{{asset($item->image != null ? $item->image : 'no-product-image.jpg')}}" alt="img" />
                                                 </a>
@@ -460,23 +445,8 @@ $bann = array_chunk($banner, 3);
                 @endif
             </div>
             <div class="tab-pane fade" id="featuredproducts">
-                @if(count($feature_product) != 0)
+                @if(count($services) != 0)
                 <div class="row mb-n7">
-                    <!-- <div class="col-lg-5 col-xl-4 mb-7">
-                        <div class="product-card-large">
-                            <a class="thumb" href="{{route('single.service', $feature_product[0]->slug)}}"><img class="d-block mx-auto" src="{{asset($feature_product[0]->image != null ? $feature_product[0]->image : 'no-product-image.jpg')}}" alt="img" />
-                            </a>
-                            <div class="product-content">
-                                <a class="product-category" href="#?">{{$feature_product[0]->category_name}}</a>
-                                <h3 class="product-title">
-                                    <a href="{{route('single.service', $feature_product[0]->slug)}}">{{$feature_product[0]->name}}</a>
-                                </h3>
-                                <button class="product-btn-lg btn btn-primary btn-hover-warning" onclick="addCart({{$feature_product[0]->id}})">
-                                    Add to cart
-                                </button>
-                            </div>
-                        </div>
-                    </div> -->
                     <div class="col-lg-7 col-xl-8 mb-7 order-first order-lg-last">
                         <div class="product-carousel2">
                             <div class="d-none d-sm-block swiper-navination-arrows">
@@ -489,11 +459,11 @@ $bann = array_chunk($banner, 3);
                             </div>
                             <div class="swiper-container">
                                 <div class="swiper-wrapper">
-                                    @foreach(array_chunk($feature_product, 2) as $feature)
+                                    @foreach($services->chunk(2) as $service)
                                     <!-- single slide Start -->
                                     <div class="swiper-slide">
                                         <div class="product-list">
-                                            @foreach($feature as $item)
+                                            @foreach($service as $item)
                                             <div class="product-card">
                                                 <a class="thumb" href="{{route('single.service', $item->slug)}}"><img src="{{asset($item->image != null ? $item->image : 'no-product-image.jpg')}}" alt="img" />
                                                 </a>

@@ -8,7 +8,6 @@ use App\Models\Slider;
 use App\Models\Setting;
 use App\Models\Category;
 use App\Models\Service;
-use App\Models\Technician;
 use App\Models\Worker;
 use Illuminate\Support\Facades\DB;
 
@@ -16,17 +15,14 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $newarrival_product = DB::select("SELECT s.*, c.name as category_name FROM services s LEFT JOIN categories c ON c.id = s.category_id where s.is_arrival = 1");
-        $feature_product    = DB::select("SELECT s.*, c.name as category_name FROM services s LEFT JOIN categories c ON c.id = s.category_id where s.is_feature = 1");
-        $popular_product    = DB::select("SELECT s.*, c.name as category_name FROM services s LEFT JOIN categories c ON c.id = s.category_id where s.is_popular = 1");
-        $topsold_product    = DB::select("SELECT s.*, c.name as category_name FROM services s LEFT JOIN categories c ON c.id = s.category_id where s.is_topsold = 1");
-        $banner             = DB::select("SELECT b.* FROM banners b ORDER BY b.id DESC");
-        $blog               = Blog::all();
-        $slider             = Slider::latest()->get();
-        $categories         = Category::with('service')->orderBy("name", "ASC")->get();
-        $worker         = Worker::with('thana')->orderBy('id', "DESC")->get();
-        $isWebsiteCategoryProduct = Category::with('subcategory')->where('is_website', 'true')->get();
-        return view('website', compact("isWebsiteCategoryProduct", "worker", "categories", "blog", "newarrival_product", "feature_product", "popular_product", "topsold_product", "banner", "slider"));
+        $data['services']                 = Service::with('category')->latest()->get();
+        $data['banner']                   = DB::select("SELECT b.* FROM banners b ORDER BY b.id DESC");
+        $data['blog']                     = Blog::all();
+        $data['slider']                   = Slider::latest()->get();
+        $data['categories']               = Category::with('service')->orderBy("name", "ASC")->get();
+        $data['worker']                   = Worker::with('thana')->orderBy('id', "DESC")->get();
+        $data['isWebsiteCategoryProduct'] = Category::with('subcategory')->where('is_website', 'true')->get();
+        return view('website', $data);
     }
 
     // Product

@@ -59,8 +59,11 @@
                                 <th style="text-align: center;color:white;">Status</th>
                                 <th style="text-align: center;color:white;">Service Name</th>
                                 <th style="text-align: center;color:white;">Quantity</th>
+                                <th style="text-align: center;color:white;">Bill</th>
+                                <th style="text-align: center;color:white;">Paid</th>
+                                <th style="text-align: center;color:white;">Due</th>
                                 <th style="text-align: center;color:white;">Worker Name</th>
-                                <th style="text-align: center; width: 12%;color:white;"> Action </th>
+                                <th style="text-align: center; width: 5%;color:white;"> Action </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -73,22 +76,28 @@
                                     <td class="text-center text-capitalize"> {{ item.status }} </td>
                                     <td class="text-center">{{ item.orderDetails[0].name }}</td>
                                     <td class="text-center">{{ item.orderDetails[0].quantity }}</td>
+                                    <td class="text-center">{{ item.orderDetails[0].bill_amount }}</td>
+                                    <td class="text-center">{{ item.orderDetails[0].paid_amount }}</td>
+                                    <td class="text-center">{{ item.orderDetails[0].due }}</td>
                                     <td class="text-center">{{ item.orderDetails[0].worker_name }}</td>
                                     <td>
-                                        <button @click="modalShow(item.orderDetails[0], item.thanaId)" type="button" class="btn btn-danger btn-sm shadow-none fas fa-user"></button>
+                                        <button v-if="item.status == 'pending'" @click="modalShow(item.orderDetails[0], item.thanaId)" type="button" class="btn btn-danger btn-sm shadow-none fas fa-user"></button>
                                     </td>
                                 </tr>
                                 <tr :style="{background: item.totaldetail == item.totalassign ? 'green': ''}" :class="item.totaldetail == item.totalassign ? 'text-white': ''" v-for="(service, sl) in item.orderDetails.slice(1)">
                                     <td colspan="5" :rowspan="item.orderDetails.length - 1" v-if="sl == 0"></td>
                                     <td class="text-center">{{ service.name }}</td>
                                     <td class="text-center">{{ service.quantity }}</td>
+                                    <td class="text-center">{{ service.bill_amount }}</td>
+                                    <td class="text-center">{{ service.paid_amount }}</td>
+                                    <td class="text-center">{{ service.due }}</td>
                                     <td class="text-center">{{ service.worker_name }}</td>
                                     <td>
-                                        <button @click="modalShow(service, item.thanaId)" type="button" class="btn btn-danger btn-sm shadow-none fas fa-user"></button>
+                                        <button v-if="item.status == 'pending'" @click="modalShow(service, item.thanaId)" type="button" class="btn btn-danger btn-sm shadow-none fas fa-user"></button>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="9">
+                                    <td colspan="12">
                                         <div class="devider"></div>
                                     </td>
                                 </tr>

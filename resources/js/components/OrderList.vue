@@ -70,7 +70,7 @@
                                 <th style="text-align: center;color:white;">Service Name</th>
                                 <th style="text-align: center;color:white;">Quantity</th>
                                 <th style="text-align: center;color:white;">Worker Name</th>
-                                <th style="text-align: center; width: 12%;color:white;"> Action </th>
+                                <th style="text-align: center; width: 10%;color:white;"> Action </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -84,7 +84,7 @@
                                     <td class="text-center">{{ item.orderDetails[0].name }}</td>
                                     <td class="text-center">{{ item.orderDetails[0].quantity }}</td>
                                     <td class="text-center">{{ item.orderDetails[0].worker_name }}</td>
-                                    <td style="width: 15%">
+                                    <td>
                                         <div class="input-group gap-2 justify-content-center">
                                             <a :href="`${'/admin/order/invoice/' + item.invoice}`" target="_blank"
                                                 title="Order Invoice" style="background: none"
@@ -92,7 +92,7 @@
                                                 <i class="fas fa-file text-info"></i>
                                             </a>
                                             <button title="Order Cancel"
-                                                v-if="item.status != 'cancel' && item.status != 'delivery'"
+                                                v-if="item.status != 'cancel' && item.status != 'complete'"
                                                 @click="InvoiceDelete(item.id)" type="button" style="background: none"
                                                 class="shadow-none outline-none border-0">
                                                 <i class="fas fa-trash text-danger"></i>
@@ -112,8 +112,12 @@
                                     <td style="text-align:center;">Total Quantity<br>{{ item.orderDetails.reduce((prev,
                                         curr) => { return prev + parseFloat(curr.quantity) }, 0) }}</td>
                                     <td colspan="2" style="text-align:right;">
-                                        Total: 0<br>
-                                        Paid: 0<br>
+                                        Total: {{ item.orderDetails.reduce((prev,
+                                        curr) => { return prev + parseFloat(curr.bill_amount) }, 0).toFixed(2) }}<br>
+                                        Paid: {{ item.orderDetails.reduce((prev,
+                                        curr) => { return prev + parseFloat(curr.paid_amount) }, 0).toFixed(2) }}<br>
+                                        Due: {{ item.orderDetails.reduce((prev,
+                                        curr) => { return prev + parseFloat(curr.due) }, 0).toFixed(2) }}
                                     </td>
                                 </tr>
                             </template>
@@ -135,7 +139,7 @@
                                 <th style="text-align: center;color:white;"> Customer Details </th>
                                 <th style="text-align: center;color:white;"> Amount Details </th>
                                 <th style="text-align: center;color:white;">Order Status</th>
-                                <th style="text-align: center; width: 12%;color:white;"> Action </th>
+                                <th style="text-align: center; width: 10%;color:white;"> Action </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -152,10 +156,10 @@
                                     <td>
                                         <span>SubTotal: {{ item.subtotal }}</span><br />
                                         <span>Total: {{ item.total }}</span><br />
-                                        <span>Shipping Cost: {{ item.shipping_charge }}</span>
+                                        <span>Due: {{ item.due }}</span>
                                     </td>
                                     <td class="text-center text-capitalize" v-html="statusText( item.status)"> </td>
-                                    <td style="width: 15%">
+                                    <td>
                                         <div class="input-group gap-2 justify-content-center">
                                             <a :href="`${'/admin/order/invoice/' + item.invoice}`" target="_blank"
                                                 title="Order Invoice" style="background: none"
@@ -163,7 +167,7 @@
                                                 <i class="fas fa-file text-info"></i>
                                             </a>
                                             <button title="Order Cancel"
-                                                v-if="item.status != 'cancel' && item.status != 'delivery'"
+                                                v-if="item.status != 'cancel' && item.status != 'complete'"
                                                 @click="InvoiceDelete(item.id)" type="button" style="background: none"
                                                 class="shadow-none outline-none border-0">
                                                 <i class="fas fa-trash text-danger"></i>

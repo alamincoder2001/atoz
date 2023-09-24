@@ -8396,15 +8396,15 @@ var render = function render() {
     staticStyle: {
       width: "47%"
     }
-  }, [_vm._v("Shipping Charge")]), _vm._v(" "), _c("td", [_vm._v(":")]), _vm._v(" "), _c("td", {
+  }, [_vm._v("Paid")]), _vm._v(" "), _c("td", [_vm._v(":")]), _vm._v(" "), _c("td", {
     staticClass: "text-end"
-  }, [_vm._v(_vm._s(_vm.modalData.shipping_charge))])]), _vm._v(" "), _vm._m(1), _vm._v(" "), _c("tr", [_c("td", {
+  }, [_vm._v(_vm._s(_vm.modalData.total))])]), _vm._v(" "), _vm._m(1), _vm._v(" "), _c("tr", [_c("td", {
     staticStyle: {
       width: "47%"
     }
-  }, [_vm._v("Total")]), _vm._v(" "), _c("td", [_vm._v(":")]), _vm._v(" "), _c("td", {
+  }, [_vm._v("Due")]), _vm._v(" "), _c("td", [_vm._v(":")]), _vm._v(" "), _c("td", {
     staticClass: "text-end"
-  }, [_vm._v(_vm._s(_vm.modalData.total))])])])])]);
+  }, [_vm._v(_vm._s(_vm.modalData.due))])])])])]);
 };
 var staticRenderFns = [function () {
   var _vm = this,
@@ -8640,7 +8640,13 @@ var render = function render() {
       staticClass: "text-center"
     }, [_vm._v(_vm._s(item.orderDetails[0].quantity))]), _vm._v(" "), _c("td", {
       staticClass: "text-center"
-    }, [_vm._v(_vm._s(item.orderDetails[0].worker_name))]), _vm._v(" "), _c("td", [_c("button", {
+    }, [_vm._v(_vm._s(item.orderDetails[0].bill_amount))]), _vm._v(" "), _c("td", {
+      staticClass: "text-center"
+    }, [_vm._v(_vm._s(item.orderDetails[0].paid_amount))]), _vm._v(" "), _c("td", {
+      staticClass: "text-center"
+    }, [_vm._v(_vm._s(item.orderDetails[0].due))]), _vm._v(" "), _c("td", {
+      staticClass: "text-center"
+    }, [_vm._v(_vm._s(item.orderDetails[0].worker_name))]), _vm._v(" "), _c("td", [item.status == "pending" ? _c("button", {
       staticClass: "btn btn-danger btn-sm shadow-none fas fa-user",
       attrs: {
         type: "button"
@@ -8650,7 +8656,7 @@ var render = function render() {
           return _vm.modalShow(item.orderDetails[0], item.thanaId);
         }
       }
-    })])]), _vm._v(" "), _vm._l(item.orderDetails.slice(1), function (service, sl) {
+    }) : _vm._e()])]), _vm._v(" "), _vm._l(item.orderDetails.slice(1), function (service, sl) {
       return _c("tr", {
         "class": item.totaldetail == item.totalassign ? "text-white" : "",
         style: {
@@ -8667,7 +8673,13 @@ var render = function render() {
         staticClass: "text-center"
       }, [_vm._v(_vm._s(service.quantity))]), _vm._v(" "), _c("td", {
         staticClass: "text-center"
-      }, [_vm._v(_vm._s(service.worker_name))]), _vm._v(" "), _c("td", [_c("button", {
+      }, [_vm._v(_vm._s(service.bill_amount))]), _vm._v(" "), _c("td", {
+        staticClass: "text-center"
+      }, [_vm._v(_vm._s(service.paid_amount))]), _vm._v(" "), _c("td", {
+        staticClass: "text-center"
+      }, [_vm._v(_vm._s(service.due))]), _vm._v(" "), _c("td", {
+        staticClass: "text-center"
+      }, [_vm._v(_vm._s(service.worker_name))]), _vm._v(" "), _c("td", [item.status == "pending" ? _c("button", {
         staticClass: "btn btn-danger btn-sm shadow-none fas fa-user",
         attrs: {
           type: "button"
@@ -8677,7 +8689,7 @@ var render = function render() {
             return _vm.modalShow(service, item.thanaId);
           }
         }
-      })])]);
+      }) : _vm._e()])]);
     }), _vm._v(" "), _c("tr", [_vm._m(2, true)])];
   })], 2)]) : _c("table", {
     staticClass: "table table-bordered m-0",
@@ -8855,10 +8867,25 @@ var staticRenderFns = [function () {
       "text-align": "center",
       color: "white"
     }
+  }, [_vm._v("Bill")]), _vm._v(" "), _c("th", {
+    staticStyle: {
+      "text-align": "center",
+      color: "white"
+    }
+  }, [_vm._v("Paid")]), _vm._v(" "), _c("th", {
+    staticStyle: {
+      "text-align": "center",
+      color: "white"
+    }
+  }, [_vm._v("Due")]), _vm._v(" "), _c("th", {
+    staticStyle: {
+      "text-align": "center",
+      color: "white"
+    }
   }, [_vm._v("Worker Name")]), _vm._v(" "), _c("th", {
     staticStyle: {
       "text-align": "center",
-      width: "12%",
+      width: "5%",
       color: "white"
     }
   }, [_vm._v(" Action ")])])]);
@@ -8867,7 +8894,7 @@ var staticRenderFns = [function () {
     _c = _vm._self._c;
   return _c("td", {
     attrs: {
-      colspan: "9"
+      colspan: "12"
     }
   }, [_c("div", {
     staticClass: "devider"
@@ -9170,11 +9197,7 @@ var render = function render() {
       staticClass: "text-center"
     }, [_vm._v(_vm._s(item.orderDetails[0].quantity))]), _vm._v(" "), _c("td", {
       staticClass: "text-center"
-    }, [_vm._v(_vm._s(item.orderDetails[0].worker_name))]), _vm._v(" "), _c("td", {
-      staticStyle: {
-        width: "15%"
-      }
-    }, [_c("div", {
+    }, [_vm._v(_vm._s(item.orderDetails[0].worker_name))]), _vm._v(" "), _c("td", [_c("div", {
       staticClass: "input-group gap-2 justify-content-center"
     }, [_c("a", {
       staticClass: "shadow-none outline-none border-0",
@@ -9188,7 +9211,7 @@ var render = function render() {
       }
     }, [_c("i", {
       staticClass: "fas fa-file text-info"
-    })]), _vm._v(" "), item.status != "cancel" && item.status != "delivery" ? _c("button", {
+    })]), _vm._v(" "), item.status != "cancel" && item.status != "complete" ? _c("button", {
       staticClass: "shadow-none outline-none border-0",
       staticStyle: {
         background: "none"
@@ -9234,7 +9257,20 @@ var render = function render() {
       }
     }, [_vm._v("Total Quantity"), _c("br"), _vm._v(_vm._s(item.orderDetails.reduce(function (prev, curr) {
       return prev + parseFloat(curr.quantity);
-    }, 0)))]), _vm._v(" "), _vm._m(2, true)])];
+    }, 0)))]), _vm._v(" "), _c("td", {
+      staticStyle: {
+        "text-align": "right"
+      },
+      attrs: {
+        colspan: "2"
+      }
+    }, [_vm._v("\n                                    Total: " + _vm._s(item.orderDetails.reduce(function (prev, curr) {
+      return prev + parseFloat(curr.bill_amount);
+    }, 0).toFixed(2))), _c("br"), _vm._v("\n                                    Paid: " + _vm._s(item.orderDetails.reduce(function (prev, curr) {
+      return prev + parseFloat(curr.paid_amount);
+    }, 0).toFixed(2))), _c("br"), _vm._v("\n                                    Due: " + _vm._s(item.orderDetails.reduce(function (prev, curr) {
+      return prev + parseFloat(curr.due);
+    }, 0).toFixed(2)) + "\n                                ")])])];
   })], 2)]) : _c("table", {
     staticClass: "table table-bordered m-0",
     staticStyle: {
@@ -9243,7 +9279,7 @@ var render = function render() {
     style: {
       display: _vm.recordType == "without" ? "" : "none"
     }
-  }, [_vm._m(3), _vm._v(" "), _c("tbody", [_vm._l(_vm.orders, function (item, index) {
+  }, [_vm._m(2), _vm._v(" "), _c("tbody", [_vm._l(_vm.orders, function (item, index) {
     return [_c("tr", [_c("td", {
       staticClass: "text-center",
       staticStyle: {
@@ -9253,16 +9289,12 @@ var render = function render() {
       staticClass: "text-center"
     }, [_vm._v(" " + _vm._s(item.invoice) + " ")]), _vm._v(" "), _c("td", {
       staticClass: "text-center"
-    }, [_vm._v(" " + _vm._s(_vm.formatDate(item.date)) + " ")]), _vm._v(" "), _c("td", [_c("span", [_vm._v("Customer Name: " + _vm._s(item.name))]), _c("br"), _vm._v(" "), _c("span", [_vm._v("Mobile: " + _vm._s(item.mobile))]), _c("br"), _vm._v(" "), _c("span", [_vm._v("Address: " + _vm._s(item.shipping_address))])]), _vm._v(" "), _c("td", [_c("span", [_vm._v("SubTotal: " + _vm._s(item.subtotal))]), _c("br"), _vm._v(" "), _c("span", [_vm._v("Total: " + _vm._s(item.total))]), _c("br"), _vm._v(" "), _c("span", [_vm._v("Shipping Cost: " + _vm._s(item.shipping_charge))])]), _vm._v(" "), _c("td", {
+    }, [_vm._v(" " + _vm._s(_vm.formatDate(item.date)) + " ")]), _vm._v(" "), _c("td", [_c("span", [_vm._v("Customer Name: " + _vm._s(item.name))]), _c("br"), _vm._v(" "), _c("span", [_vm._v("Mobile: " + _vm._s(item.mobile))]), _c("br"), _vm._v(" "), _c("span", [_vm._v("Address: " + _vm._s(item.shipping_address))])]), _vm._v(" "), _c("td", [_c("span", [_vm._v("SubTotal: " + _vm._s(item.subtotal))]), _c("br"), _vm._v(" "), _c("span", [_vm._v("Total: " + _vm._s(item.total))]), _c("br"), _vm._v(" "), _c("span", [_vm._v("Due: " + _vm._s(item.due))])]), _vm._v(" "), _c("td", {
       staticClass: "text-center text-capitalize",
       domProps: {
         innerHTML: _vm._s(_vm.statusText(item.status))
       }
-    }), _vm._v(" "), _c("td", {
-      staticStyle: {
-        width: "15%"
-      }
-    }, [_c("div", {
+    }), _vm._v(" "), _c("td", [_c("div", {
       staticClass: "input-group gap-2 justify-content-center"
     }, [_c("a", {
       staticClass: "shadow-none outline-none border-0",
@@ -9276,7 +9308,7 @@ var render = function render() {
       }
     }, [_c("i", {
       staticClass: "fas fa-file text-info"
-    })]), _vm._v(" "), item.status != "cancel" && item.status != "delivery" ? _c("button", {
+    })]), _vm._v(" "), item.status != "cancel" && item.status != "complete" ? _c("button", {
       staticClass: "shadow-none outline-none border-0",
       staticStyle: {
         background: "none"
@@ -9367,21 +9399,10 @@ var staticRenderFns = [function () {
   }, [_vm._v("Worker Name")]), _vm._v(" "), _c("th", {
     staticStyle: {
       "text-align": "center",
-      width: "12%",
+      width: "10%",
       color: "white"
     }
   }, [_vm._v(" Action ")])])]);
-}, function () {
-  var _vm = this,
-    _c = _vm._self._c;
-  return _c("td", {
-    staticStyle: {
-      "text-align": "right"
-    },
-    attrs: {
-      colspan: "2"
-    }
-  }, [_vm._v("\n                                    Total: 0"), _c("br"), _vm._v("\n                                    Paid: 0"), _c("br")]);
 }, function () {
   var _vm = this,
     _c = _vm._self._c;
@@ -9425,7 +9446,7 @@ var staticRenderFns = [function () {
   }, [_vm._v("Order Status")]), _vm._v(" "), _c("th", {
     staticStyle: {
       "text-align": "center",
-      width: "12%",
+      width: "10%",
       color: "white"
     }
   }, [_vm._v(" Action ")])])]);
@@ -10773,12 +10794,8 @@ var render = function render() {
       staticClass: "text-center"
     }, [_vm._v(_vm._s(item.orderDetails[0].quantity))]), _vm._v(" "), _c("td", {
       staticClass: "text-center"
-    }, [_vm._v(_vm._s(item.orderDetails[0].worker_name))]), _vm._v(" "), _c("td", {
-      staticStyle: {
-        width: "15%"
-      }
-    }, [_c("div", {
-      staticClass: "input-group gap-2 justify-content-end"
+    }, [_vm._v(_vm._s(item.orderDetails[0].worker_name))]), _vm._v(" "), _c("td", [_c("div", {
+      staticClass: "input-group gap-2 justify-content-center"
     }, [_c("a", {
       staticClass: "shadow-none outline-none border-0",
       staticStyle: {
@@ -10791,7 +10808,7 @@ var render = function render() {
       }
     }, [_c("i", {
       staticClass: "fas fa-file text-info"
-    })]), _vm._v(" "), item.status != "cancel" && item.status != "delivery" ? _c("button", {
+    })]), _vm._v(" "), item.status != "cancel" && item.status != "complete" ? _c("button", {
       staticClass: "shadow-none outline-none border-0",
       staticStyle: {
         background: "none"
@@ -10837,7 +10854,20 @@ var render = function render() {
       }
     }, [_vm._v("Total Quantity"), _c("br"), _vm._v(_vm._s(item.orderDetails.reduce(function (prev, curr) {
       return prev + parseFloat(curr.quantity);
-    }, 0)))]), _vm._v(" "), _vm._m(2, true)])];
+    }, 0)))]), _vm._v(" "), _c("td", {
+      staticStyle: {
+        "text-align": "right"
+      },
+      attrs: {
+        colspan: "2"
+      }
+    }, [_vm._v("\n                                    Total: " + _vm._s(item.orderDetails.reduce(function (prev, curr) {
+      return prev + parseFloat(curr.bill_amount);
+    }, 0).toFixed(2))), _c("br"), _vm._v("\n                                    Paid: " + _vm._s(item.orderDetails.reduce(function (prev, curr) {
+      return prev + parseFloat(curr.paid_amount);
+    }, 0).toFixed(2))), _c("br"), _vm._v("\n                                    Due: " + _vm._s(item.orderDetails.reduce(function (prev, curr) {
+      return prev + parseFloat(curr.due);
+    }, 0).toFixed(2)) + "\n                                ")])])];
   })], 2)]) : _c("table", {
     staticClass: "table table-bordered m-0",
     staticStyle: {
@@ -10846,7 +10876,7 @@ var render = function render() {
     style: {
       display: _vm.recordType == "without" ? "" : "none"
     }
-  }, [_vm._m(3), _vm._v(" "), _c("tbody", [_vm._l(_vm.orders, function (item, index) {
+  }, [_vm._m(2), _vm._v(" "), _c("tbody", [_vm._l(_vm.orders, function (item, index) {
     return [_c("tr", [_c("td", {
       staticClass: "text-center",
       staticStyle: {
@@ -10856,17 +10886,13 @@ var render = function render() {
       staticClass: "text-center"
     }, [_vm._v(" " + _vm._s(item.invoice) + " ")]), _vm._v(" "), _c("td", {
       staticClass: "text-center"
-    }, [_vm._v(" " + _vm._s(_vm.formatDate(item.date)) + " ")]), _vm._v(" "), _c("td", [_c("span", [_vm._v("Customer Name: " + _vm._s(item.name))]), _c("br"), _vm._v(" "), _c("span", [_vm._v("Mobile: " + _vm._s(item.mobile))]), _c("br"), _vm._v(" "), _c("span", [_vm._v("Address: " + _vm._s(item.shipping_address))])]), _vm._v(" "), _c("td", [_c("span", [_vm._v("SubTotal: " + _vm._s(item.subtotal))]), _c("br"), _vm._v(" "), _c("span", [_vm._v("Total: " + _vm._s(item.total))]), _c("br"), _vm._v(" "), _c("span", [_vm._v("Shipping Cost: " + _vm._s(item.shipping_charge))])]), _vm._v(" "), _c("td", {
+    }, [_vm._v(" " + _vm._s(_vm.formatDate(item.date)) + " ")]), _vm._v(" "), _c("td", [_c("span", [_vm._v("Customer Name: " + _vm._s(item.name))]), _c("br"), _vm._v(" "), _c("span", [_vm._v("Mobile: " + _vm._s(item.mobile))]), _c("br"), _vm._v(" "), _c("span", [_vm._v("Address: " + _vm._s(item.shipping_address))])]), _vm._v(" "), _c("td", [_c("span", [_vm._v("SubTotal: " + _vm._s(item.subtotal))]), _c("br"), _vm._v(" "), _c("span", [_vm._v("Total: " + _vm._s(item.total))]), _c("br"), _vm._v(" "), _c("span", [_vm._v("Due: " + _vm._s(item.due))])]), _vm._v(" "), _c("td", {
       staticClass: "text-center text-capitalize",
       domProps: {
         innerHTML: _vm._s(_vm.statusText(item.status))
       }
-    }), _vm._v(" "), _c("td", {
-      staticStyle: {
-        width: "15%"
-      }
-    }, [_c("div", {
-      staticClass: "input-group gap-2 justify-content-end"
+    }), _vm._v(" "), _c("td", [_c("div", {
+      staticClass: "input-group gap-2 justify-content-center"
     }, [_c("a", {
       staticClass: "shadow-none outline-none border-0",
       staticStyle: {
@@ -10879,7 +10905,7 @@ var render = function render() {
       }
     }, [_c("i", {
       staticClass: "fas fa-file text-info"
-    })]), _vm._v(" "), item.status != "cancel" && item.status != "delivery" ? _c("button", {
+    })]), _vm._v(" "), item.status != "cancel" && item.status != "complete" ? _c("button", {
       staticClass: "shadow-none outline-none border-0",
       staticStyle: {
         background: "none"
@@ -10970,21 +10996,10 @@ var staticRenderFns = [function () {
   }, [_vm._v("Worker Name")]), _vm._v(" "), _c("th", {
     staticStyle: {
       "text-align": "center",
-      width: "12%",
+      width: "10%",
       color: "white"
     }
   }, [_vm._v(" Action ")])])]);
-}, function () {
-  var _vm = this,
-    _c = _vm._self._c;
-  return _c("td", {
-    staticStyle: {
-      "text-align": "right"
-    },
-    attrs: {
-      colspan: "2"
-    }
-  }, [_vm._v("\n                                    Total: 0"), _c("br"), _vm._v("\n                                    Paid: 0"), _c("br")]);
 }, function () {
   var _vm = this,
     _c = _vm._self._c;
@@ -11028,7 +11043,7 @@ var staticRenderFns = [function () {
   }, [_vm._v("Order Status")]), _vm._v(" "), _c("th", {
     staticStyle: {
       "text-align": "center",
-      width: "12%",
+      width: "10%",
       color: "white"
     }
   }, [_vm._v(" Action ")])])]);
@@ -11233,11 +11248,7 @@ var render = function render() {
       staticClass: "text-center"
     }, [_vm._v(_vm._s(item.orderDetails[0].quantity))]), _vm._v(" "), _c("td", {
       staticClass: "text-center"
-    }, [_vm._v(_vm._s(item.orderDetails[0].worker_name))]), _vm._v(" "), _c("td", {
-      staticStyle: {
-        width: "15%"
-      }
-    }, [_c("div", {
+    }, [_vm._v(_vm._s(item.orderDetails[0].worker_name))]), _vm._v(" "), _c("td", [_c("div", {
       staticClass: "input-group gap-2 justify-content-end"
     }, [_c("a", {
       staticClass: "shadow-none outline-none border-0",
@@ -11251,7 +11262,7 @@ var render = function render() {
       }
     }, [_c("i", {
       staticClass: "fas fa-file text-info"
-    })]), _vm._v(" "), item.status != "cancel" && item.status != "delivery" ? _c("button", {
+    })]), _vm._v(" "), item.status != "cancel" && item.status != "complete" ? _c("button", {
       staticClass: "shadow-none outline-none border-0",
       staticStyle: {
         background: "none"
@@ -11297,7 +11308,20 @@ var render = function render() {
       }
     }, [_vm._v("Total Quantity"), _c("br"), _vm._v(_vm._s(item.orderDetails.reduce(function (prev, curr) {
       return prev + parseFloat(curr.quantity);
-    }, 0)))]), _vm._v(" "), _vm._m(2, true)])];
+    }, 0)))]), _vm._v(" "), _c("td", {
+      staticStyle: {
+        "text-align": "right"
+      },
+      attrs: {
+        colspan: "2"
+      }
+    }, [_vm._v("\n                                    Total: " + _vm._s(item.orderDetails.reduce(function (prev, curr) {
+      return prev + parseFloat(curr.bill_amount);
+    }, 0).toFixed(2))), _c("br"), _vm._v("\n                                    Paid: " + _vm._s(item.orderDetails.reduce(function (prev, curr) {
+      return prev + parseFloat(curr.paid_amount);
+    }, 0).toFixed(2))), _c("br"), _vm._v("\n                                    Due: " + _vm._s(item.orderDetails.reduce(function (prev, curr) {
+      return prev + parseFloat(curr.due);
+    }, 0).toFixed(2)) + "\n                                ")])])];
   })], 2)]) : _c("table", {
     staticClass: "table table-bordered m-0",
     staticStyle: {
@@ -11306,7 +11330,7 @@ var render = function render() {
     style: {
       display: _vm.recordType == "without" ? "" : "none"
     }
-  }, [_vm._m(3), _vm._v(" "), _c("tbody", [_vm._l(_vm.orders, function (item, index) {
+  }, [_vm._m(2), _vm._v(" "), _c("tbody", [_vm._l(_vm.orders, function (item, index) {
     return [_c("tr", [_c("td", {
       staticClass: "text-center",
       staticStyle: {
@@ -11316,16 +11340,12 @@ var render = function render() {
       staticClass: "text-center"
     }, [_vm._v(" " + _vm._s(item.invoice) + " ")]), _vm._v(" "), _c("td", {
       staticClass: "text-center"
-    }, [_vm._v(" " + _vm._s(_vm.formatDate(item.date)) + " ")]), _vm._v(" "), _c("td", [_c("span", [_vm._v("Customer Name: " + _vm._s(item.name))]), _c("br"), _vm._v(" "), _c("span", [_vm._v("Mobile: " + _vm._s(item.mobile))]), _c("br"), _vm._v(" "), _c("span", [_vm._v("Address: " + _vm._s(item.shipping_address))])]), _vm._v(" "), _c("td", [_c("span", [_vm._v("SubTotal: " + _vm._s(item.subtotal))]), _c("br"), _vm._v(" "), _c("span", [_vm._v("Total: " + _vm._s(item.total))]), _c("br"), _vm._v(" "), _c("span", [_vm._v("Shipping Cost: " + _vm._s(item.shipping_charge))])]), _vm._v(" "), _c("td", {
+    }, [_vm._v(" " + _vm._s(_vm.formatDate(item.date)) + " ")]), _vm._v(" "), _c("td", [_c("span", [_vm._v("Customer Name: " + _vm._s(item.name))]), _c("br"), _vm._v(" "), _c("span", [_vm._v("Mobile: " + _vm._s(item.mobile))]), _c("br"), _vm._v(" "), _c("span", [_vm._v("Address: " + _vm._s(item.shipping_address))])]), _vm._v(" "), _c("td", [_c("span", [_vm._v("SubTotal: " + _vm._s(item.subtotal))]), _c("br"), _vm._v(" "), _c("span", [_vm._v("Total: " + _vm._s(item.total))]), _c("br"), _vm._v(" "), _c("span", [_vm._v("Due: " + _vm._s(item.due))])]), _vm._v(" "), _c("td", {
       staticClass: "text-center text-capitalize",
       domProps: {
         innerHTML: _vm._s(_vm.statusText(item.status))
       }
-    }), _vm._v(" "), _c("td", {
-      staticStyle: {
-        width: "15%"
-      }
-    }, [_c("div", {
+    }), _vm._v(" "), _c("td", [_c("div", {
       staticClass: "input-group gap-2 justify-content-end"
     }, [_c("a", {
       staticClass: "shadow-none outline-none border-0",
@@ -11339,7 +11359,7 @@ var render = function render() {
       }
     }, [_c("i", {
       staticClass: "fas fa-file text-info"
-    })]), _vm._v(" "), item.status != "cancel" && item.status != "delivery" ? _c("button", {
+    })]), _vm._v(" "), item.status != "cancel" && item.status != "complete" ? _c("button", {
       staticClass: "shadow-none outline-none border-0",
       staticStyle: {
         background: "none"
@@ -11430,21 +11450,10 @@ var staticRenderFns = [function () {
   }, [_vm._v("Worker Name")]), _vm._v(" "), _c("th", {
     staticStyle: {
       "text-align": "center",
-      width: "12%",
+      width: "10%",
       color: "white"
     }
   }, [_vm._v(" Action ")])])]);
-}, function () {
-  var _vm = this,
-    _c = _vm._self._c;
-  return _c("td", {
-    staticStyle: {
-      "text-align": "right"
-    },
-    attrs: {
-      colspan: "2"
-    }
-  }, [_vm._v("\n                                    Total: 0"), _c("br"), _vm._v("\n                                    Paid: 0"), _c("br")]);
 }, function () {
   var _vm = this,
     _c = _vm._self._c;
@@ -11488,7 +11497,7 @@ var staticRenderFns = [function () {
   }, [_vm._v("Order Status")]), _vm._v(" "), _c("th", {
     staticStyle: {
       "text-align": "center",
-      width: "12%",
+      width: "10%",
       color: "white"
     }
   }, [_vm._v(" Action ")])])]);

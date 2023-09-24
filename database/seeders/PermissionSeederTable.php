@@ -68,7 +68,6 @@ class PermissionSeederTable extends Seeder
                 'group_name' => 'Service',
                 'permission_name' => [
                     'serviceEntry',
-                    'servicepublishEntry'
                 ]
             ],
             [
