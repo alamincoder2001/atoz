@@ -63,7 +63,7 @@
             </div>
         </div>
         <!-- Column -->
-        <div class="col-md-2 col-6">
+        <div class="col-md-2 col-6" v-if="role != 'manager'">
             <div class="card">
                 <div class="card-header d-flex justify-content-center py-2 px-0">
                     <i class="fas fa-users bg-primary"></i>
@@ -105,6 +105,10 @@
 export default {
     data() {
         return {
+            props: [
+                'admin_id',
+                'role',
+            ],
             todayOrder    : 0,
             pendingOrder    : 0,
             completedOrder: 0,
@@ -112,11 +116,16 @@ export default {
             worker        : 0,
             manager       : 0,
             customer      : 0,
+
+            adminId: "",
+            role: "",
         }
     },
 
     created() {
         this.getProfit();
+        this.adminId  = this.$attrs.admin_id
+        this.role     = this.$attrs.role
     },
 
     methods: {

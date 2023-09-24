@@ -5908,17 +5908,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
+      props: ['admin_id', 'role'],
       todayOrder: 0,
       pendingOrder: 0,
       completedOrder: 0,
       canceldOrder: 0,
       worker: 0,
       manager: 0,
-      customer: 0
+      customer: 0,
+      adminId: "",
+      role: ""
     };
   },
   created: function created() {
     this.getProfit();
+    this.adminId = this.$attrs.admin_id;
+    this.role = this.$attrs.role;
   },
   methods: {
     getProfit: function getProfit() {
@@ -6508,6 +6513,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
+      props: ['admin_id', 'role', 'district_id', 'thana_id'],
       linkHref: location.origin,
       form: new Form({
         id: "",
@@ -6551,33 +6557,57 @@ __webpack_require__.r(__webpack_exports__);
       }, {
         label: "Action",
         field: "after"
-      }]
+      }],
       // rows: [],
       // page: 1,
       // per_page: 10,
+
+      adminId: "",
+      role: "",
+      district_id: "",
+      thana_id: ""
     };
   },
   created: function created() {
     this.getWorker();
     this.getDistrict();
-    this.getAreaManager();
+    this.adminId = this.$attrs.admin_id;
+    this.role = this.$attrs.role;
+    this.district_id = this.$attrs.district_id;
+    this.thana_id = this.$attrs.thana_id;
   },
   methods: {
+    onChangeThana: function onChangeThana() {
+      this.selectedManager = null;
+      this.getAreaManager();
+    },
     getAreaManager: function getAreaManager() {
       var _this = this;
       axios.get("/admin/get-manager").then(function (res) {
-        _this.managers = res.data.data;
+        _this.managers = res.data.data.filter(function (manager) {
+          return manager.thana_id == _this.selectedThana.id;
+        });
       });
     },
     getDistrict: function getDistrict() {
       var _this2 = this;
       axios.get("/admin/district/fetch").then(function (res) {
-        _this2.districts = res.data.data;
+        if (_this2.role == 'manager') {
+          _this2.districts = res.data.data.filter(function (d) {
+            return d.id == _this2.district_id;
+          });
+        } else {
+          _this2.districts = res.data.data;
+        }
       });
     },
     onChangeDistrict: function onChangeDistrict() {
-      if (this.selectedDistrict != null) {
-        this.thanas = [];
+      if (this.role != 'manager') {
+        if (this.selectedDistrict != null) {
+          this.selectedThana = null;
+          this.getThana();
+        }
+      } else {
         this.selectedThana = null;
         this.getThana();
       }
@@ -6585,9 +6615,15 @@ __webpack_require__.r(__webpack_exports__);
     getThana: function getThana() {
       var _this3 = this;
       axios.get("/admin/thana/fetch").then(function (res) {
-        _this3.thanas = res.data.data.filter(function (th) {
-          return th.district_id == _this3.selectedDistrict.id;
-        });
+        if (_this3.role != 'manager') {
+          _this3.thanas = res.data.data.filter(function (th) {
+            return th.district_id == _this3.selectedDistrict.id;
+          });
+        } else {
+          _this3.thanas = res.data.data.filter(function (th) {
+            return th.id == _this3.thana_id;
+          });
+        }
       });
     },
     getWorker: function getWorker() {
@@ -6686,6 +6722,7 @@ __webpack_require__.r(__webpack_exports__);
         id: val.thana_id,
         name: val.thana.name
       };
+      this.getAreaManager();
     },
     deleteRow: function deleteRow(id) {
       var _this6 = this;
@@ -7299,14 +7336,6 @@ var render = function render() {
       key: "table-row",
       fn: function fn(props) {
         return [props.column.field == "after" ? _c("span", [_c("a", {
-          staticClass: "text-danger",
-          attrs: {
-            title: "User Access",
-            href: "".concat(_vm.linkHref + "/admin/user/permission/" + props.row.id)
-          }
-        }, [_c("i", {
-          staticClass: "fas fa-users text-warning"
-        })]), _vm._v(" "), _c("a", {
           attrs: {
             href: ""
           },
@@ -8164,7 +8193,7 @@ var render = function render() {
     staticClass: "font-light text-white fontSize"
   }, [_vm._v("Cancel Order")]), _vm._v(" "), _c("h4", {
     staticClass: "text-white"
-  }, [_vm._v(_vm._s(_vm.canceldOrder))])])])]), _vm._v(" "), _c("div", {
+  }, [_vm._v(_vm._s(_vm.canceldOrder))])])])]), _vm._v(" "), _vm.role != "manager" ? _c("div", {
     staticClass: "col-md-2 col-6"
   }, [_c("div", {
     staticClass: "card"
@@ -8174,7 +8203,7 @@ var render = function render() {
     staticClass: "font-light text-white fontSize"
   }, [_vm._v(" Area Manager ")]), _vm._v(" "), _c("h4", {
     staticClass: "text-white"
-  }, [_vm._v(" " + _vm._s(_vm.manager) + " ")])])])]), _vm._v(" "), _c("div", {
+  }, [_vm._v(" " + _vm._s(_vm.manager) + " ")])])])]) : _vm._e(), _vm._v(" "), _c("div", {
     staticClass: "col-md-2 col-6"
   }, [_c("div", {
     staticClass: "card"
@@ -10176,24 +10205,6 @@ var render = function render() {
     staticClass: "col-md-9"
   }, [_c("v-select", {
     attrs: {
-      options: _vm.managers,
-      label: "name"
-    },
-    model: {
-      value: _vm.selectedManager,
-      callback: function callback($$v) {
-        _vm.selectedManager = $$v;
-      },
-      expression: "selectedManager"
-    }
-  }), _vm._v(" "), _c("span", {
-    staticClass: "error-manager_id error text-danger"
-  })], 1)]), _vm._v(" "), _c("div", {
-    staticClass: "form-group row mb-2"
-  }, [_vm._m(7), _vm._v(" "), _c("div", {
-    staticClass: "col-md-9"
-  }, [_c("v-select", {
-    attrs: {
       options: _vm.districts,
       label: "name"
     },
@@ -10211,12 +10222,15 @@ var render = function render() {
     staticClass: "error-district_id error text-danger"
   })], 1)]), _vm._v(" "), _c("div", {
     staticClass: "form-group row mb-2"
-  }, [_vm._m(8), _vm._v(" "), _c("div", {
+  }, [_vm._m(7), _vm._v(" "), _c("div", {
     staticClass: "col-md-9"
   }, [_c("v-select", {
     attrs: {
       options: _vm.thanas,
       label: "name"
+    },
+    on: {
+      input: _vm.onChangeThana
     },
     model: {
       value: _vm.selectedThana,
@@ -10227,6 +10241,24 @@ var render = function render() {
     }
   }), _vm._v(" "), _c("span", {
     staticClass: "error-password error text-danger"
+  })], 1)]), _vm._v(" "), _c("div", {
+    staticClass: "form-group row mb-2"
+  }, [_vm._m(8), _vm._v(" "), _c("div", {
+    staticClass: "col-md-9"
+  }, [_c("v-select", {
+    attrs: {
+      options: _vm.managers,
+      label: "name"
+    },
+    model: {
+      value: _vm.selectedManager,
+      callback: function callback($$v) {
+        _vm.selectedManager = $$v;
+      },
+      expression: "selectedManager"
+    }
+  }), _vm._v(" "), _c("span", {
+    staticClass: "error-manager_id error text-danger"
   })], 1)]), _vm._v(" "), _c("div", {
     staticClass: "form-group row mb-2"
   }, [_vm._m(9), _vm._v(" "), _c("div", {
@@ -10437,17 +10469,6 @@ var staticRenderFns = [function () {
   return _c("label", {
     staticClass: "col-md-3",
     attrs: {
-      "for": "manager_id"
-    }
-  }, [_vm._v("Manager"), _c("span", {
-    staticClass: "text-danger fw-bold"
-  }, [_vm._v("*")])]);
-}, function () {
-  var _vm = this,
-    _c = _vm._self._c;
-  return _c("label", {
-    staticClass: "col-md-3",
-    attrs: {
       "for": "district_id"
     }
   }, [_vm._v("District"), _c("span", {
@@ -10462,6 +10483,17 @@ var staticRenderFns = [function () {
       "for": "thana_id"
     }
   }, [_vm._v("Thana"), _c("span", {
+    staticClass: "text-danger fw-bold"
+  }, [_vm._v("*")])]);
+}, function () {
+  var _vm = this,
+    _c = _vm._self._c;
+  return _c("label", {
+    staticClass: "col-md-3",
+    attrs: {
+      "for": "manager_id"
+    }
+  }, [_vm._v("Manager"), _c("span", {
     staticClass: "text-danger fw-bold"
   }, [_vm._v("*")])]);
 }, function () {

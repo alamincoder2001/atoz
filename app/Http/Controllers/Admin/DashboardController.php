@@ -26,7 +26,7 @@ class DashboardController extends Controller
         $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
             ->pluck('permissions')
             ->toArray();
-        if (!in_array("dashboard", $access)) {
+        if (!in_array("Dashboard", $access)) {
             return view("admin.unauthorize");
         }
         return view("admin.dashboard");
@@ -39,43 +39,52 @@ class DashboardController extends Controller
         $today = date('Y-m-d');
         $dayNumber = date('t', mktime(0, 0, 0, $month, 1, $year));
 
-        $todayOrder = DB::select("SELECT sm.*
+        $clauses = "";
+        $areaId = Auth::guard('admin')->user();
+        if ($areaId->role == 'manager') {
+            $clauses .= "AND c.thana_id = '$areaId->thana_id'";
+        }
+
+        $todayOrder = DB::select("SELECT sm.*,
+        c.district_id,
+        c.thana_id
         FROM orders sm
+        LEFT JOIN users c ON c.id = sm.customer_id
         WHERE sm.date = '$today' AND sm.status = 'pending'
+        $clauses
         ");
-        $pendingOrder = DB::select("SELECT sm.*
+        $pendingOrder = DB::select("SELECT sm.*,
+        c.district_id,
+        c.thana_id
         FROM orders sm
+        LEFT JOIN users c ON c.id = sm.customer_id
         WHERE sm.status = 'pending'
+        $clauses
         ");
-        $yearOrder = DB::select("SELECT sm.*
+        $yearOrder = DB::select("SELECT sm.*,
+        c.district_id,
+        c.thana_id
         FROM orders sm
+        LEFT JOIN users c ON c.id = sm.customer_id
         WHERE YEAR(sm.date) = '$year' AND sm.status = 'pending'
+        $clauses
         ");
-        $complete = DB::select("SELECT sm.*
-            FROM orders sm WHERE sm.status = 'complete'
+        $complete = DB::select("SELECT sm.*,
+            c.district_id,
+            c.thana_id
+            FROM orders sm
+            LEFT JOIN users c ON c.id = sm.customer_id
+            WHERE sm.status = 'complete'
+            $clauses
         ");
-        $cancel = DB::select("SELECT sm.*
-            FROM orders sm WHERE sm.status = 'cancel'
+        $cancel = DB::select("SELECT sm.*,
+            c.district_id,
+            c.thana_id
+            FROM orders sm
+            LEFT JOIN users c ON c.id = sm.customer_id
+            WHERE sm.status = 'cancel'
+            $clauses
         ");
-
-
-        $dayRecord = DB::select("SELECT 
-        IFNULL(SUM(sm.total), 0 ) AS sales_amount
-        FROM orders sm
-        WHERE sm.date = ?
-        AND sm.status = 'delivery'", [date('Y-m-d')]);
-
-        $monthRecord = DB::select("SELECT 
-        IFNULL(SUM(sm.total), 0 ) AS sales_amount
-        FROM orders sm
-        WHERE MONTH(sm.date) = '$month'
-        AND sm.status = 'delivery'");
-
-        $yearRecord = DB::select("SELECT 
-        IFNULL(SUM(sm.total), 0 ) AS sales_amount
-        FROM orders sm
-        WHERE YEAR(sm.date) = '$year'
-        AND sm.status = 'delivery'");
 
         // monthly record
         $monthlyRecord = [];
@@ -137,6 +146,13 @@ class DashboardController extends Controller
         if ((Auth::guard('admin')->user()->role == 'admin') || (Auth::guard('admin')->user()->role == 'superadmin')) {
             $worker = Worker::get();
         }
+        $customer = '';
+        if (Auth::guard('admin')->user()->role == 'manager') {
+            $customer = User::where("thana_id", Auth::guard('admin')->user()->thana_id)->get();
+        }
+        if ((Auth::guard('admin')->user()->role == 'admin') || (Auth::guard('admin')->user()->role == 'superadmin')) {
+            $customer = User::get();
+        }
 
         return response()->json([
             'today_order'    => $todayOrder,
@@ -148,7 +164,7 @@ class DashboardController extends Controller
             'topCustomer'    => $topCustomer,
             'manager'        => Admin::where('role', 'manager')->get(),
             'worker'         => $worker,
-            'customer'       => User::get(),
+            'customer'       => $customer,
         ]);
     }
 

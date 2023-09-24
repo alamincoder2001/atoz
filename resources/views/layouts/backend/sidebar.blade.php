@@ -9,7 +9,7 @@
         <!-- Sidebar navigation-->
         <nav class="sidebar-nav">
             <ul id="sidebarnav">
-                @if(in_array("dashboard", $access))
+                @if(in_array("Dashboard", $access))
                 <li class="sidebar-item {{Request::is('admin.dashboard') ? 'selected':''}}">
                     <a class="sidebar-link waves-effect waves-dark sidebar-link {{Request::is('admin.dashboard') ? 'active':''}}" href="{{route('admin.dashboard')}}" aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span class="hide-menu">Dashboard</span></a>
                 </li>

@@ -31,7 +31,11 @@ class WorkerController extends Controller
 
     public function index()
     {
-        $workers = Worker::with('thana', 'manager')->latest()->get();
+        if (Auth::guard('admin')->user()->role == 'manager') {
+            $workers = Worker::with('thana', 'manager')->where('thana_id', Auth::guard('admin')->user()->thana_id)->latest()->get();
+        }else{
+            $workers = Worker::with('thana', 'manager')->latest()->get();
+        }
         $worker_code = $this->generateCode("Worker", "W");
 
         return response()->json(["workers" => $workers, "worker_code" => $worker_code]);

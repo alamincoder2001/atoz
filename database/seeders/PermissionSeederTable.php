@@ -19,7 +19,7 @@ class PermissionSeederTable extends Seeder
             [
                 'group_name' => 'Dashboard',
                 'permission_name' => [
-                    'dashboard',
+                    'Dashboard',
                 ]
             ],
             [

@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Admin Login</title>
+    <title>Backend Login</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.1.0/mdb.min.css" rel="stylesheet" />
@@ -33,7 +33,7 @@
 
 <body style="position: relative;">
     <!-- Section: Design Block -->
-    <h3 class="m-0 text-center my-5">Welcome To Admin Login Page</h3>
+    <h3 class="m-0 text-center my-5">Welcome To Login Page</h3>
     <section class="text-center text-lg-start position-fixed w-100 d-flex align-items-center justify-content-center">
         <div class="card mb-3 w-50">
             <div class="row g-0 d-flex align-items-center">

@@ -5,5 +5,5 @@
 @section("breadcrumb_item", "Admin Dashboard")
 
 @section("content")
-    <Dashboard></Dashboard>
+    <Dashboard admin_id="{{Auth::guard('admin')->user()->id}}" role="{{Auth::guard('admin')->user()->role}}"></Dashboard>
 @endsection

@@ -1,5 +1,5 @@
 @extends("layouts.fronted_master")
-@section("title", "Website - Home")
+@section("title", " Website - Home")
 @section("content")
 <div class="container">
     <div class="row">

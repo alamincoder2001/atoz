@@ -65,14 +65,6 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group row mb-2">
-                                            <label for="manager_id" class="col-md-3">Manager<span
-                                                    class="text-danger fw-bold">*</span></label>
-                                            <div class="col-md-9">
-                                                <v-select :options="managers" v-model="selectedManager" label="name"></v-select>
-                                                <span class="error-manager_id error text-danger"></span>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row mb-2">
                                             <label for="district_id" class="col-md-3">District<span
                                                     class="text-danger fw-bold">*</span></label>
                                             <div class="col-md-9">
@@ -85,8 +77,18 @@
                                             <label for="thana_id" class="col-md-3">Thana<span
                                                     class="text-danger fw-bold">*</span></label>
                                             <div class="col-md-9">
-                                                <v-select :options="thanas" v-model="selectedThana" label="name"></v-select>
+                                                <v-select :options="thanas" v-model="selectedThana" label="name"
+                                                    @input="onChangeThana"></v-select>
                                                 <span class="error-password error text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row mb-2">
+                                            <label for="manager_id" class="col-md-3">Manager<span
+                                                    class="text-danger fw-bold">*</span></label>
+                                            <div class="col-md-9">
+                                                <v-select :options="managers" v-model="selectedManager"
+                                                    label="name"></v-select>
+                                                <span class="error-manager_id error text-danger"></span>
                                             </div>
                                         </div>
 
@@ -167,6 +169,12 @@
 export default {
     data() {
         return {
+            props: [
+                'admin_id',
+                'role',
+                'district_id',
+                'thana_id',
+            ],
             linkHref: location.origin,
             form: new Form({
                 id: "",
@@ -203,31 +211,52 @@ export default {
             // rows: [],
             // page: 1,
             // per_page: 10,
+
+            adminId: "",
+            role: "",
+            district_id: "",
+            thana_id: "",
         }
     },
 
     created() {
         this.getWorker();
         this.getDistrict();
-        this.getAreaManager();
+
+        this.adminId = this.$attrs.admin_id
+        this.role = this.$attrs.role
+        this.district_id = this.$attrs.district_id
+        this.thana_id = this.$attrs.thana_id
     },
 
     methods: {
+        onChangeThana() {
+            this.selectedManager = null
+            this.getAreaManager();
+        },
         getAreaManager() {
             axios.get("/admin/get-manager")
                 .then(res => {
-                    this.managers = res.data.data;
+                    this.managers = res.data.data.filter(manager => manager.thana_id == this.selectedThana.id);
                 })
         },
         getDistrict() {
             axios.get("/admin/district/fetch")
                 .then(res => {
-                    this.districts = res.data.data
+                    if (this.role == 'manager') {
+                        this.districts = res.data.data.filter(d => d.id == this.district_id)
+                    } else {
+                        this.districts = res.data.data
+                    }
                 })
         },
         onChangeDistrict() {
-            if (this.selectedDistrict != null) {
-                this.thanas = [];
+            if (this.role != 'manager') {
+                if (this.selectedDistrict != null) {
+                    this.selectedThana = null;
+                    this.getThana();
+                }
+            } else {
                 this.selectedThana = null;
                 this.getThana();
             }
@@ -235,9 +264,13 @@ export default {
         getThana() {
             axios.get("/admin/thana/fetch")
                 .then(res => {
-                    this.thanas = res.data.data.filter(th => {
-                        return th.district_id == this.selectedDistrict.id
-                    })
+                    if (this.role != 'manager') {
+                        this.thanas = res.data.data.filter(th => {
+                            return th.district_id == this.selectedDistrict.id
+                        })
+                    } else {
+                        this.thanas = res.data.data.filter(th => th.id == this.thana_id)
+                    }
                 })
         },
         getWorker() {
@@ -330,7 +363,7 @@ export default {
                     id: val.manager_id,
                     name: val.manager.name,
                 }
-            }else{
+            } else {
                 this.selectedManager = null
             }
             this.selectedDistrict = {
@@ -342,6 +375,8 @@ export default {
                 id: val.thana_id,
                 name: val.thana.name
             }
+
+            this.getAreaManager();
         },
 
         deleteRow(id) {

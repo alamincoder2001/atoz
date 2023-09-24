@@ -31,8 +31,12 @@ class AreaManagerController extends Controller
 
     public function index()
     {
-        $authId = Auth::guard('admin')->user()->id;
-        $data = Admin::with('thana')->where("role", "manager")->where('id', '!=', $authId)->get();
+        $authId = Auth::guard('admin')->user();
+        if ($authId->role == 'manager') {
+            $data = Admin::with('thana')->where("role", "manager")->where('id', $authId->id)->get();
+        }else{
+            $data = Admin::with('thana')->where("role", "manager")->get();
+        }
 
         return response()->json(["data" => $data]);
     }
@@ -70,6 +74,41 @@ class AreaManagerController extends Controller
                 $data->image    = $this->imageUpload($request, 'image', 'uploads/admins');
             }
             $data->save();
+
+            $permissions = [
+                [
+                    'group_name' => 'Dashboard',
+                    'permission_name' => [
+                        'Dashboard',
+                    ]
+                ],
+                [
+                    'group_name' => 'Worker',
+                    'permission_name' => [
+                        'workerEntry',
+                        'assignWorkerService',
+                    ]
+                ],
+                [
+                    'group_name' => 'Order',
+                    'permission_name' => [
+                        'orderList',
+                        'orderAssign',
+                        'orderComplete',
+                        'orderCancel',
+                    ]
+                ],
+            ];
+
+            foreach ($permissions as $permission) {
+                foreach ($permission['permission_name'] as $permissionName) {
+                    AdminAccess::create([
+                        'admin_id'    => $data->id,
+                        'group_name'  => $permission['group_name'],
+                        'permissions' => $permissionName,
+                    ]);
+                }
+            }
 
 
             return response()->json([
@@ -120,6 +159,46 @@ class AreaManagerController extends Controller
                 $data->image    = $this->imageUpload($request, 'image', 'uploads/admins');
             }
             $data->update();
+
+            $checkaccess = AdminAccess::where('admin_id', $request->id)->get();
+
+            if (count($checkaccess) == 0) {
+                $permissions = [
+                    [
+                        'group_name' => 'Dashboard',
+                        'permission_name' => [
+                            'Dashboard',
+                        ]
+                    ],
+                    [
+                        'group_name' => 'Worker',
+                        'permission_name' => [
+                            'workerEntry',
+                            'assignWorkerService',
+                        ]
+                    ],
+                    [
+                        'group_name' => 'Order',
+                        'permission_name' => [
+                            'orderList',
+                            'orderAssign',
+                            'orderComplete',
+                            'orderCancel',
+                        ]
+                    ],
+                ];
+
+                foreach ($permissions as $permission) {
+                    foreach ($permission['permission_name'] as $permissionName) {
+                        AdminAccess::create([
+                            'admin_id'    => $data->id,
+                            'group_name'  => $permission['group_name'],
+                            'permissions' => $permissionName,
+                        ]);
+                    }
+                }
+            }
+
 
             return response()->json([
                 'status'  => true,

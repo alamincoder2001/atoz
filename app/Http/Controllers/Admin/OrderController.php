@@ -68,10 +68,15 @@ class OrderController extends Controller
     public function fetch(Request $request)
     {
         $clauses = "";
-        // $areaId = $request->thanaId;
-        // if (Auth::guard('admin')->user()->role == 'manager') {
-        //     $areaId = Auth::guard()->user()->thana_id;
-        // }
+        $areaId = $request->thanaId;
+        if (Auth::guard('admin')->user()->role == 'manager') {
+            $areaId = Auth::guard()->user()->thana_id;
+            $clauses .= " AND c.thana_id = '$areaId'";
+        } else {
+            if (isset($request->thanaId) && !empty($request->thanaId)) {
+                $clauses .= " AND c.thana_id = '$request->thanaId'";
+            }
+        }
         if (isset($request->dateFrom) && !empty($request->dateFrom)) {
             $clauses .= " AND o.date BETWEEN '$request->dateFrom' AND '$request->dateTo'";
         }
@@ -81,9 +86,7 @@ class OrderController extends Controller
         if (isset($request->id) && !empty($request->id)) {
             $clauses .= " AND o.id = '$request->id'";
         }
-        if (isset($request->thanaId) && !empty($request->thanaId)) {
-            $clauses .= " AND c.thana_id = '$request->thanaId'";
-        }
+
         $orders = DB::select("SELECT
                             o.*,
                             c.id as customer_id,
