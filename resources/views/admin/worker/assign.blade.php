@@ -5,5 +5,5 @@
 @section('breadcrumb_item', 'Assign Service Worker List')
 
 @section('content')
-<assignWorker></assignWorker>
+<assign-worker></assign-worker>
 @endsection

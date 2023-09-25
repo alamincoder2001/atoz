@@ -56,11 +56,11 @@
                                 <th style="text-align: center; width: 8%;color:white;"> Sl </th>
                                 <th style="text-align: center; width: 10%;color:white;"> #Invoice </th>
                                 <th style="text-align: center;color:white;"> Date </th>
-                                <th style="text-align: center;color:white;"> Customer Name </th>
+                                <th style="text-align: center;color:white;"> Customer </th>
                                 <th style="text-align: center;color:white;">Status</th>
-                                <th style="text-align: center;color:white;">Service Name</th>
+                                <th style="text-align: center;color:white;">Service</th>
                                 <th style="text-align: center;color:white;">Quantity</th>
-                                <th style="text-align: center;color:white;">Worker Name</th>
+                                <th style="text-align: center;color:white;">Worker</th>
                                 <th style="text-align: center; width: 10%;color:white;"> Action </th>
                             </tr>
                         </thead>
@@ -74,6 +74,9 @@
                                     <td class="text-center text-capitalize" v-html="statusText( item.status)"></td>
                                     <td class="text-center">{{ item.orderDetails[0].name }}</td>
                                     <td class="text-center">{{ item.orderDetails[0].quantity }}</td>
+                                    <td class="text-center">{{ item.orderDetails[0].bill_amount }}</td>
+                                    <td class="text-center">{{ item.orderDetails[0].paid_amount }}</td>
+                                    <td class="text-center">{{ item.orderDetails[0].due }}</td>
                                     <td class="text-center">{{ item.orderDetails[0].worker_name }}</td>
                                     <td>
                                         <div class="input-group gap-2 justify-content-center">
@@ -95,6 +98,9 @@
                                     <td colspan="5" :rowspan="item.orderDetails.length - 1" v-if="sl == 0"></td>
                                     <td class="text-center">{{ service.name }}</td>
                                     <td class="text-center">{{ service.quantity }}</td>
+                                    <td class="text-center">{{ service.bill_amount }}</td>
+                                    <td class="text-center">{{ service.paid_amount }}</td>
+                                    <td class="text-center">{{ service.due }}</td>
                                     <td class="text-center">{{ service.worker_name }}</td>
                                     <td></td>
                                 </tr>
@@ -102,7 +108,7 @@
                                     <td colspan="6" style="font-weight:normal;"><strong>Note: </strong>{{ item.note }}</td>
                                     <td style="text-align:center;">Total Quantity<br>{{ item.orderDetails.reduce((prev,
                                         curr) => { return prev + parseFloat(curr.quantity) }, 0) }}</td>
-                                    <td colspan="2" style="text-align:right;">
+                                    <td colspan="5" style="text-align:right;">
                                         Total: {{ item.orderDetails.reduce((prev,
                                         curr) => { return prev + parseFloat(curr.bill_amount) }, 0).toFixed(2) }}<br>
                                         Paid: {{ item.orderDetails.reduce((prev,

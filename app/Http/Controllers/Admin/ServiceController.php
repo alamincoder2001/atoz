@@ -35,18 +35,6 @@ class ServiceController extends Controller
         $service_code = $this->generateCode("Service", "S");
         $data = DB::select("SELECT
                     s.*,
-                    (CASE WHEN (s.is_arrival = 1) THEN 'Published'
-                        ELSE 'Unpublished'
-                    END) AS is_arrival_text,
-                    (CASE WHEN (s.is_feature = 1) THEN 'Published'
-                        ELSE 'Unpublished'
-                    END) AS is_feature_text,
-                    (CASE WHEN (s.is_popular = 1) THEN 'Published'
-                        ELSE 'Unpublished'
-                    END) AS is_popular_text,
-                    (CASE WHEN (s.is_topsold = 1) THEN 'Published'
-                        ELSE 'Unpublished'
-                    END) AS is_topsold_text,
                     concat(s.service_code, '-', s.name) AS display_name,
                     c.name AS category_name
                 FROM services s

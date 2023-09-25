@@ -186,6 +186,54 @@ class OrderController extends Controller
         return view('admin.order.report');
     }
 
+    public function orderDetails(Request $request)
+    {
+        try {
+            $clauses = "";
+            $areaId = $request->thanaId;
+            if (Auth::guard('admin')->user()->role == 'manager') {
+                $areaId = Auth::guard()->user()->thana_id;
+                $clauses .= " AND c.thana_id = '$areaId'";
+            } else {
+                if (isset($request->thanaId) && !empty($request->thanaId)) {
+                    $clauses .= " AND c.thana_id = '$request->thanaId'";
+                }
+            }
+            if (isset($request->dateFrom) && !empty($request->dateFrom)) {
+                $clauses .= " AND o.date BETWEEN '$request->dateFrom' AND '$request->dateTo'";
+            }
+            if (isset($request->status) && !empty($request->status)) {
+                $clauses .= " AND od.status = '$request->status'";
+            }
+
+            $detail = DB::select("SELECT
+                            od.*,
+                            s.name as service_name,
+                            w.name as worker_name,
+                            w.thana_id as worker_district,
+                            w.district_id as worker_thana,
+                            o.date,
+                            o.customer_id,
+                            c.name as customer_name,
+                            c.district_id as customer_district,
+                            c.thana_id as customer_thana
+                        FROM order_details od
+                        LEFT JOIN services s ON s.id = od.service_id
+                        LEFT JOIN workers w ON w.id = od.worker_id
+                        LEFT JOIN orders o ON o.id = od.order_id
+                        LEFT JOIN users c ON c.id = o.customer_id
+                        WHERE od.status != 'complete' 
+                        AND od.status != 'cancel'
+                        AND od.worker_id is not null
+                        $clauses
+                        ");
+
+            return response()->json(['status' => false, 'msg' => $detail]);
+        } catch (\Throwable $e) {
+            return response()->json(['status' => false, 'msg' => $e->getMessage()]);
+        }
+    }
+
     public function getCommission(Request $request)
     {
         try {

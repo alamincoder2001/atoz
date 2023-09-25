@@ -36,6 +36,15 @@
                         <th class="text-white text-center">
                             Quantity
                         </th>
+                        <th class="text-white text-center">
+                            Bill
+                        </th>
+                        <th class="text-white text-center">
+                            Paid
+                        </th>
+                        <th class="text-white text-end">
+                            Due
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -44,6 +53,15 @@
                         <td>{{ item.name }}</td>
                         <td class="text-center">
                             {{ item.quantity }}
+                        </td>
+                        <td class="text-center">
+                            {{ item.bill_amount }}
+                        </td>
+                        <td class="text-center">
+                            {{ item.paid_amount }}
+                        </td>
+                        <td class="text-end">
+                            {{ item.due }}
                         </td>
                     </tr>
                 </tbody>

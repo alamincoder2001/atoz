@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Order;
 use App\Models\Worker;
 use App\Models\AdminAccess;
+use App\Models\OrderDetail;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -33,7 +35,7 @@ class WorkerController extends Controller
     {
         if (Auth::guard('admin')->user()->role == 'manager') {
             $workers = Worker::with('thana', 'manager')->where('thana_id', Auth::guard('admin')->user()->thana_id)->latest()->get();
-        }else{
+        } else {
             $workers = Worker::with('thana', 'manager')->latest()->get();
         }
         $worker_code = $this->generateCode("Worker", "W");
@@ -168,5 +170,44 @@ class WorkerController extends Controller
             return view("admin.unauthorize");
         }
         return view('admin.worker.assign');
+    }
+
+
+    public function statusChange(Request $request)
+    {
+        try {
+            $data = OrderDetail::where('id', $request->id)->first();
+            $orderId = $data->order_id;
+
+            if ($request->status == 'complete') {
+                $data->bill_amount = $request->billAmount;
+                $data->paid_amount = $request->paidAmount;
+                $data->due         = $request->dueAmount;
+            }
+            $data->status = $request->status;
+            $data->update();
+
+            $msg = "";
+            if ($request->status == 'proccess') {
+                $msg = 'Service proccessing successfully';
+            }
+            if ($request->status == 'complete') {
+                $msg = 'Service complete successfully';
+            }
+            $orderdetail = OrderDetail::where('order_id', $orderId)->get();
+            $ordercomplete = OrderDetail::where('order_id', $orderId)->where('status', 'complete')->get();
+            if (count($orderdetail) == count($ordercomplete)) {
+                $order = Order::where('id', $orderId)->first();
+                $order->subtotal = array_sum(array_column($ordercomplete->toArray(), 'bill_amount'));
+                $order->total = array_sum(array_column($ordercomplete->toArray(), 'paid_amount'));
+                $order->due = array_sum(array_column($ordercomplete->toArray(), 'due'));
+                $order->status = 'complete';
+                $order->update();
+            }
+
+            return response()->json(['status' => false, 'msg' => $msg]);
+        } catch (\Throwable $e) {
+            return response()->json(['status' => false, 'msg' => $e->getMessage()]);
+        }
     }
 }

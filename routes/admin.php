@@ -80,6 +80,7 @@ Route::group(["prefix" => "admin"], function () {
 
     //order route
     Route::get('/order', [OrderController::class, 'index'])->name('admin.order.index');
+    Route::post('/get-orderDetails', [OrderController::class, 'orderDetails'])->name('admin.order.detail');
     Route::get('/order-assign', [OrderController::class, 'assign'])->name('admin.order.assign');
     Route::post('/order/assign-worker', [OrderController::class, 'assignWorker'])->name('admin.order.assignworker');
     Route::get('/order-delivery', [OrderController::class, 'delivery'])->name('admin.order.delivery');
@@ -118,6 +119,7 @@ Route::group(["prefix" => "admin"], function () {
     Route::post('/worker/status', [WorkerController::class, 'status'])->name("admin.worker.status");
     Route::get('/worker/fetch/{id?}', [WorkerController::class, 'fetch'])->name("admin.worker.fetch");
     Route::post('/worker/rating', [WorkerController::class, 'rating'])->name("admin.worker.rating");
+    Route::post('/worker/assignwork-status-change', [WorkerController::class, 'statusChange'])->name("admin.worker.status.change");
 
     //user Route
     Route::get('/user', [AdminAccessController::class, 'create'])->name('admin.user.create');

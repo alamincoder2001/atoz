@@ -45,7 +45,7 @@
                         @endif
                         @if(in_array("serviceEntry", $access))
                         <li class="sidebar-item">
-                            <a href="{{route('admin.service.index')}}" class="sidebar-link {{Request::is('admin.service.index') ? 'active':''}}"><i class="fab fa-product-hunt"></i><span class="hide-menu"> Service Entry </span></a>
+                            <a href="{{route('admin.service.index')}}" class="sidebar-link {{Request::is('admin.service.index') ? 'active':''}}"><i class="fas fa-briefcase"></i><span class="hide-menu"> Service Entry </span></a>
                         </li>
                         @endif
                     </ul>
@@ -73,7 +73,7 @@
                     </ul>
                 </li>
                 @endif
-                @if(in_array("orderList", $access) || in_array("orderAssign", $access) || in_array("orderComplete", $access) || in_array("orderCancel", $access))
+                @if(in_array("orderList", $access) || in_array("orderAssign", $access) || in_array("orderComplete", $access) || in_array("orderCancel", $access) || in_array("assignWorkerService", $access))
                 <li class="sidebar-item {{Request::is('admin.order.index') || Request::is('admin.order.delivery') || Request::is('admin.order.canceled') ? 'selected':''}}">
                     <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-cart-plus"></i><span class="hide-menu"> Order Module </span></a>
                     <ul aria-expanded="false" class="collapse first-level">
@@ -95,6 +95,11 @@
                         @if(in_array("orderCancel", $access))
                         <li class="sidebar-item {{Request::is('admin.order.canceled') ? 'active':''}}">
                             <a href="{{route('admin.order.canceled')}}" class="sidebar-link {{Request::is('admin.order.canceled') ? 'active':''}}"><i class="fas fa-cart-plus"></i><span class="hide-menu"> Canceled Order </span></a>
+                        </li>
+                        @endif
+                        @if(in_array("assignWorkerService", $access))
+                        <li class="sidebar-item {{Request::is('admin.worker.assignservice') ? 'selected':''}}">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link {{Request::is('admin.worker.assignservice') ? 'active':''}}" href="{{route('admin.worker.assignservice')}}" aria-expanded="false"><i class="fas fa-briefcase"></i><span class="hide-menu">Assign Worker List</span></a>
                         </li>
                         @endif
                     </ul>
