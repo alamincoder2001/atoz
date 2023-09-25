@@ -77,12 +77,12 @@ class DashboardController extends Controller
             WHERE sm.status = 'complete'
             $clauses
         ");
-        $cancel = DB::select("SELECT sm.*,
-            c.district_id,
-            c.thana_id
-            FROM orders sm
-            LEFT JOIN users c ON c.id = sm.customer_id
-            WHERE sm.status = 'cancel'
+        $orderDetail = DB::select("SELECT
+                    od.*
+                FROM order_details od
+                LEFT JOIN orders o ON o.id = od.order_id
+                LEFT JOIN users c ON c.id = o.customer_id
+                WHERE od.status != 'cancel'
             $clauses
         ");
 
@@ -155,16 +155,16 @@ class DashboardController extends Controller
         }
 
         return response()->json([
-            'today_order'    => $todayOrder,
-            'pending_order'  => $pendingOrder,
-            'year_order'     => $yearOrder,
-            'completed'      => $complete,
-            'cancel'         => $cancel,
-            'topSold'        => $topSold,
-            'topCustomer'    => $topCustomer,
-            'manager'        => Admin::where('role', 'manager')->get(),
-            'worker'         => $worker,
-            'customer'       => $customer,
+            'today_order'   => $todayOrder,
+            'pending_order' => $pendingOrder,
+            'year_order'    => $yearOrder,
+            'completed'     => $complete,
+            'order_detail'  => $orderDetail,
+            'topSold'       => $topSold,
+            'topCustomer'   => $topCustomer,
+            'manager'       => Admin::where('role', 'manager')->get(),
+            'worker'        => $worker,
+            'customer'      => $customer,
         ]);
     }
 

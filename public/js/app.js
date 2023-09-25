@@ -5909,10 +5909,10 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       props: ['admin_id', 'role'],
+      orderDetail: [],
       todayOrder: 0,
       pendingOrder: 0,
       completedOrder: 0,
-      canceldOrder: 0,
       worker: 0,
       manager: 0,
       customer: 0,
@@ -5936,7 +5936,7 @@ __webpack_require__.r(__webpack_exports__);
         _this.todayOrder = res.data.today_order.length;
         _this.pendingOrder = res.data.pending_order.length;
         _this.completedOrder = res.data.completed.length;
-        _this.canceldOrder = res.data.cancel.length;
+        _this.orderDetail = res.data.order_detail;
       });
     }
   }
@@ -8282,10 +8282,10 @@ __webpack_require__.r(__webpack_exports__);
 var render = function render() {
   var _vm = this,
     _c = _vm._self._c;
-  return _c("div", {
+  return _c("div", [_c("div", {
     staticClass: "row d-flex justify-content-center"
   }, [_c("div", {
-    staticClass: "col-md-2 col-6"
+    staticClass: "col-md-3 col-6"
   }, [_c("div", {
     staticClass: "card"
   }, [_vm._m(0), _vm._v(" "), _c("div", {
@@ -8295,7 +8295,7 @@ var render = function render() {
   }, [_vm._v("Today's Order")]), _vm._v(" "), _c("h4", {
     staticClass: "text-white"
   }, [_vm._v(_vm._s(_vm.todayOrder))])])])]), _vm._v(" "), _c("div", {
-    staticClass: "col-md-2 col-6"
+    staticClass: "col-md-3 col-6"
   }, [_c("div", {
     staticClass: "card"
   }, [_vm._m(1), _vm._v(" "), _c("div", {
@@ -8305,7 +8305,7 @@ var render = function render() {
   }, [_vm._v("Pending Order")]), _vm._v(" "), _c("h4", {
     staticClass: "text-white"
   }, [_vm._v(_vm._s(_vm.pendingOrder))])])])]), _vm._v(" "), _c("div", {
-    staticClass: "col-md-2 col-6"
+    staticClass: "col-md-3 col-6"
   }, [_c("div", {
     staticClass: "card"
   }, [_vm._m(2), _vm._v(" "), _c("div", {
@@ -8314,47 +8314,77 @@ var render = function render() {
     staticClass: "font-light text-white fontSize"
   }, [_vm._v("Completed Order")]), _vm._v(" "), _c("h4", {
     staticClass: "text-white"
-  }, [_vm._v(_vm._s(_vm.completedOrder))])])])]), _vm._v(" "), _c("div", {
-    staticClass: "col-md-2 col-6"
+  }, [_vm._v(_vm._s(_vm.completedOrder))])])])])]), _vm._v(" "), _c("div", {
+    staticClass: "row d-flex justify-content-center"
+  }, [_c("div", {
+    staticClass: "col-md-3 col-6"
   }, [_c("div", {
     staticClass: "card"
   }, [_vm._m(3), _vm._v(" "), _c("div", {
-    staticClass: "box bg-danger text-center"
+    staticClass: "box bg-secondary text-center"
   }, [_c("h3", {
     staticClass: "font-light text-white fontSize"
-  }, [_vm._v("Cancel Order")]), _vm._v(" "), _c("h4", {
+  }, [_vm._v("Bill Amount")]), _vm._v(" "), _c("h4", {
     staticClass: "text-white"
-  }, [_vm._v(_vm._s(_vm.canceldOrder))])])])]), _vm._v(" "), _vm.role != "manager" ? _c("div", {
-    staticClass: "col-md-2 col-6"
+  }, [_vm._v(_vm._s(_vm.orderDetail.reduce(function (acc, pre) {
+    return acc + parseFloat(pre.bill_amount);
+  }, 0).toFixed(2)))])])])]), _vm._v(" "), _c("div", {
+    staticClass: "col-md-3 col-6"
   }, [_c("div", {
     staticClass: "card"
   }, [_vm._m(4), _vm._v(" "), _c("div", {
+    staticClass: "box bg-danger text-center"
+  }, [_c("h3", {
+    staticClass: "font-light text-white fontSize"
+  }, [_vm._v("Paid Amount")]), _vm._v(" "), _c("h4", {
+    staticClass: "text-white"
+  }, [_vm._v(_vm._s(_vm.orderDetail.reduce(function (acc, pre) {
+    return acc + parseFloat(pre.paid_amount);
+  }, 0).toFixed(2)))])])])]), _vm._v(" "), _c("div", {
+    staticClass: "col-md-3 col-6"
+  }, [_c("div", {
+    staticClass: "card"
+  }, [_vm._m(5), _vm._v(" "), _c("div", {
+    staticClass: "box bg-primary text-center"
+  }, [_c("h3", {
+    staticClass: "font-light text-white fontSize"
+  }, [_vm._v("Due Amount")]), _vm._v(" "), _c("h4", {
+    staticClass: "text-white"
+  }, [_vm._v(_vm._s(_vm.orderDetail.reduce(function (acc, pre) {
+    return acc + parseFloat(pre.due);
+  }, 0).toFixed(2)))])])])])]), _vm._v(" "), _c("div", {
+    staticClass: "row d-flex justify-content-center"
+  }, [_vm.role != "manager" ? _c("div", {
+    staticClass: "col-md-3 col-6"
+  }, [_c("div", {
+    staticClass: "card"
+  }, [_vm._m(6), _vm._v(" "), _c("div", {
     staticClass: "box bg-primary text-center"
   }, [_c("h3", {
     staticClass: "font-light text-white fontSize"
   }, [_vm._v(" Area Manager ")]), _vm._v(" "), _c("h4", {
     staticClass: "text-white"
   }, [_vm._v(" " + _vm._s(_vm.manager) + " ")])])])]) : _vm._e(), _vm._v(" "), _c("div", {
-    staticClass: "col-md-2 col-6"
+    staticClass: "col-md-3 col-6"
   }, [_c("div", {
     staticClass: "card"
-  }, [_vm._m(5), _vm._v(" "), _c("div", {
+  }, [_vm._m(7), _vm._v(" "), _c("div", {
     staticClass: "box bg-info text-center"
   }, [_c("h3", {
     staticClass: "font-light text-white fontSize"
   }, [_vm._v(" Worker ")]), _vm._v(" "), _c("h4", {
     staticClass: "text-white"
   }, [_vm._v(_vm._s(_vm.worker))])])])]), _vm._v(" "), _c("div", {
-    staticClass: "col-md-2 col-6"
+    staticClass: "col-md-3 col-6"
   }, [_c("div", {
     staticClass: "card"
-  }, [_vm._m(6), _vm._v(" "), _c("div", {
+  }, [_vm._m(8), _vm._v(" "), _c("div", {
     staticClass: "box bg-secondary text-center"
   }, [_c("h3", {
     staticClass: "font-light text-white fontSize"
   }, [_vm._v(" Customer ")]), _vm._v(" "), _c("h4", {
     staticClass: "text-white"
-  }, [_vm._v(" " + _vm._s(_vm.customer) + " ")])])])])]);
+  }, [_vm._v(" " + _vm._s(_vm.customer) + " ")])])])])])]);
 };
 var staticRenderFns = [function () {
   var _vm = this,
@@ -8386,7 +8416,32 @@ var staticRenderFns = [function () {
   return _c("div", {
     staticClass: "card-header d-flex justify-content-center py-2 px-0"
   }, [_c("i", {
-    staticClass: "fas fa-shopping-cart bg-danger"
+    staticClass: "fas fa-dollar-sign bg-secondary",
+    staticStyle: {
+      padding: "12px 17px"
+    }
+  })]);
+}, function () {
+  var _vm = this,
+    _c = _vm._self._c;
+  return _c("div", {
+    staticClass: "card-header d-flex justify-content-center py-2 px-0"
+  }, [_c("i", {
+    staticClass: "fas fa-dollar-sign bg-danger",
+    staticStyle: {
+      padding: "12px 17px"
+    }
+  })]);
+}, function () {
+  var _vm = this,
+    _c = _vm._self._c;
+  return _c("div", {
+    staticClass: "card-header d-flex justify-content-center py-2 px-0"
+  }, [_c("i", {
+    staticClass: "fas fa-dollar-sign bg-primary",
+    staticStyle: {
+      padding: "12px 17px"
+    }
   })]);
 }, function () {
   var _vm = this,
