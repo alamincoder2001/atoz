@@ -238,27 +238,4 @@ class OrderController extends Controller
         }
     }
 
-    public function getCommission(Request $request)
-    {
-        try {
-            $clauses = "";
-            if (!empty($request->month)) {
-                $clauses .= " AND DATE_FORMAT(o.date, '%Y-%m') = '$request->month'";
-            }
-            if (!empty($request->managerThana)) {
-                $clauses .= " AND c.thana_id = '$request->managerThana'";
-            }
-            $query = DB::select("SELECT c.id,
-                                    concat_ws('-', c.customer_code, c.name) AS customer_name,
-                                    SUM(o.subtotal) as subtotal
-                                    FROM orders o
-                                    JOIN users c ON c.id = o.customer_id
-                                    WHERE o.status = 'complete' 
-                                    $clauses
-                                    GROUP BY id");
-            return $query;
-        } catch (\Throwable $e) {
-            return "Opps! something went wrong";
-        }
-    }
 }

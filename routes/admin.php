@@ -90,7 +90,6 @@ Route::group(["prefix" => "admin"], function () {
     Route::post('/order/delete', [OrderController::class, 'destroy'])->name('admin.order.destroy');
     Route::get('/order/invoice/{invoice}', [OrderController::class, 'invoice'])->name('admin.order.invoice');
     Route::get('/order/report', [OrderController::class, 'report'])->name("admin.order.report");
-    Route::post('/order/commission', [OrderController::class, 'getCommission'])->name("admin.order.commission");
 
     // blog route
     Route::get('/blog', [BlogController::class, 'index'])->name('admin.blog.index');
@@ -140,4 +139,5 @@ Route::group(["prefix" => "admin"], function () {
 
     // commission Route
     Route::post('/pay-commission', [CommissionController::class, 'payCommission'])->name('admin.pay.commission');
+    Route::post('/order/commission', [CommissionController::class, 'getCommission'])->name("admin.order.commission");
 });
