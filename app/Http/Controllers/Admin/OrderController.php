@@ -202,6 +202,9 @@ class OrderController extends Controller
             if (isset($request->dateFrom) && !empty($request->dateFrom)) {
                 $clauses .= " AND o.date BETWEEN '$request->dateFrom' AND '$request->dateTo'";
             }
+            if (isset($request->workerId) && !empty($request->workerId)) {
+                $clauses .= " AND od.worker_id = '$request->workerId'";
+            }
             if (isset($request->status) && !empty($request->status)) {
                 $clauses .= " AND od.status = '$request->status'";
             }
@@ -237,20 +240,25 @@ class OrderController extends Controller
     public function getCommission(Request $request)
     {
         try {
+            $monthArr = explode('-', $request->month);
+            $month = $monthArr[1];
+            $year = $monthArr[0];
             $clauses = "";
-            if (!empty($request->dateFrom)) {
-                $clauses .= "AND o.date BETWEEN '$request->dateFrom' AND '$request->dateTo'";
+            if (!empty($request->month)) {
+                $clauses .= "AND month(o.date) = '$month'";
+                $clauses .= "AND year(o.date) = '$year'";
             }
-            $query = DB::select("SELECT
-                                    c.id,
+            if (!empty($request->managerThana)) {
+                $clauses .= "AND c.thana_id = '$request->managerThana'";
+            }
+            $query = DB::select("SELECT c.id,
                                     concat_ws('-', c.customer_code, c.name) AS customer_name,
-                                    SUM(o.total) as paid
-                                FROM orders o
-                                JOIN users c ON c.id = o.customer_id
-                                WHERE c.customer_type != 'Wholesale' 
-                                $clauses
-                                GROUP BY id");
-
+                                    SUM(o.subtotal) as subtotal
+                                    FROM orders o
+                                    JOIN users c ON c.id = o.customer_id
+                                    WHERE o.status = 'complete' 
+                                    $clauses
+                                    GROUP BY id");
             return $query;
         } catch (\Throwable $e) {
             return "Opps! something went wrong";

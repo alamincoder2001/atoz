@@ -11,24 +11,24 @@
                                     <select class="form-select shadow-none" v-model="searchBy" @change="onChangeSearch">
                                         <option value="">All</option>
                                         <option value="thana">Area Wise</option>
+                                        <option value="worker">Worker Wise</option>
                                     </select>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-3 mb-1" v-if="searchBy == 'worker'"
+                                :class="searchBy == 'worker' ? '' : 'd-none'">
+                                <div class="form-group m-0">
+                                    <v-select id="workers" :options="workers" v-model="selectedWorker" label="name"
+                                        placeholder="Select Worker"></v-select>
                                 </div>
                             </div>
                             <div class="col-6 col-md-3 mb-1" v-if="searchBy == 'thana'"
                                 :class="searchBy == 'thana' ? '' : 'd-none'">
                                 <div class="form-group m-0">
-                                    <v-select id="thanas" :options="thanas" v-model="selectedThana" label="name"></v-select>
+                                    <v-select id="thanas" :options="thanas" v-model="selectedThana" label="name"
+                                        placeholder="Select Upazila"></v-select>
                                 </div>
                             </div>
-                            <!-- <div class="col-6 col-md-2 mb-1">
-                                <div class="form-group m-0">
-                                    <select class="form-select shadow-none" v-model="filter.status">
-                                        <option value="">All</option>
-                                        <option value="pending">Pending</option>
-                                        <option value="complete">Completed</option>
-                                    </select>
-                                </div>
-                            </div> -->
                             <div class="col-6 col-md-2 mb-1">
                                 <div class="form-group m-0">
                                     <input type="date" class="form-control" v-model="filter.dateFrom" />
@@ -168,6 +168,8 @@ export default {
                 dueAmount: 0,
             },
             orders: [],
+            workers: [],
+            selectedWorker: null,
             thanas: [],
             selectedThana: null,
 
@@ -202,16 +204,29 @@ export default {
             }
             this.calculate.dueAmount = parseFloat(parseFloat(this.calculate.billAmount) - parseFloat(this.calculate.paidAmount)).toFixed(2);
         },
+        getWorker() {
+            axios.get("/admin/get-worker").then((res) => {
+                this.workers = res.data.workers;
+            });
+        },
         getThana() {
             axios.get("/admin/thana/fetch").then((res) => {
                 this.thanas = res.data.data;
             });
         },
         onChangeSearch() {
+            this.selectedWorker = null;
             this.selectedThana = null;
+            if (this.searchBy == 'thana') {
+            } else if (this.searchBy == 'worker') {
+                this.getWorker();
+            } else {
+
+            }
         },
         getOrder() {
             this.filter.thanaId = this.selectedThana == null ? null : this.selectedThana.id
+            this.filter.workerId = this.selectedWorker == null ? null : this.selectedWorker.id
 
             axios.post("/admin/get-orderDetails", this.filter).then((res) => {
                 this.orders = res.data.msg;

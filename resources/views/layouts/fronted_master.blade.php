@@ -52,57 +52,15 @@
             border: 1px solid #2b46a8 !important;
         }
 
-        /* Rating style */
-        .rating input[type="radio"]:not(:nth-of-type(0)) {
-            /* hide visually */
-            border: 0;
-            clip: rect(0 0 0 0);
-            height: 1px;
-            margin: -1px;
-            overflow: hidden;
-            padding: 0;
-            position: absolute;
-            width: 1px;
+        .serviceShow ul li a {
+            border: 1px solid #585858;
+            padding: 3px 0;
+            transition: 0.5s;
         }
 
-        .rating [type="radio"]:not(:nth-of-type(0))+label {
-            display: none;
-        }
-
-        label[for]:hover {
-            cursor: pointer;
-        }
-
-        .rating .stars label:before {
-            content: "★";
-        }
-
-        .stars label {
-            color: lightgray;
-        }
-
-        .stars label:hover {
-            text-shadow: 0 0 1px #000;
-        }
-
-        .rating [type="radio"]:nth-of-type(1):checked~.stars label:nth-of-type(-n+1),
-        .rating [type="radio"]:nth-of-type(2):checked~.stars label:nth-of-type(-n+2),
-        .rating [type="radio"]:nth-of-type(3):checked~.stars label:nth-of-type(-n+3),
-        .rating [type="radio"]:nth-of-type(4):checked~.stars label:nth-of-type(-n+4),
-        .rating [type="radio"]:nth-of-type(5):checked~.stars label:nth-of-type(-n+5) {
-            color: orange !important;
-        }
-
-        .rating [type="radio"]:nth-of-type(1):focus~.stars label:nth-of-type(1),
-        .rating [type="radio"]:nth-of-type(2):focus~.stars label:nth-of-type(2),
-        .rating [type="radio"]:nth-of-type(3):focus~.stars label:nth-of-type(3),
-        .rating [type="radio"]:nth-of-type(4):focus~.stars label:nth-of-type(4),
-        .rating [type="radio"]:nth-of-type(5):focus~.stars label:nth-of-type(5) {
-            color: darkorange !important;
-        }
-
-        .stars{
-            font-size: 22px;
+        .serviceShow ul li a:hover {
+            /* transition: 0.5s; */
+            background: #5c5c5c;
         }
     </style>
 

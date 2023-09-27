@@ -6,14 +6,11 @@
                     <div class="row">
                         <div class="col-lg-3">
                             <div class="form-group">
-                                <v-select :options="customers" label="name" v-model="selectedCustomer"></v-select>
+                                <v-select :options="managers" id="manager" label="name" v-model="selectedManager" @input="onChangeManager" placeholder="Area Manager Select"></v-select>
                             </div>
                         </div>
                         <div class="col-lg-2">
-                            <input type="date" v-model="dateFrom" class="form-control">
-                        </div>
-                        <div class="col-lg-2">
-                            <input type="date" v-model="dateTo" class="form-control">
+                            <input type="month" v-model="month" :max="max" class="form-control">
                         </div>
                         <div class="col-lg-2">
                             <button type="button" @click="getCommission" class="btn btn-primary btn-sm shadow-none">Submit</button>
@@ -26,18 +23,25 @@
                             <tr>
                                 <th class="text-white" style="font-weight:bold;width:5%;">Sl</th>
                                 <th class="text-white" style="font-weight:bold;">Customer Name</th>
-                                <th class="text-white" style="font-weight:bold;width:25%;">Commission(.5% per 5 lakhs)</th>
-                                <th class="text-white text-end" style="font-weight:bold;width:15%;">Order Total</th>
+                                <th class="text-white text-center" style="font-weight: bold;">Commission ({{ selectedManager.commission }})%</th>
+                                <th class="text-white text-end" style="font-weight:bold;">Order Total</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="(item, index) in commissions">
                                 <td>{{ index + 1 }}</td>
                                 <td>{{ item.customer_name }}</td>
-                                <td>{{ item.paid/500000 > 1 ? Number((item.paid/500000).toString()[0]) * .5:'Not Shown' }} %</td>
-                                <td class="text-end">{{ item.paid }}</td>
+                                <td class="text-center">{{ selectedManager == null ? 0 : parseFloat((parseFloat(item.subtotal)*selectedManager.commission)/100).toFixed(2) }} ৳</td>
+                                <td class="text-end">{{ item.subtotal }}</td>
                             </tr>
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="2" class="text-end" style="font-weight:bold;">Total</th>
+                                <th class="text-center" style="font-weight:bold;">{{ selectedManager == null ? 0 : parseFloat((commissions.reduce((acc, pre) => {return acc +parseFloat(pre.subtotal)},0)*selectedManager.commission)/100).toFixed(2) }} ৳</th>
+                                <th class="text-end" style="font-weight:bold;">{{ commissions.reduce((acc, pre) => {return acc +parseFloat(pre.subtotal)},0).toFixed(2) }}</th>
+                            </tr>
+                        </tfoot>
                     </table>
                     <div v-else class="text-center">Not Found Data</div>
                 </div>
@@ -53,13 +57,10 @@ export default {
 
     data() {
         return {
-            dateFrom: moment().format("YYYY-MM-DD"),
-            dateTo: moment().format("YYYY-MM-DD"),
-            customers: [],
-            selectedCustomer: {
-                id: '',
-                name: "Select Customer"
-            },
+            max: moment().format("YYYY-MM"),
+            month: moment().format("YYYY-MM"),
+            managers: [],
+            selectedManager: null,
             commissions: []          
         }
     },
@@ -69,20 +70,27 @@ export default {
     },
 
     methods: {
+        onChangeManager(){
+            this.commissions = [];
+        },
         getCustomer(){
-            axios.get(location.origin+"/admin/customer/fetch")
+            axios.get("/admin/get-manager")
                 .then(res => {
-                    this.customers = res.data.filter(c => c.customer_type == 'Wholesale')
-                    this.customers.unshift({id:0, name:'Select Customer'})
+                    this.managers = res.data.data
                 })
         },
 
         getCommission(){
-            let formdata = {
-                dateFrom: this.dateFrom,
-                dateTo: this.dateTo
+            if (this.selectedManager == null) {
+                alert("Area Manager Select")
+                document.querySelector("#manager [type='search']").focus();
+                return
             }
-            axios.post(location.origin+"/admin/order/commission", formdata)
+            let formdata = {
+                month: this.month,
+                managerThana: this.selectedManager != null ? this.selectedManager.thana_id: ''
+            }
+            axios.post("/admin/order/commission", formdata)
                 .then(res => {
                     this.commissions = res.data
                 })

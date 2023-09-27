@@ -57,9 +57,20 @@
                                             <label for="commission" class="col-md-3 pe-md-0">Commission<span
                                                     class="text-danger fw-bold">*</span></label>
                                             <div class="col-md-9">
-                                                <input type="number" id="commission" v-model="form.commission"
-                                                    class="form-control" placeholder="%" autocomplete="off">
+                                                <div class="input-group d-flex align-items-center">
+                                                    <input type="number" step="0.01" min="0" id="commission" v-model="form.commission"
+                                                        class="form-control" placeholder="%" autocomplete="off">
+                                                    <span style="background: #8b006d;padding: 4px;color: white;">%</span>
+                                                </div>
                                                 <span class="error-commission error text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row mb-2">
+                                            <label for="category_id" class="col-md-3">Category<span
+                                                    class="text-danger fw-bold">*</span></label>
+                                            <div class="col-md-9">
+                                                <v-select :options="categories" v-model="selectedCategory" label="name"></v-select>
+                                                <span class="error-category_id error text-danger"></span>
                                             </div>
                                         </div>
                                     </div>
@@ -192,6 +203,7 @@ export default {
                 mother_name: "",
                 commission: 0,
                 nid: "",
+                category_id: "",
                 manager_id: "",
                 district_id: "",
                 thana_id: "",
@@ -208,6 +220,8 @@ export default {
             selectedThana: null,
             managers: [],
             selectedManager: null,
+            categories: [],
+            selectedCategory: null,
             columns: [
                 { label: "Image", field: "img", html: true, },
                 { label: 'Name', field: 'name' },
@@ -230,6 +244,7 @@ export default {
     created() {
         this.getWorker();
         this.getDistrict();
+        this.getCategory();
 
         this.adminId = this.$attrs.admin_id
         this.role = this.$attrs.role
@@ -247,6 +262,11 @@ export default {
                 .then(res => {
                     this.managers = res.data.data.filter(manager => manager.thana_id == this.selectedThana.id);
                 })
+        },
+        getCategory() {
+            axios.get("/admin/category/fetch").then((res) => {
+                this.categories = res.data.data;
+            });
         },
         getDistrict() {
             axios.get("/admin/district/fetch")
@@ -303,12 +323,17 @@ export default {
                 return
             }
             if (this.selectedManager == null) {
-                alert("Thana Select")
+                alert("Manager Select")
+                return
+            }
+            if (this.selectedCategory == null) {
+                alert("Category Select")
                 return
             }
             this.form.manager_id = this.selectedManager.id;
             this.form.district_id = this.selectedDistrict.id;
             this.form.thana_id = this.selectedThana.id;
+            this.form.category_id = this.selectedCategory.id;
             let url = "/admin/worker";
             if (this.form.id != '') {
                 url = "/admin/update/worker";
@@ -360,6 +385,7 @@ export default {
             this.form.mobile = val.mobile;
             this.form.commission = val.commission;
             this.form.nid = val.nid;
+            this.form.category_id = val.category_id;
             this.form.manager_id = val.manager_id;
             this.form.district_id = val.district_id;
             this.form.thana_id = val.thana_id;
@@ -374,6 +400,10 @@ export default {
                 }
             } else {
                 this.selectedManager = null
+            }
+            this.selectedCategory = {
+                id: val.category_id,
+                name: val.category.name,
             }
             this.selectedDistrict = {
                 id: val.district_id,
@@ -432,6 +462,7 @@ export default {
             this.thanas = [];
             this.selectedThana = null;
             this.selectedManager = null;
+            this.selectedCategory = null;
         }
     },
 }

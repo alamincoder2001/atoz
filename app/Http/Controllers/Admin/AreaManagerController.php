@@ -68,6 +68,7 @@ class AreaManagerController extends Controller
             $data->district_id = $request->district_id;
             $data->thana_id    = $request->thana_id;
             $data->address     = $request->address;
+            $data->commission  = $request->commission;
             $data->role        = 'manager';
             $data->password    = Hash::make($request->password);
             if ($request->hasFile('image')) {
@@ -149,6 +150,7 @@ class AreaManagerController extends Controller
             $data->district_id = $request->district_id;
             $data->thana_id    = $request->thana_id;
             $data->address     = $request->address;
+            $data->commission  = $request->commission;
             if (!empty($request->password)) {
                 $data->password = Hash::make($request->password);
             }

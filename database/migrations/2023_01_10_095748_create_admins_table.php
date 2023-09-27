@@ -25,6 +25,7 @@ class CreateAdminsTable extends Migration
             $table->integer('district_id')->nullable();
             $table->integer('thana_id')->nullable();
             $table->string('address')->nullable();
+            $table->decimal('commission')->default(0);
             $table->rememberToken();
             $table->timestamps();
         });

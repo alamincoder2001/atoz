@@ -23,9 +23,9 @@
                 $(".cartImage").removeClass("d-none")
             },
             success: res => {
-                if(res.status){
+                if (res.status) {
                     $.notify(res.msg, "success");
-                }else{
+                } else {
                     $.notify(res.msg, "error");
                 }
                 $.each(res.content, (index, value) => {
@@ -150,6 +150,48 @@
                 }
             }
         })
+    }
+
+    // search product
+    async function SearchProduct(event) {
+        event.preventDefault();
+        let serviceName;
+        if (event.target.id == 'serviceName') {
+            serviceName = event.target.value;
+        } else {
+            serviceName = $("#serviceName").val();
+        }
+        if (serviceName != '') {
+            await $.ajax({
+                url: "/search/service",
+                method: "POST",
+                dataType: "JSON",
+                data: {
+                    serviceName: serviceName
+                },
+                success: res => {
+                    $(".serviceShow ul").html('');
+                    $(".serviceShow").removeClass('d-none');
+                    if (res.length > 0) {
+                        $.each(res, (index, value) => {
+                            let row = `
+                                    <li>
+                                        <a href="/service-single/${value.slug}" class="text-white d-flex align-items-center gap-2 mb-1">
+                                            <img src="${value.image ? value.image :'/noImage.jpg'}" width="30">
+                                            <span>${value.name}</span>                                        
+                                        </a>
+                                    </li>
+                            `;
+                            $(".serviceShow ul").append(row);
+                        })
+                    } else {
+                        $(".serviceShow ul").html(`<li class="text-white text-center">Not Found Product</li>`);
+                    }
+                }
+            })
+        } else {
+            $(".serviceShow").addClass('d-none');
+        }
     }
 </script>
 @stack('webjs')

@@ -56,28 +56,18 @@
                 <!-- Header Logo End -->
 
                 <!-- Header Menu Start -->
-                <div class="col-md-6 col-lg-4 p-lg-0 p-md-0 d-none d-lg-block">
-                    <form action="#">
+                <div class="col-md-6 col-lg-4 p-lg-0 p-md-0 d-none d-lg-block" style="position: relative;">
+                    <form onsubmit="SearchProduct(event)">
                         <div class="input-group border">
-                            <div class="input-group-text">
-                                <select class="form-select d-none d-xl-block" aria-label="Default select example">
-                                    <option value="0">All categories</option>
-                                    <option value="12">Kitchenair</option>
-                                    <option value="44">- - Knives</option>
-                                    <option value="46">- - - - Baking Dishes</option>
-                                    <option value="47">- - - - Ice Cream</option>
-                                    <option value="48">- - - - Mandoline Slicers</option>
-                                    <option value="49">- - - - Slushy Makers</option>
-                                    <option value="75">Decorating Pens</option>
-                                </select>
-
-                            </div>
-                            <input type="text" class="form-control border-0" placeholder="Enter your search key ... " />
+                            <input type="text" id="serviceName" class="form-control border-0" placeholder="Enter your search key ... " autocomplete="off" oninput="SearchProduct(event)" />
                             <div class="input-group-text">
                                 <button class="btn btn-hover-warning btn-primary h-100" style="border-radius: 0;" type="submit">
                                     Search
                                 </button>
                             </div>
+                        </div>
+                        <div class="bg-dark p-1 d-none serviceShow" style="position: absolute;width:100%;z-index:999;">
+                            <ul class=""></ul>
                         </div>
                     </form>
                 </div>

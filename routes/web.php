@@ -17,6 +17,9 @@ Route::get('/worker', [HomeController::class, 'worker'])->name('worker');
 Route::get('/worker-details/{id}', [HomeController::class, 'workerDetails'])->name('worker.details');
 Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
 
+// search service
+Route::post('/search/service', [HomeController::class, 'searchService'])->name('search.service');
+
 // cart add route
 Route::get('/cart', [CartController::class, 'index'])->name('cart');
 Route::post('/addcart', [CartController::class, 'addCart'])->name('addcart');

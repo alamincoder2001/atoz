@@ -23,6 +23,7 @@ class CreateWorkersTable extends Migration
             $table->string("password");
             $table->string("nid");
             $table->decimal("commission");
+            $table->integer('category_id')->nullable();
             $table->integer('manager_id')->nullable();
             $table->integer('district_id')->nullable();
             $table->integer('thana_id')->nullable();

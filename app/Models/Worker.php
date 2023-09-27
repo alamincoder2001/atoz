@@ -15,6 +15,10 @@ class Worker extends Authenticatable
 
     protected $guarded = ['id'];
 
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'category_id', 'id');
+    }
     public function manager()
     {
         return $this->belongsTo(Admin::class, 'manager_id', 'id');

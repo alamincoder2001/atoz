@@ -9,6 +9,7 @@ use App\Models\Setting;
 use App\Models\Category;
 use App\Models\Service;
 use App\Models\Worker;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
@@ -79,5 +80,17 @@ class HomeController extends Controller
     public function fetch()
     {
         return Setting::first();
+    }
+
+
+    // searchService
+    public function searchService(Request $request)
+    {
+        try {
+            $data = DB::select("SELECT s.* FROM services s WHERE s.name LIKE '%$request->serviceName%'");
+            return response()->json($data);
+        } catch (\Throwable $e) {
+            return $e->getMessage();
+        }
     }
 }

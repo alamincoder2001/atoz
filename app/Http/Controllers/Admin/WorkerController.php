@@ -34,9 +34,9 @@ class WorkerController extends Controller
     public function index()
     {
         if (Auth::guard('admin')->user()->role == 'manager') {
-            $workers = Worker::with('thana', 'manager')->where('thana_id', Auth::guard('admin')->user()->thana_id)->latest()->get();
+            $workers = Worker::with('thana', 'manager', 'category')->where('thana_id', Auth::guard('admin')->user()->thana_id)->latest()->get();
         } else {
-            $workers = Worker::with('thana', 'manager')->latest()->get();
+            $workers = Worker::with('thana', 'manager', 'category')->latest()->get();
         }
         $worker_code = $this->generateCode("Worker", "W");
 
@@ -68,6 +68,7 @@ class WorkerController extends Controller
             $data->commission  = $request->commission;
             $data->father_name = $request->father_name;
             $data->mother_name = $request->mother_name;
+            $data->category_id = $request->category_id;
             $data->manager_id  = $request->manager_id;
             $data->district_id = $request->district_id;
             $data->thana_id    = $request->thana_id;
@@ -117,6 +118,7 @@ class WorkerController extends Controller
             $data->commission  = $request->commission;
             $data->father_name = $request->father_name;
             $data->mother_name = $request->mother_name;
+            $data->category_id = $request->category_id;
             $data->manager_id  = $request->manager_id;
             $data->district_id = $request->district_id;
             $data->thana_id    = $request->thana_id;

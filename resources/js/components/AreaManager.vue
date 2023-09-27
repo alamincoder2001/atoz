@@ -18,7 +18,7 @@
                                             </div>
                                         </div>
                                         <div class="form-group row mb-2">
-                                            <label for="name" class="col-md-3">User Name<span
+                                            <label for="username" class="col-md-3">User Name<span
                                                     class="text-danger fw-bold">*</span></label>
                                             <div class="col-md-9">
                                                 <input type="text" id="username" v-model="form.username"
@@ -27,12 +27,24 @@
                                             </div>
                                         </div>
                                         <div class="form-group row mb-2">
-                                            <label for="name" class="col-md-3">Email<span
+                                            <label for="email" class="col-md-3">Email<span
                                                     class="text-danger fw-bold">*</span></label>
                                             <div class="col-md-9">
                                                 <input type="email" id="email" v-model="form.email" class="form-control"
                                                     placeholder="Email" autocomplete="off">
                                                 <span class="error-email error text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row mb-2">
+                                            <label for="commission" class="col-md-3 pe-0">Commission<span
+                                                    class="text-danger fw-bold">*</span></label>
+                                            <div class="col-md-9">
+                                                <div class="input-group d-flex align-items-center">
+                                                    <input type="number" step="0.01" min="0" id="commission" v-model="form.commission"
+                                                        class="form-control" placeholder="%" autocomplete="off">
+                                                    <span style="background: #8b006d;padding: 4px;color: white;">%</span>
+                                                </div>
+                                                <span class="error-commission error text-danger"></span>
                                             </div>
                                         </div>
                                     </div>
@@ -43,7 +55,7 @@
                                             <div class="col-md-9">
                                                 <v-select :options="districts" v-model="selectedDistrict" label="name"
                                                     @input="onChangeDistrict"></v-select>
-                                                <span class="error-password error text-danger"></span>
+                                                <span class="error-district_id error text-danger"></span>
                                             </div>
                                         </div>
                                         <div class="form-group row mb-2">
@@ -51,11 +63,11 @@
                                                     class="text-danger fw-bold">*</span></label>
                                             <div class="col-md-9">
                                                 <v-select :options="thanas" v-model="selectedThana" label="name"></v-select>
-                                                <span class="error-password error text-danger"></span>
+                                                <span class="error-thana_id error text-danger"></span>
                                             </div>
                                         </div>
                                         <div class="form-group row mb-2">
-                                            <label for="name" class="col-md-3">Password<span
+                                            <label for="password" class="col-md-3">Password<span
                                                     class="text-danger fw-bold">*</span></label>
                                             <div class="col-md-9">
                                                 <input type="password" id="password" v-model="form.password"
@@ -65,7 +77,7 @@
                                         </div>
 
                                         <div class="form-group row text-end">
-                                            <label for="name" class="col-md-3"></label>
+                                            <label for="save" class="col-md-3"></label>
                                             <div class="col-md-9">
                                                 <button type="submit" class="btn btn-success text-light shadow-none">
                                                     <i class="fa fa-floppy-o pe-1" aria-hidden="true"></i>
@@ -133,6 +145,7 @@ export default {
                 district_id: "",
                 thana_id: "",
                 address: "",
+                commission: 0,
             }),
             imageSrc: "/noImage.jpg",
             users: [],
@@ -256,6 +269,7 @@ export default {
             this.form.district_id = val.district_id;
             this.form.thana_id = val.thana_id;
             this.form.address = val.address;
+            this.form.commission = val.commission;
             this.imageSrc = val.image != null ? '/' + val.image : "/noImage.jpg"
 
             this.selectedDistrict = {
@@ -303,6 +317,7 @@ export default {
             this.form.district_id = "";
             this.form.thana_id = "";
             this.form.address = "";
+            this.form.commission = 0;
             this.imageSrc = "/noImage.jpg",
                 delete (this.form.image)
 
