@@ -241,16 +241,12 @@ class OrderController extends Controller
     public function getCommission(Request $request)
     {
         try {
-            $monthArr = explode('-', $request->month);
-            $month = $monthArr[1];
-            $year = $monthArr[0];
             $clauses = "";
             if (!empty($request->month)) {
-                $clauses .= "AND month(o.date) = '$month'";
-                $clauses .= "AND year(o.date) = '$year'";
+                $clauses .= " AND DATE_FORMAT(o.date, '%Y-%m') = '$request->month'";
             }
             if (!empty($request->managerThana)) {
-                $clauses .= "AND c.thana_id = '$request->managerThana'";
+                $clauses .= " AND c.thana_id = '$request->managerThana'";
             }
             $query = DB::select("SELECT c.id,
                                     concat_ws('-', c.customer_code, c.name) AS customer_name,
