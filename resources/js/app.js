@@ -28,6 +28,7 @@ Vue.component("Service", require("./components/Service.vue").default);
 Vue.component("published_service", require("./components/publishedService.vue").default);
 Vue.component("Customer", require("./components/Customer.vue").default);
 Vue.component("assign-worker", require("./components/assignWorker.vue").default);
+Vue.component("commission-list", require("./components/CommissionList.vue").default);
 Vue.component("Worker", require("./components/Worker.vue").default);
 Vue.component("Slider", require("./components/Slider.vue").default);
 Vue.component("Blog", require("./components/Blog.vue").default);

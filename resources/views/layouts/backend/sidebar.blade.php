@@ -82,11 +82,6 @@
                             <a href="{{route('admin.order.index')}}" class="sidebar-link {{Request::is('admin.order.index') ? 'active':''}}"><i class="fas fa-cart-plus"></i><span class="hide-menu"> Order List </span></a>
                         </li>
                         @endif
-                        @if(in_array("orderAssign", $access))
-                        <li class="sidebar-item {{Request::is('admin.order.assign') ? 'active':''}}">
-                            <a href="{{route('admin.order.assign')}}" class="sidebar-link {{Request::is('admin.order.assign') ? 'active':''}}"><i class="fas fa-dolly-flatbed"></i><span class="hide-menu"> Assign Order </span></a>
-                        </li>
-                        @endif
                         @if(in_array("orderComplete", $access))
                         <li class="sidebar-item {{Request::is('admin.order.delivery') ? 'active':''}}">
                             <a href="{{route('admin.order.delivery')}}" class="sidebar-link {{Request::is('admin.order.delivery') ? 'active':''}}"><i class="fas fa-cart-plus"></i><span class="hide-menu"> Completed Order </span></a>
@@ -95,6 +90,11 @@
                         @if(in_array("orderCancel", $access))
                         <li class="sidebar-item {{Request::is('admin.order.canceled') ? 'active':''}}">
                             <a href="{{route('admin.order.canceled')}}" class="sidebar-link {{Request::is('admin.order.canceled') ? 'active':''}}"><i class="fas fa-cart-plus"></i><span class="hide-menu"> Canceled Order </span></a>
+                        </li>
+                        @endif
+                        @if(in_array("orderAssign", $access))
+                        <li class="sidebar-item {{Request::is('admin.order.assign') ? 'active':''}}">
+                            <a href="{{route('admin.order.assign')}}" class="sidebar-link {{Request::is('admin.order.assign') ? 'active':''}}"><i class="fas fa-dolly-flatbed"></i><span class="hide-menu"> Assign Order </span></a>
                         </li>
                         @endif
                         @if(in_array("assignWorkerService", $access))
@@ -106,13 +106,18 @@
                 </li>
                 @endif
 
-                @if(in_array("reportShow", $access))
+                @if(in_array("reportShow", $access) || in_array("paymentShow", $access))
                 <li class="sidebar-item">
                     <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-file"></i><span class="hide-menu"> Report </span></a>
                     <ul aria-expanded="false" class="collapse first-level">
                         @if(in_array("reportShow", $access))
                         <li class="sidebar-item">
                             <a href="{{route('admin.order.report')}}" class="sidebar-link {{Request::is('admin.order.report') ? 'active':''}}"><i class="fas fa-file"></i><span class="hide-menu"> Commission Report </span></a>
+                        </li>
+                        @endif
+                        @if(in_array("paymentShow", $access))
+                        <li class="sidebar-item">
+                            <a href="{{route('admin.commission.list')}}" class="sidebar-link {{Request::is('admin.commission.list') ? 'active':''}}"><i class="fas fa-file"></i><span class="hide-menu"> Commission Payment List </span></a>
                         </li>
                         @endif
                     </ul>

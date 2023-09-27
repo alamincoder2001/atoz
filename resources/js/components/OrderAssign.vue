@@ -215,7 +215,7 @@ export default {
             this.filter.thanaId = this.selectedThana == null ? null : this.selectedThana.id
 
             axios.post("/admin/order/fetch", this.filter).then((res) => {
-                this.orders = res.data.orders.filter(order => order.status != 'cancel');
+                this.orders = res.data.orders.filter(order => order.status != 'cancel' && order.status != 'complete');
             });
         },
 
@@ -243,15 +243,6 @@ export default {
                     this.selectedWorker = null;
                     $('#staticBackdrop').modal('hide');
                 });
-        },
-
-        InvoiceDelete(id) {
-            if (confirm("Are you sure want to delete")) {
-                axios.post("/admin/order/delete", { id: id }).then((res) => {
-                    $.notify(res.data, "success");
-                    this.getOrder();
-                });
-            }
         },
 
         formatDate(date) {

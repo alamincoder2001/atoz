@@ -40,9 +40,11 @@ class DashboardController extends Controller
         // $dayNumber = date('t', mktime(0, 0, 0, $month, 1, $year));
 
         $clauses = "";
+        $managerId = "";
         $areaId = Auth::guard('admin')->user();
         if ($areaId->role == 'manager') {
             $clauses .= "AND c.thana_id = '$areaId->thana_id'";
+            $managerId .= "AND cm.manager_id = '$areaId->id'";
         }
 
         $todayOrder = DB::select("SELECT sm.*,
@@ -85,7 +87,8 @@ class DashboardController extends Controller
                 WHERE od.status != 'cancel'
             $clauses
         ");
-        $commission = DB::select("SELECT ifnull(sum(cm.amount), 0) as total FROM commissions cm");
+
+        $commission = DB::select("SELECT ifnull(sum(cm.amount), 0) as total FROM commissions cm WHERE 1 = 1 $managerId");
 
         $worker = '';
         if (Auth::guard('admin')->user()->role == 'manager') {

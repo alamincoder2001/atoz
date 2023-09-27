@@ -129,7 +129,7 @@ Route::group(["prefix" => "admin"], function () {
     Route::post('/user/delete', [AdminAccessController::class, 'destroy'])->name('admin.user.destroy');
     Route::get('/user/permission/{id}', [AdminAccessController::class, 'permissionEdit'])->name('admin.user.permission');
     Route::post('/user/store-permission', [AdminAccessController::class, 'permissionStore'])->name('admin.store.permission');
-    
+
     //manager Route
     Route::get('/manager', [AreaManagerController::class, 'create'])->name('admin.manager.create');
     Route::get('/get-manager/{id?}', [AreaManagerController::class, 'index'])->name('admin.manager.index');
@@ -138,6 +138,8 @@ Route::group(["prefix" => "admin"], function () {
     Route::post('/manager/delete', [AreaManagerController::class, 'destroy'])->name('admin.manager.destroy');
 
     // commission Route
+    Route::get('/commission-list', [CommissionController::class, 'list'])->name('admin.commission.list');
+    Route::post('/commission-fetch', [CommissionController::class, 'fetch'])->name('admin.commission.fetch');
     Route::post('/pay-commission', [CommissionController::class, 'payCommission'])->name('admin.pay.commission');
     Route::post('/order/commission', [CommissionController::class, 'getCommission'])->name("admin.order.commission");
 });

@@ -106,6 +106,7 @@ class PermissionSeederTable extends Seeder
                 'group_name' => 'Report',
                 'permission_name' => [
                     'reportShow',
+                    'paymentShow',
                 ]
             ],
             [

@@ -15,6 +15,40 @@ class CommissionController extends Controller
         $this->middleware('auth:admin');
     }
 
+    public function list()
+    {
+        return view('admin.commission.list');
+    }
+
+    public function fetch(Request $request)
+    {
+        try {
+            $clauses = "";
+            if (!empty($request->managerId)) {
+                $clauses .= " AND cm.manager_id = '$request->managerId'";
+            }
+            if (!empty($request->workerId)) {
+                $clauses .= " AND cm.worker_id = '$request->workerId'";
+            }
+
+            if (!empty($request->dateFrom)) {
+                $clauses .= " AND cm.payment_date BETWEEN '$request->dateFrom' AND '$request->dateTo'";
+            }
+
+            $query = DB::select("SELECT 
+                        cm.*, 
+                        concat(w.name, '(Worker)') as worker_name, 
+                        concat(am.name, '(Area Manager)') as manager_name 
+                        FROM commissions cm 
+                        LEFT JOIN workers w ON w.id = cm.worker_id 
+                        LEFT JOIN admins am ON am.id = cm.manager_id 
+                        WHERE 1 = 1 $clauses");
+            return $query;
+        } catch (\Throwable $e) {
+            return "Opps! something went wrong" . $e->getMessage();
+        }
+    }
+
     public function getCommission(Request $request)
     {
         try {
