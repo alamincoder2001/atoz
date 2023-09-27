@@ -5,5 +5,5 @@
 @section('breadcrumb_item', 'Assign Service Worker List')
 
 @section('content')
-<assign-worker></assign-worker>
+<assign-worker admin_id="{{Auth::guard('admin')->user()->id}}" role="{{Auth::guard('admin')->user()->role}}"></assign-worker>
 @endsection

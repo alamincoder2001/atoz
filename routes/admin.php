@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\DistrictController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\AdminAccessController;
 use App\Http\Controllers\Admin\AreaManagerController;
+use App\Http\Controllers\Admin\CommissionController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\WorkerController;
 
@@ -136,4 +137,7 @@ Route::group(["prefix" => "admin"], function () {
     Route::post('/manager', [AreaManagerController::class, 'store'])->name('admin.manager.store');
     Route::post('/update/manager', [AreaManagerController::class, 'update'])->name('admin.manager.update');
     Route::post('/manager/delete', [AreaManagerController::class, 'destroy'])->name('admin.manager.destroy');
+
+    // commission Route
+    Route::post('/pay-commission', [CommissionController::class, 'payCommission'])->name('admin.pay.commission');
 });

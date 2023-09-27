@@ -8,6 +8,7 @@ use App\Models\OrderDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
@@ -141,7 +142,7 @@ class OrderController extends Controller
         try {
             $data = OrderDetail::where("id", $request->id)->first();
             $data->worker_id = $request->worker_id;
-            $data->updated_at = date("Y-m-d");
+            $data->updated_at = Carbon::now();
             $data->save();
             return "Service assign successfully";
         } catch (\Throwable $e) {

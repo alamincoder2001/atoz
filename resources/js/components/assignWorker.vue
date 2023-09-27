@@ -5,12 +5,11 @@
                 <div class="card-header">
                     <form @submit.prevent="getOrder">
                         <div class="row">
-                            <div class="col-6 col-md-2 mb-1" v-if="role != 'manager'"
-                                :class="role != 'manager' ? '' : 'd-none'">
+                            <div class="col-6 col-md-2 mb-1">
                                 <div class="form-group m-0">
                                     <select class="form-select shadow-none" v-model="searchBy" @change="onChangeSearch">
-                                        <option value="">All</option>
-                                        <option value="thana">Area Wise</option>
+                                        <option value="" v-if="role != 'manager'">All</option>
+                                        <option v-if="role != 'manager'" value="thana">Area Wise</option>
                                         <option value="worker">Worker Wise</option>
                                     </select>
                                 </div>
@@ -183,6 +182,10 @@ export default {
         this.getThana();
         this.adminId = this.$attrs.admin_id
         this.role = this.$attrs.role
+        if (this.role == 'manager') {
+            this.searchBy = 'worker';
+            this.getWorker();
+        }
     },
 
     methods: {
