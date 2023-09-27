@@ -29,7 +29,7 @@ class PermissionSeederTable extends Seeder
                 ]
             ],
             [
-                'group_name' => 'Area Manager',
+                'group_name' => 'AreaManager',
                 'permission_name' => [
                     'areaManagerEntry',
                 ]
@@ -53,7 +53,7 @@ class PermissionSeederTable extends Seeder
                 ]
             ],
             [
-                'group_name' => 'News & Event',
+                'group_name' => 'NewsEvent',
                 'permission_name' => [
                     'newsandeventEntry',
                 ]

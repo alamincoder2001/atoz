@@ -31,24 +31,28 @@
                     </div>
                     <input type="hidden" name="admin_id" value="<?= $user->id ?>">
                     <table class="table table-bordered">
-                        <tr>
+                        <thead class="bg-dark">
+                            <tr>
+                                <th class="text-white" style="font-weight: 900;">Group Name</th>
+                                <th class="text-white" style="font-weight: 900;">Permission Name</th>
+                            </tr>
+                        </thead>
+                        <tr class="border-bottom:1px solid gray;">
                             <td colspan="2">
-                                <input type="checkbox" onchange="selectAll(event)" id="all">
+                                <input type="checkbox" onchange="selectAll(event)" id="all" {{\App\Models\Admin::checkAll($access) ? 'checked' : ''}} >
                                 <label for="all">All</label>
                             </td>
                         </tr>
-                        @foreach ($group_name as $group)
+                        @foreach ($groups as $group)
                         <tr>
-                            <td>
-                                <input type="checkbox" id="role-{{ $group }}" value="{{ $group }}" onclick="selectGroup(this.id)">
-                                <label for="role-{{ $group }}">{{ $group }}</label>
+                            <td class="group">
+                                <input type="checkbox" id="role-{{ $group->group_name }}" value="{{ $group->group_name }}" onclick="selectGroup({{$group}})" {{\App\Models\Admin::checkGroupName($group->group_name, $access) ? 'checked' : ''}} />
+                                <label for="role-{{ $group->group_name }}">{{ $group->group_name }}</label>
                             </td>
-                            <td class="role-{{ $group }}">
-                                @foreach ($permissions as $item)
-                                @if ($group == $item->group_name)
-                                <input type="checkbox" name="permissions[]" id="{{ $item->permissions }}" value="{{ $item->id }}" {{ in_array($item->permissions, $userAccess) ? 'checked' : '' }}>
+                            <td class="role-{{ $group->group_name }}">
+                                @foreach ($group->permissionArr as $item)
+                                <input type="checkbox" name="permissions[]" onclick="singlePermission({{$group}})" id="{{ $item->permissions }}" value="{{ $item->id }}" {{ in_array($item->permissions, $userAccess) ? 'checked' : '' }} />
                                 <label for="{{ $item->permissions }}">{{ $item->permissions }}</label><br>
-                                @endif
                                 @endforeach
                             </td>
                         </tr>
@@ -75,12 +79,34 @@
         }
     }
 
-    function selectGroup(className) {
-        const checkbox = $('.' + className + ' input');
-        if ($('#' + className).is(':checked')) {
+    function selectGroup(group) {
+        const checkbox = $('.role-'+group.group_name + ' input');
+        if ($('#role-'+group.group_name).is(':checked')) {
             checkbox.prop('checked', true);
         } else {
             checkbox.prop('checked', false);
+        }
+
+        singlePermission(group)
+    }
+
+    function singlePermission(group){
+        var totalCheck = $(".role-"+group.group_name+" input:checkbox:checked").length
+        var totalUnCheck = $(".role-"+group.group_name+" input:checkbox").length
+        
+        if (totalCheck == totalUnCheck) {
+            $("#role-"+group.group_name).prop("checked", true);
+        }else{
+            $("#role-"+group.group_name).prop("checked", false);
+        }
+
+        var totalgroupcheck = $(".group input:checkbox:checked").length
+        var totalgroupuncheck = $(".group input:checkbox").length
+
+        if(totalgroupcheck >= totalgroupuncheck){
+            $("#all").prop("checked", true);
+        }else{
+            $("#all").prop("checked", false);
         }
     }
 </script>
