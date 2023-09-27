@@ -37,7 +37,7 @@ class DashboardController extends Controller
         $month = date("m");
         $year = date("Y");
         $today = date('Y-m-d');
-        $dayNumber = date('t', mktime(0, 0, 0, $month, 1, $year));
+        // $dayNumber = date('t', mktime(0, 0, 0, $month, 1, $year));
 
         $clauses = "";
         $areaId = Auth::guard('admin')->user();
@@ -86,59 +86,6 @@ class DashboardController extends Controller
             $clauses
         ");
         $commission = DB::select("SELECT ifnull(sum(cm.amount), 0) as total FROM commissions cm");
-
-        // monthly record
-        // $monthlyRecord = [];
-        // for ($i = 1; $i <= $dayNumber; $i++) {
-        //     $date = $year . '-' . $month . '-' . sprintf("%02d", $i);
-        //     $query = DB::select("SELECT 
-        //     IFNULL(SUM(sm.total), 0 ) AS sales_amount
-        //     FROM orders sm
-        //     WHERE sm.date = ?
-        //     AND sm.status = 'delivery'", [$date]);
-
-        //     $amount = (float)$query[0]->sales_amount;
-
-        //     $sale = [sprintf("%02d", $i), $amount];
-        //     array_push($monthlyRecord, $sale);
-        // }
-
-        // yearly record
-        // $yearlyRecord = [];
-        // for ($i = 1; $i <= 12; $i++) {
-        //     $yearMonth = $year . sprintf("%02d", $i);
-        //     $query = DB::select("SELECT 
-        //             IFNULL(SUM(sm.total), 0 ) AS sales_amount
-        //             FROM orders sm
-        //             WHERE extract(year_month from sm.date) = ?
-        //             AND sm.status = 'delivery'", [$yearMonth]);
-
-
-        //     $amount = (float)$query[0]->sales_amount;
-        //     $monthName = date("M", mktime(0, 0, 0, $i, 10));
-
-        //     $sale = [$monthName, $amount];
-        //     array_push($yearlyRecord, $sale);
-        // }
-
-        // top sold service
-        // $topSold = DB::select("SELECT
-        //                 s.name AS service_name,
-        //                 SUM(od.quantity) as qty
-        //             FROM order_details od
-        //             JOIN services s ON s.id = od.service_id
-        //             JOIN orders o ON o.id = od.order_id
-        //             WHERE o.status != 'cancel' AND o.status != 'pending'
-        //             GROUP BY service_name LIMIT 5");
-        // top sold product
-        // $topCustomer = DB::select("SELECT
-        //                     c.name,
-        //                     ifnull(SUM(o.total), 0) as total_amount
-        //                     FROM orders o
-        //                     JOIN users c ON c.id = o.customer_id
-        //                     WHERE o.status != 'pending' 
-        //                     AND o.status != 'cancel'
-        //                     GROUP BY name LIMIT 5");
 
         $worker = '';
         if (Auth::guard('admin')->user()->role == 'manager') {
