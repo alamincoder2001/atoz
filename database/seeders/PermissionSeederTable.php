@@ -125,13 +125,13 @@ class PermissionSeederTable extends Seeder
             }
         }
 
-        $allPermissions = Permission::all();
-        foreach ($allPermissions as $perm) {
-            AdminAccess::create([
-                'admin_id'    => 1,
-                'group_name'  => $perm->group_name,
-                'permissions' => $perm->permissions,
-            ]);
-        }
+        // $allPermissions = Permission::all();
+        // foreach ($allPermissions as $perm) {
+        //     AdminAccess::create([
+        //         'admin_id'    => 1,
+        //         'group_name'  => $perm->group_name,
+        //         'permissions' => $perm->permissions,
+        //     ]);
+        // }
     }
 }

@@ -21,12 +21,15 @@ class AdminAccessController extends Controller
 
     public function create()
     {
-        $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
-            ->pluck('permissions')
-            ->toArray();
-        if (!in_array("userEntry", $access)) {
-            return view("admin.unauthorize");
+        if (Auth::guard('admin')->user()->role != 'superadmin') {
+            $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
+                ->pluck('permissions')
+                ->toArray();
+            if (!in_array("userEntry", $access)) {
+                return view("admin.unauthorize");
+            }
         }
+
         return view("admin.user.create");
     }
 
@@ -154,17 +157,20 @@ class AdminAccessController extends Controller
     {
         $user = Admin::find($id);
 
-        if (empty($user)) {
-            return back();
-        } else if ($user->id == 1 || $user->role == 'manager') {
-            return back();
-        }
+        if (Auth::guard('admin')->user()->role != 'superadmin') {
 
-        $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
-            ->pluck('permissions')
-            ->toArray();
-        if (!in_array("userAccess", $access)) {
-            return view("admin.unauthorize");
+            if (empty($user)) {
+                return back();
+            } else if ($user->id == 1 || $user->role == 'manager') {
+                return back();
+            }
+
+            $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
+                ->pluck('permissions')
+                ->toArray();
+            if (!in_array("userAccess", $access)) {
+                return view("admin.unauthorize");
+            }
         }
 
         $userAccess = AdminAccess::where('admin_id', $id)->pluck('permissions')->toArray();

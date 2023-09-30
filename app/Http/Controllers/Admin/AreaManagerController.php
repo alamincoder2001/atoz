@@ -20,11 +20,13 @@ class AreaManagerController extends Controller
 
     public function create()
     {
-        $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
-            ->pluck('permissions')
-            ->toArray();
-        if (!in_array("areaManagerEntry", $access)) {
-            return view("admin.unauthorize");
+        if (Auth::guard('admin')->user()->role != 'superadmin') {
+            $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
+                ->pluck('permissions')
+                ->toArray();
+            if (!in_array("areaManagerEntry", $access)) {
+                return view("admin.unauthorize");
+            }
         }
         return view("admin.manager.create");
     }
@@ -34,7 +36,7 @@ class AreaManagerController extends Controller
         $authId = Auth::guard('admin')->user();
         if ($authId->role == 'manager') {
             $data = Admin::with('thana')->where("role", "manager")->where('id', $authId->id)->get();
-        }else{
+        } else {
             $data = Admin::with('thana')->where("role", "manager")->get();
         }
 

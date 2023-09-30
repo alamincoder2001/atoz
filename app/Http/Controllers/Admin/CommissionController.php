@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Models\Commission;
 use Carbon\Carbon;
+use App\Models\Commission;
+use App\Models\AdminAccess;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class CommissionController extends Controller
 {
@@ -17,6 +19,14 @@ class CommissionController extends Controller
 
     public function list()
     {
+        if (Auth::guard('admin')->user()->role != 'superadmin') {
+            $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
+                ->pluck('permissions')
+                ->toArray();
+            if (!in_array("categoryEntry", $access)) {
+                return view("admin.unauthorize");
+            }
+        }
         return view('admin.commission.list');
     }
 
