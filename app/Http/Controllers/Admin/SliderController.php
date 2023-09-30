@@ -61,7 +61,6 @@ class SliderController extends Controller
 
             $data->title       = $request->title;
             $data->description = $request->description;
-            $data->using_by    = $request->using_by;
             if ($request->hasFile("image")) {
                 if (isset($old) && $old != "") {
                     if (File::exists($old)) {
@@ -78,7 +77,7 @@ class SliderController extends Controller
                 return "Slider insert successfully";
             }
         } catch (\Throwable $e) {
-            return "Something went wrong";
+            return "Something went wrong".$e->getMessage();
         }
     }
 

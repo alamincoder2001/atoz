@@ -90,7 +90,6 @@ export default {
             slider: {
                 id: "",
                 title: "",
-                using_by: "retail",
                 description: "",
                 image: ""
             },
