@@ -11,11 +11,6 @@ class Category extends Model
 
     protected $guarded = ["id"];
 
-    public function subcategory()
-    {
-        return $this->hasMany(Subcategory::class, 'category_id', 'id')->with('product');
-    }
-
     public function service()
     {
         return $this->hasMany(Service::class, "category_id", "id");

@@ -22,7 +22,7 @@ class HomeController extends Controller
         $data['slider']                   = Slider::latest()->get();
         $data['categories']               = Category::with('service')->orderBy("name", "ASC")->get();
         $data['worker']                   = Worker::with('thana')->orderBy('id', "DESC")->get();
-        $data['isWebsiteCategoryProduct'] = Category::with('subcategory')->where('is_website', 'true')->get();
+        $data['isWebsiteCategoryProduct'] = Category::with('service')->where('is_website', 'true')->get();
         return view('website', $data);
     }
 

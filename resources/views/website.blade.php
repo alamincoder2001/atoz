@@ -144,11 +144,9 @@
                                     <!-- single slide Start -->
                                     @foreach($services as $item)
                                     <div class="swiper-slide">
-                                        <div class="product-card" style="height:350px;">
-                                            <a class="thumb" href="{{route('single.service', $item->slug)}}"><img src="{{asset($item->image != null ? $item->image : 'no-product-image.jpg')}}" alt="img" />
-                                                <!-- <div class="onsales-badges">
-                                                    <span class="badge bg-dark">new</span>
-                                                </div> -->
+                                        <div class="product-card" style="height:250px;">
+                                            <a class="thumb" href="{{route('single.service', $item->slug)}}">
+                                                <img src="{{asset($item->image != null ? $item->image : 'no-product-image.jpg')}}" alt="img" style="height: 150px;width: 100%;" />
                                             </a>
                                             <div class="product-content">
                                                 <a class="product-category" href="#?">{{$item->category_name}}</a>
@@ -220,57 +218,57 @@
                                     @if(Auth::guard('web')->check())
                                     @foreach($worker as $item)
                                     @if(Auth::guard('web')->user()->thana->district_id == $item->district_id)
-                                        <div class="swiper-slide">
-                                            <div class="product-card" style="position:relative;height:200px;border: 1px solid #cdcdcd;">
-                                                @if($item->status == 'v')
-                                                <span style="position: absolute;right:0;top:0;background: green;color: white;padding: 0px 5px;border-bottom-left-radius: 10px;">{{$item->status == 'v' ? 'Verified' : ''}}</span>
-                                                @endif
-                                                <a class="thumb text-center" href=""><img style="width: 100px;border:1px solid #e5e5e5;padding:2px;" src="{{asset($item->image != null ? $item->image : 'nouser.png')}}" alt="img" /></a>
-                                                <div class="product-content text-center">
-                                                    <h3 class="product-title mt-3">
-                                                        <a href="">{{$item->name}}</a>
-                                                    </h3>
-                                                    <span>Location: {{$item->thana->name}}, {{$item->thana->district->name}}</span>
-                                                </div>
+                                    <div class="swiper-slide">
+                                        <div class="product-card" style="position:relative;height:200px;border: 1px solid #cdcdcd;">
+                                            @if($item->status == 'v')
+                                            <span style="position: absolute;right:0;top:0;background: green;color: white;padding: 0px 5px;border-bottom-left-radius: 10px;">{{$item->status == 'v' ? 'Verified' : ''}}</span>
+                                            @endif
+                                            <a class="thumb text-center" href=""><img style="width: 100px;border:1px solid #e5e5e5;padding:2px;" src="{{asset($item->image != null ? $item->image : 'nouser.png')}}" alt="img" /></a>
+                                            <div class="product-content text-center">
+                                                <h3 class="product-title mt-3">
+                                                    <a href="">{{$item->name}}</a>
+                                                </h3>
+                                                <span>Location: {{$item->thana->name}}, {{$item->thana->district->name}}</span>
                                             </div>
                                         </div>
+                                    </div>
                                     @endif
                                     @endforeach
                                     @foreach($worker as $item)
                                     @if(Auth::guard('web')->user()->thana->district_id != $item->district_id)
-                                        <div class="swiper-slide">
-                                            <div class="product-card" style="position:relative;height:200px;border: 1px solid #cdcdcd;">
-                                                @if($item->status == 'v')
-                                                <span style="position: absolute;right:0;top:0;background: green;color: white;padding: 0px 5px;border-bottom-left-radius: 10px;">{{$item->status == 'v' ? 'Verified' : ''}}</span>
-                                                @endif
-                                                <a class="thumb text-center" href=""><img style="width: 100px;border:1px solid #e5e5e5;padding:2px;" src="{{asset($item->image != null ? $item->image : 'nouser.png')}}" alt="img" /></a>
-                                                <div class="product-content text-center">
-                                                    <h3 class="product-title mt-3">
-                                                        <a href="">{{$item->name}}</a>
-                                                    </h3>
-                                                    <span>Location: {{$item->thana->name}}, {{$item->thana->district->name}}</span>
-                                                </div>
+                                    <div class="swiper-slide">
+                                        <div class="product-card" style="position:relative;height:200px;border: 1px solid #cdcdcd;">
+                                            @if($item->status == 'v')
+                                            <span style="position: absolute;right:0;top:0;background: green;color: white;padding: 0px 5px;border-bottom-left-radius: 10px;">{{$item->status == 'v' ? 'Verified' : ''}}</span>
+                                            @endif
+                                            <a class="thumb text-center" href=""><img style="width: 100px;border:1px solid #e5e5e5;padding:2px;" src="{{asset($item->image != null ? $item->image : 'nouser.png')}}" alt="img" /></a>
+                                            <div class="product-content text-center">
+                                                <h3 class="product-title mt-3">
+                                                    <a href="">{{$item->name}}</a>
+                                                </h3>
+                                                <span>Location: {{$item->thana->name}}, {{$item->thana->district->name}}</span>
                                             </div>
                                         </div>
+                                    </div>
                                     @endif
                                     @endforeach
                                     @else
-                                        @foreach($worker as $item)
-                                            <div class="swiper-slide">
-                                                <div class="product-card" style="position:relative;height:200px;border: 1px solid #cdcdcd;">
-                                                    @if($item->status == 'v')
-                                                    <span style="position: absolute;right:0;top:0;background: green;color: white;padding: 0px 5px;border-bottom-left-radius: 10px;">{{$item->status == 'v' ? 'Verified' : ''}}</span>
-                                                    @endif
-                                                    <a class="thumb text-center" href=""><img style="width: 100px;border:1px solid #e5e5e5;padding:2px;" src="{{asset($item->image != null ? $item->image : 'nouser.png')}}" alt="img" /></a>
-                                                    <div class="product-content text-center">
-                                                        <h3 class="product-title mt-3">
-                                                            <a href="">{{$item->name}}</a>
-                                                        </h3>
-                                                        <span>Location: {{$item->thana->name}}, {{$item->thana->district->name}}</span>
-                                                    </div>
-                                                </div>
+                                    @foreach($worker as $item)
+                                    <div class="swiper-slide">
+                                        <div class="product-card" style="position:relative;height:200px;border: 1px solid #cdcdcd;">
+                                            @if($item->status == 'v')
+                                            <span style="position: absolute;right:0;top:0;background: green;color: white;padding: 0px 5px;border-bottom-left-radius: 10px;">{{$item->status == 'v' ? 'Verified' : ''}}</span>
+                                            @endif
+                                            <a class="thumb text-center" href=""><img style="width: 100px;border:1px solid #e5e5e5;padding:2px;" src="{{asset($item->image != null ? $item->image : 'nouser.png')}}" alt="img" /></a>
+                                            <div class="product-content text-center">
+                                                <h3 class="product-title mt-3">
+                                                    <a href="">{{$item->name}}</a>
+                                                </h3>
+                                                <span>Location: {{$item->thana->name}}, {{$item->thana->district->name}}</span>
                                             </div>
-                                        @endforeach
+                                        </div>
+                                    </div>
+                                    @endforeach
                                     @endif
                                 </div>
                             </div>
@@ -519,7 +517,7 @@ $bann = array_chunk($banner, 3);
 @endif
 <!-- Banner Section End -->
 
-@foreach($isWebsiteCategoryProduct->take(3) as $category)
+@foreach($isWebsiteCategoryProduct->take(3) as $key => $category)
 <!-- Product tab Start -->
 <section class="section-py">
     <div class="container">
@@ -531,25 +529,13 @@ $bann = array_chunk($banner, 3);
                         <div class="col-12 col-lg-4">
                             <h3 class="title">{{$category->name}}</h3>
                         </div>
-                        <!-- title section End -->
-                        @if($category->subcategory->count() > 0)
-                        <div class="col-12 col-lg-6 custom-col1">
-                            <ul class="nav nav-pills product-tab-links mt-8 mt-lg-0 justify-content-md-center">
-                                @foreach($category->subcategory as $key => $subcat)
-                                <li class="nav-item"><a class="nav-link {{$key == 0 ? 'active':''}}" data-bs-toggle="pill" href="#{{$subcat->name}}">{{$subcat->name}}</a></li>
-                                @endforeach
-                            </ul>
-                        </div>
-                        @endif
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="tab-content">
-            @if($category->subcategory->count() > 0)
-            @foreach($category->subcategory as $key => $subcat)
-            <div class="tab-pane fade {{$key == 0 ? 'show active':''}}" id="{{$subcat->name}}">
+            <div class="tab-pane fade {{$key == 0 ? 'show active':''}}" id="{{$category->name}}">
                 <div class="row mb-n7">
                     <div class="order-last order-lg-first col-lg-4 col-xl-3 custom-col-20 mb-7">
                         <a class="zoom-in text-center" href="#">
@@ -568,8 +554,8 @@ $bann = array_chunk($banner, 3);
                             </div>
                             <div class="swiper-container">
                                 <div class="swiper-wrapper">
-                                    @if(count($subcat->product) > 0)
-                                    @foreach($subcat->product->chunk(2) as $prod)
+                                    @if(count($category->service) > 0)
+                                    @foreach($category->service->chunk(2) as $prod)
                                     <!-- single slide Start -->
                                     <div class="swiper-slide">
                                         @foreach($prod as $item)
@@ -600,8 +586,6 @@ $bann = array_chunk($banner, 3);
                     </div>
                 </div>
             </div>
-            @endforeach
-            @endif
         </div>
     </div>
 </section>

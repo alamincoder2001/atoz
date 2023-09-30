@@ -34,6 +34,8 @@
                             </div>
                             <div class="col-12 col-md-2 d-flex justify-content-center align-items-center">
                                 <div class="form-group ImageBackground">
+                                    <p class="text-danger" style="text-align: center;font-size: 11px;margin: 0px;">955px X
+                                        300px</p>
                                     <img :src="imageSrc" class="imageShow" />
                                     <label for="image">Image</label>
                                     <input type="file" id="image" class="form-control shadow-none" @change="imageUrl" />
@@ -145,7 +147,7 @@ export default {
         },
 
         imageUrl(event) {
-            if (event.target.files[0]) {
+            if (event.target.files[0] && event.target.files[0].size < 256000) {
                 let img = new Image()
                 img.src = window.URL.createObjectURL(event.target.files[0]);
                 img.onload = () => {
@@ -153,9 +155,11 @@ export default {
                         this.imageSrc = window.URL.createObjectURL(event.target.files[0]);
                         this.slider.image = event.target.files[0];
                     } else {
-                        alert(`This image ${img.width}px X ${img.width}px but require image 955px X 300px`);
+                        alert(`This image ${img.width}px X ${img.height}px but require image 955px X 300px`);
                     }
                 }
+            }else{
+                alert(`This file size too big ${parseFloat(event.target.files[0].size / 1024).toFixed(2)}kb. require size 250kb`)
             }
         },
 

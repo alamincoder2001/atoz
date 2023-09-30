@@ -428,7 +428,7 @@ export default {
         },
 
         imageUrl(event) {
-            if (event.target.files[0]) {
+            if (event.target.files[0] && event.target.files[0].size < 256000) {
                 let img = new Image()
                 img.src = window.URL.createObjectURL(event.target.files[0]);
                 img.onload = () => {
@@ -439,6 +439,8 @@ export default {
                         alert(`This image ${img.width}px X ${img.height}px but require image 150px X 150px`);
                     }
                 }
+            }else{
+                alert(`This file size too big ${parseFloat(event.target.files[0].size / 1024).toFixed(2)}kb. require size 250kb`)
             }
         },
 
