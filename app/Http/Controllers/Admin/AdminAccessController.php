@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
 class AdminAccessController extends Controller
@@ -192,6 +193,9 @@ class AdminAccessController extends Controller
             AdminAccess::where('admin_id', $request->admin_id)->delete();
             $permissions = Permission::all();
 
+            if (empty($request->permissions)) {
+                return redirect()->route('admin.user.create')->with('error', 'Permissions remove all');
+            }
             foreach ($permissions as $value) {
                 if (in_array($value->id, $request->permissions)) {
                     AdminAccess::create([
@@ -201,11 +205,8 @@ class AdminAccessController extends Controller
                     ]);
                 }
             }
-            if ($admin->role == 'manager') {
-                return redirect()->route('admin.manager.create')->with('success', 'Permissions added successfullly');
-            } else {
-                return redirect()->route('admin.user.create')->with('success', 'Permissions added successfullly');
-            }
+
+            return redirect()->route('admin.user.create')->with('success', 'Permissions added successfullly');
         } catch (\Throwable $e) {
             return redirect()->route('admin.user.create');
         }
