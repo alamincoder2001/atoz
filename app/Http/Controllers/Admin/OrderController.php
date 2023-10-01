@@ -20,42 +20,50 @@ class OrderController extends Controller
 
     public function index()
     {
-        $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
-            ->pluck('permissions')
-            ->toArray();
-        if (!in_array("orderList", $access)) {
-            return view("admin.unauthorize");
+        if (Auth::guard('admin')->user()->role != 'SuperAdmin') {
+            $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
+                ->pluck('permissions')
+                ->toArray();
+            if (!in_array("orderList", $access)) {
+                return view("admin.unauthorize");
+            }
         }
         return view("admin.order.index");
     }
     public function assign()
     {
-        $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
-            ->pluck('permissions')
-            ->toArray();
-        if (!in_array("orderAssign", $access)) {
-            return view("admin.unauthorize");
+        if (Auth::guard('admin')->user()->role != 'SuperAdmin') {
+            $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
+                ->pluck('permissions')
+                ->toArray();
+            if (!in_array("orderAssign", $access)) {
+                return view("admin.unauthorize");
+            }
         }
         return view("admin.order.assign");
     }
 
     public function delivery()
     {
-        $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
-            ->pluck('permissions')
-            ->toArray();
-        if (!in_array("orderComplete", $access)) {
-            return view("admin.unauthorize");
+        if (Auth::guard('admin')->user()->role != 'SuperAdmin') {
+            $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
+                ->pluck('permissions')
+                ->toArray();
+            if (!in_array("orderComplete", $access)) {
+                return view("admin.unauthorize");
+            }
         }
         return view("admin.order.delivery");
     }
     public function canceled()
     {
-        $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
-            ->pluck('permissions')
-            ->toArray();
-        if (!in_array("orderCancel", $access)) {
-            return view("admin.unauthorize");
+        if (Auth::guard('admin')->user()->role != 'SuperAdmin') {
+            $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
+                ->pluck('permissions')
+                ->toArray();
+            if (!in_array("orderCancel", $access)) {
+                return view("admin.unauthorize");
+            }
         }
         return view("admin.order.canceled");
     }
@@ -184,6 +192,14 @@ class OrderController extends Controller
 
     public function report()
     {
+        if (Auth::guard('admin')->user()->role != 'SuperAdmin') {
+            $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
+                ->pluck('permissions')
+                ->toArray();
+            if (!in_array("reportShow", $access)) {
+                return view("admin.unauthorize");
+            }
+        }
         return view('admin.order.report');
     }
 
@@ -237,5 +253,4 @@ class OrderController extends Controller
             return response()->json(['status' => false, 'msg' => $e->getMessage()]);
         }
     }
-
 }

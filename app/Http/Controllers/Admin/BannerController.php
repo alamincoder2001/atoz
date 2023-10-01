@@ -20,7 +20,7 @@ class BannerController extends Controller
 
     public function index()
     {
-        if (Auth::guard('admin')->user()->role != 'superadmin') {
+        if (Auth::guard('admin')->user()->role != 'SuperAdmin') {
             $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
                 ->pluck('permissions')
                 ->toArray();

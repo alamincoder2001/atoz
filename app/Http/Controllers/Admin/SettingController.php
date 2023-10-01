@@ -19,11 +19,13 @@ class SettingController extends Controller
 
     public function index()
     {
-        $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
-            ->pluck('permissions')
-            ->toArray();
-        if (!in_array("settingUpdate", $access)) {
-            return view("admin.unauthorize");
+        if (Auth::guard('admin')->user()->role != 'SuperAdmin') {
+            $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
+                ->pluck('permissions')
+                ->toArray();
+            if (!in_array("settingUpdate", $access)) {
+                return view("admin.unauthorize");
+            }
         }
         $data = Setting::first();
         return view("admin.setting", compact("data"));
@@ -60,7 +62,7 @@ class SettingController extends Controller
             $data->save();
             return "Setting updated successfully";
         } catch (\Throwable $e) {
-            return "Something went wrong".$e->getMessage();
+            return "Something went wrong" . $e->getMessage();
         }
     }
 

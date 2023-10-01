@@ -16,9 +16,9 @@ class AdminSeederTable extends Seeder
     public function run()
     {
         Admin::create([
-            "name"     => "Admin",
+            "name"     => "Super Admin",
             "username" => "admin",
-            "role"     => "superadmin",
+            "role"     => "SuperAdmin",
             "email"    => "admin@gmail.com",
             "password" => Hash::make(1),
         ]);

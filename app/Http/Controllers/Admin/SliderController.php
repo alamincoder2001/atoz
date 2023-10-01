@@ -20,11 +20,13 @@ class SliderController extends Controller
 
     public function index()
     {
-        $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
-            ->pluck('permissions')
-            ->toArray();
-        if (!in_array("sliderEntry", $access)) {
-            return view("admin.unauthorize");
+        if (Auth::guard('admin')->user()->role != 'SuperAdmin') {
+            $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
+                ->pluck('permissions')
+                ->toArray();
+            if (!in_array("sliderEntry", $access)) {
+                return view("admin.unauthorize");
+            }
         }
         return view("admin.slider.index");
     }
@@ -77,7 +79,7 @@ class SliderController extends Controller
                 return "Slider insert successfully";
             }
         } catch (\Throwable $e) {
-            return "Something went wrong".$e->getMessage();
+            return "Something went wrong" . $e->getMessage();
         }
     }
 

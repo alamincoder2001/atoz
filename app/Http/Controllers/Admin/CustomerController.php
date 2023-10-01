@@ -19,11 +19,13 @@ class CustomerController extends Controller
 
     public function index()
     {
-        $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
-            ->pluck('permissions')
-            ->toArray();
-        if (!in_array("customerList", $access)) {
-            return view("admin.unauthorize");
+        if (Auth::guard('admin')->user()->role != 'SuperAdmin') {
+            $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
+                ->pluck('permissions')
+                ->toArray();
+            if (!in_array("customerList", $access)) {
+                return view("admin.unauthorize");
+            }
         }
         return view("admin.customer.index");
     }

@@ -23,11 +23,13 @@ class DashboardController extends Controller
 
     public function index()
     {
-        $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
-            ->pluck('permissions')
-            ->toArray();
-        if (!in_array("Dashboard", $access)) {
-            return view("admin.unauthorize");
+        if (Auth::guard('admin')->user()->role != 'SuperAdmin') {
+            $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
+                ->pluck('permissions')
+                ->toArray();
+            if (!in_array("Dashboard", $access)) {
+                return view("admin.unauthorize");
+            }
         }
         return view("admin.dashboard");
     }
@@ -94,14 +96,14 @@ class DashboardController extends Controller
         if (Auth::guard('admin')->user()->role == 'manager') {
             $worker = Worker::where("thana_id", Auth::guard('admin')->user()->thana_id)->get();
         }
-        if ((Auth::guard('admin')->user()->role == 'admin') || (Auth::guard('admin')->user()->role == 'superadmin')) {
+        if ((Auth::guard('admin')->user()->role == 'admin') || (Auth::guard('admin')->user()->role == 'SuperAdmin')) {
             $worker = Worker::get();
         }
         $customer = '';
         if (Auth::guard('admin')->user()->role == 'manager') {
             $customer = User::where("thana_id", Auth::guard('admin')->user()->thana_id)->get();
         }
-        if ((Auth::guard('admin')->user()->role == 'admin') || (Auth::guard('admin')->user()->role == 'superadmin')) {
+        if ((Auth::guard('admin')->user()->role == 'admin') || (Auth::guard('admin')->user()->role == 'SuperAdmin')) {
             $customer = User::get();
         }
 

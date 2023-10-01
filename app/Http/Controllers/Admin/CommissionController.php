@@ -19,7 +19,7 @@ class CommissionController extends Controller
 
     public function list()
     {
-        if (Auth::guard('admin')->user()->role != 'superadmin') {
+        if (Auth::guard('admin')->user()->role != 'SuperAdmin') {
             $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
                 ->pluck('permissions')
                 ->toArray();
