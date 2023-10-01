@@ -186,6 +186,9 @@ class AdminAccessController extends Controller
     {
         try {
             $admin = Admin::find($request->admin_id);
+            if ($admin->role == 'SuperAdmin') {
+                return redirect()->route('admin.manager.create')->with('error', 'This user super admin already');
+            }
             AdminAccess::where('admin_id', $request->admin_id)->delete();
             $permissions = Permission::all();
 

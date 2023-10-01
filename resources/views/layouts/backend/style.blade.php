@@ -1,6 +1,7 @@
 <link rel="stylesheet" href="{{asset('css/app.css')}}">
 <link href="{{asset('backend')}}/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css" rel="stylesheet" />
 <link href="{{asset('backend')}}/dist/css/style.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
 <style>
     .ImageBackground .imageShow {

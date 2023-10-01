@@ -43,7 +43,7 @@
                                             <div class="col-md-9">
                                                 <select id="role" v-model="form.role" class="form-select shadow-none">
                                                     <option value="">Select Role</option>
-                                                    <option value="superadmin">Super Admin</option>
+                                                    <option value="SuperAdmin">Super Admin</option>
                                                     <option value="admin">Admin</option>
                                                     <option value="user">User</option>
                                                 </select>
@@ -99,7 +99,7 @@
                 </template>
                 <template slot="table-row" slot-scope="props">
                     <span v-if="props.column.field == 'after'">
-                        <a title="User Access" class="text-danger" :href="`${linkHref + '/admin/user/permission/' + props.row.id}`">
+                        <a v-if="props.row.role != 'SuperAdmin'" title="User Access" class="text-danger" :href="`${linkHref + '/admin/user/permission/' + props.row.id}`">
                             <i class="fas fa-users text-warning"></i>
                         </a>
                         <a href="" @click.prevent="editRow(props.row)">

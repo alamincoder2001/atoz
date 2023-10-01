@@ -6,6 +6,7 @@
 <!--Menu sidebar -->
 <script src="{{asset('backend')}}/dist/js/sidebarmenu.js"></script>
 <script src="{{asset('backend')}}/assets/extra-libs/DataTables/datatables.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 @stack("js")
 <script src="{{asset('backend')}}/dist/js/notify.js"></script>
 <script src="{{asset('backend')}}/dist/js/custom.min.js"></script>
