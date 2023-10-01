@@ -35,10 +35,18 @@ class AdminAccessController extends Controller
 
     public function index($id = null)
     {
-        if ($id == null) {
-            $data = Admin::where('role', '!=', 'manager')->where("id", "!=", 1)->get();
+        if (Auth::guard('admin')->user()->role == 'SuperAdmin') {
+            if ($id == null) {
+                $data = Admin::where('id', '!=', Auth::guard('admin')->user()->id)->where('role', '!=', 'manager')->where("id", "!=", 1)->get();
+            } else {
+                $data = Admin::find($id);
+            }
         } else {
-            $data = Admin::find($id);
+            if ($id == null) {
+                $data = Admin::where('id', '!=', Auth::guard('admin')->user()->id)->where('role', '!=', 'manager')->where("id", "!=", 1)->get();
+            } else {
+                $data = Admin::find($id);
+            }
         }
         return response()->json(["data" => $data]);
     }
@@ -111,6 +119,9 @@ class AdminAccessController extends Controller
             $data->username = $request->username;
             $data->email    = $request->email;
             $data->role     = $request->role;
+            if ($request->role == 'SuperAdmin') {
+                AdminAccess::where('admin_id', $request->id)->delete();
+            }
             if (!empty($request->password)) {
                 $data->password = Hash::make($request->password);
             }
