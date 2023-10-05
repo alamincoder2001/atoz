@@ -102,10 +102,10 @@
                         <a v-if="props.row.role != 'SuperAdmin'" title="User Access" class="text-danger" :href="`${linkHref + '/admin/user/permission/' + props.row.id}`">
                             <i class="fas fa-users text-warning"></i>
                         </a>
-                        <a href="" @click.prevent="editRow(props.row)">
+                        <a href="" v-if="props.row.role != 'SuperAdmin' || userId == 1"  @click.prevent="editRow(props.row)">
                             <i class="fas fa-edit text-info"></i>
                         </a>
-                        <a href="" @click.prevent="deleteRow(props.row.id)">
+                        <a href="" v-if="props.row.role != 'SuperAdmin'" @click.prevent="deleteRow(props.row.id)">
                             <i class="fas fa-trash text-danger"></i>
                         </a>
                     </span>
@@ -120,6 +120,9 @@
 export default {
     data() {
         return {
+            props: [
+                'admin_id',
+            ],
             linkHref: location.origin,
             form: new Form({
                 id: "",
@@ -148,6 +151,7 @@ export default {
 
     created() {
         this.getUser();
+        this.userId = this.$attrs.admin_id;
     },
 
     methods: {

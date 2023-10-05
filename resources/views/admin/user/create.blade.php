@@ -5,7 +5,7 @@
 @section('breadcrumb_item', 'Create User')
 
 @section('content')
-<create-user></create-user>
+<create-user admin_id="{{Auth::guard('admin')->user()->id}}"></create-user>
 @endsection
 
 @push("js")
