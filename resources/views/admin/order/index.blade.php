@@ -7,3 +7,4 @@
 @section("content")
     <Orderlist admin_id="{{Auth::guard('admin')->user()->id}}" role="{{Auth::guard('admin')->user()->role}}"></Orderlist>
 @endsection
+

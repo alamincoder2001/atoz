@@ -29,3 +29,4 @@
         text-transform: uppercase;
     }
 </style>
+@stack('admin_style')

@@ -45,13 +45,13 @@ class CommissionController extends Controller
                 $clauses .= " AND cm.payment_date BETWEEN '$request->dateFrom' AND '$request->dateTo'";
             }
 
-            $query = DB::select("SELECT 
-                        cm.*, 
-                        concat(w.name, '(Worker)') as worker_name, 
-                        concat(am.name, '(Area Manager)') as manager_name 
-                        FROM commissions cm 
-                        LEFT JOIN workers w ON w.id = cm.worker_id 
-                        LEFT JOIN admins am ON am.id = cm.manager_id 
+            $query = DB::select("SELECT
+                        cm.*,
+                        concat(w.name, '(Worker)') as worker_name,
+                        concat(am.name, '(Area Manager)') as manager_name
+                        FROM commissions cm
+                        LEFT JOIN workers w ON w.id = cm.worker_id
+                        LEFT JOIN admins am ON am.id = cm.manager_id
                         WHERE 1 = 1 $clauses");
             return $query;
         } catch (\Throwable $e) {
@@ -63,20 +63,21 @@ class CommissionController extends Controller
     {
         try {
             $clauses = "";
-            if (!empty($request->month)) {
-                $clauses .= " AND DATE_FORMAT(o.date, '%Y-%m') = '$request->month'";
+            if (!empty($request->dateFrom) && !empty($request->dateTo)) {
+                // $clauses .= " AND DATE_FORMAT(o.date, '%Y-%m') = '$request->month'";
+                $clauses .= " AND o.date BETWEEN '$request->dateFrom' AND '$request->dateTo'";
             }
             if (!empty($request->managerThana)) {
                 $clauses .= " AND c.thana_id = '$request->managerThana'";
             }
             $query = DB::select("SELECT c.id,
-                                    concat_ws('-', c.customer_code, c.name) AS customer_name,
-                                    SUM(o.subtotal) as subtotal
-                                    FROM orders o
-                                    JOIN users c ON c.id = o.customer_id
-                                    WHERE o.status = 'complete' 
-                                    $clauses
-                                    GROUP BY id");
+                                concat_ws('-', c.customer_code, c.name) AS customer_name,
+                                SUM(o.subtotal) as subtotal
+                                FROM orders o
+                                JOIN users c ON c.id = o.customer_id
+                                WHERE o.status = 'complete'
+                                $clauses
+                            GROUP BY id");
             return $query;
         } catch (\Throwable $e) {
             return "Opps! something went wrong";

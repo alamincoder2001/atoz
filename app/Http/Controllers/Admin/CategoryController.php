@@ -50,6 +50,7 @@ class CategoryController extends Controller
                     "name" => "required|unique:categories,name," . $request->id,
                     "image" => "dimensions:width=150,height=150'"
                 ], ["image.dimensions" => "Image dimension must be 150 X 150"]);
+
                 $data = Category::find($request->id);
                 $old = $data->image;
                 $data->updated_at = Carbon::now();

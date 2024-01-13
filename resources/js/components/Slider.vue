@@ -1,57 +1,46 @@
 <template>
-    <div>
-        <div class="col-md-12">
+    <div class="row">
+        <div class="col-md-6 col-lg-6">
             <div class="card">
                 <div class="card-body">
                     <form @submit.prevent="saveSlider">
                         <div class="row">
-                            <div class="col-md-10">
-                                <div class="row mt-2">
-                                    <label for="title" class="col-4 col-md-3 d-flex align-items-center">Title:</label>
-                                    <div class="col-8 col-md-9">
-                                        <input type="text" name="title" v-model="slider.title" id="title"
-                                            class="form-control shadow-none">
-                                    </div>
-                                </div>
-                                <div class="row mt-2">
-                                    <label for="description" class="col-4 col-md-3 d-flex align-items-center">Description:</label>
-                                    <div class="col-8 col-md-9">
-                                        <ckeditor id="description" :editor="editor" v-model="slider.description"></ckeditor>
-                                    </div>
-                                </div>
-                                <div class="row mt-4">
-                                    <label for="previous_due" class="col-4 col-md-3 d-flex align-items-center"></label>
-                                    <div class="col-8 col-md-9 text-end">
-                                        <button type="button" @click="clearData"
-                                            class="btn btn-sm btn-outline-secondary shadow-none">
-                                            Reset
-                                        </button>
-                                        <button type="submit" class="btn btn-sm btn-outline-success shadow-none">
-                                            Save Slider
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-2 d-flex justify-content-center align-items-center">
-                                <div class="form-group ImageBackground">
-                                    <p class="text-danger" style="text-align: center;font-size: 11px;margin: 0px;">955px X
-                                        300px</p>
-                                    <img :src="imageSrc" class="imageShow" />
-                                    <label for="image">Image</label>
+                            <div class="col-md-7">
+                                <div class="form-group">
+                                    <label for="image">Image <small>(1920px X 994px)</small> </label>
                                     <input type="file" id="image" class="form-control shadow-none" @change="imageUrl" />
                                 </div>
                             </div>
+                            <div class="col-md-5 d-flex">
+                                <button type="submit" class="btn btn-sm btn-outline-success shadow-none" style="height: 31px;margin-top: 10%;">
+                                    Save Slider
+                                </button>
+                                &nbsp;
+                                <button type="button" @click="clearData"
+                                    class="btn btn-sm btn-outline-danger shadow-none" style="height: 31px; margin-top: 10%;;">
+                                    Reset
+                                </button>
+                            </div>
+
+                            <img :src="imageSrc" class="imageShow mt-2" style="height: 70px;width: 250px;" />
+
                         </div>
                     </form>
                 </div>
             </div>
         </div>
-        <div class="col-12 col-lg-12" style="overflow-x: auto">
+        <div class="col-md-6 col-lg-6" style="overflow-x: auto">
             <vue-good-table :columns="columns" :rows="sliders" :fixed-header="true" :pagination-options="{
-                enabled: true,
+                enabled: false,
                 perPage: 15,
-            }" :search-options="{ enabled: true }" :line-numbers="true" styleClass="vgt-table" max-height="550px">
+            }" :search-options="{ enabled: false }" :line-numbers="false" styleClass="vgt-table" max-height="550px">
                 <template slot="table-row" slot-scope="props">
+                    <span v-if="props.column.label =='Title'">
+                        {{ props.row.title }}
+                    </span>
+                    <span v-if="props.column.label =='Image'">
+                        <img :src="baseUrl+'/'+props.row.image" alt="image" style="height: 30px;">
+                    </span>
                     <span v-if="props.column.field == 'before'">
                         <button class="btn btn-sm btn-outline-primary shadow-none" @click="editRow(props.row)">
                             Edit
@@ -73,13 +62,15 @@ export default {
         return {
             editor: ClassicEditor,
             columns: [
+                // {
+                //     label: "Title",
+                //     field: "title",
+                // },
+
                 {
-                    label: "Slider Title",
-                    field: "title",
-                },
-                {
-                    label: "Description",
-                    field: "description",
+                    label: 'Image',
+                    field: 'image',
+                    html: true
                 },
                 {
                     label: "Action",
@@ -94,6 +85,7 @@ export default {
                 image: ""
             },
             imageSrc: "/noImage.jpg",
+            baseUrl :window.location.origin
         };
     },
 
@@ -104,24 +96,32 @@ export default {
     methods: {
         getSlider() {
             axios.get("/admin/slider/fetch").then((res) => {
-                this.sliders = res.data.data.filter(slide => slide.description = slide.description.replace(/(<([^>]+)>)/gi, ""));
+                this.sliders = res.data.data.filter(slide => slide.description = slide.description);
+                // this.sliders = res.data;
             });
         },
 
         saveSlider(event) {
-            if (this.slider.name == "") {
-                alert("Name Field is Empty");
-                return;
-            }
+            // if (this.slider.name == "") {
+            //     alert("Name Field is Empty");
+            //     return;
+            // }
 
             let formdata = new FormData(event.target)
             formdata.append("image", this.slider.image)
             formdata.append("id", this.slider.id)
-            formdata.append("description", this.slider.description != null ? this.slider.description : "")
+            // formdata.append("description", this.slider.description != null ? this.slider.description : "")
             axios
                 .post("/admin/slider", formdata)
                 .then((res) => {
-                    $.notify(res.data, "success");
+
+                    if(res.data == 'error')
+                    {
+                        $.notify(res.data.error.title[0], "error");
+                    }else{
+                        $.notify(res.data, "success");
+                    }
+
                     this.clearData();
                     this.getSlider();
                 });
@@ -150,7 +150,7 @@ export default {
                 let img = new Image()
                 img.src = window.URL.createObjectURL(event.target.files[0]);
                 img.onload = () => {
-                    if (img.width === 955 && img.height === 300) {
+                    if (img.width === 1920 && img.height === 994) {
                         this.imageSrc = window.URL.createObjectURL(event.target.files[0]);
                         this.slider.image = event.target.files[0];
                     } else {
@@ -167,8 +167,9 @@ export default {
                 id: "",
                 title: "",
                 using_by: "retail",
-                description: "",
+                description: ""
             };
+            // $("#image").val('');
             this.getSlider()
             this.imageSrc = "/noImage.jpg"
         },

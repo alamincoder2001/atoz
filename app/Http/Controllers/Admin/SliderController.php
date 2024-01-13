@@ -44,13 +44,13 @@ class SliderController extends Controller
     public function store(Request $request)
     {
         try {
-            $validator = Validator::make($request->all(), [
-                "title" => "required",
-            ]);
+            // $validator = Validator::make($request->all(), [
+            //     "title" => "required",
+            // ]);
 
-            if ($validator->fails()) {
-                return response()->json(["error" => $validator->errors()]);
-            }
+            // if ($validator->fails()) {
+            //     return response()->json(["error" => $validator->errors()]);
+            // }
 
             if (!empty($request->id)) {
                 $data             = Slider::find($request->id);
@@ -61,8 +61,9 @@ class SliderController extends Controller
                 $data->created_at = Carbon::now();
             }
 
-            $data->title       = $request->title;
-            $data->description = $request->description;
+            $data->title    = 'eeeee';
+            $data->description    = 'sssssasdfasf';
+
             if ($request->hasFile("image")) {
                 if (isset($old) && $old != "") {
                     if (File::exists($old)) {

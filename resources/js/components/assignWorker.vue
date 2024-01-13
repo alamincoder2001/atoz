@@ -47,9 +47,14 @@
                             </div>
                         </div>
                     </form>
+
+                    <a href="" @click.prevent="print" style="color: #3e5569; float: right !important;" v-if="orders.length > 0">
+                        <i class="fas fa-print" style="color: gray; font-size: 12px; padding: 0;"></i>
+                            Print
+                    </a>
                 </div>
-                <div class="card-body" v-if="orders.length > 0">
-                    <table class="table table-bordered m-0">
+                <div class="card-body pt-0" v-if="orders.length > 0" id="reportContent">
+                    <table class="table table-bordered m-0 record-table">
                         <thead style="background: #59d9ff">
                             <tr>
                                 <th style="text-align: center; width: 8%;color:white;"> Sl </th>
@@ -79,12 +84,12 @@
                                     <td>
                                         <div class="input-group gap-2 justify-content-center">
                                             <button v-if="item.status == 'pending'"
-                                                @click="statusChange(item.id, 'proccess')" type="button"
+                                                @click="statusChange(item.id, 'proccess')" type="button" title="Working Status Pending"
                                                 style="padding: 5px;" class="btn btn-xs btn-warning shadow-none text-white">
                                                 <i class="fas fa-check-square"></i>
                                             </button>
                                             <button v-if="item.status == 'proccess'" @click="showModal(item.id)"
-                                                type="button" style="padding: 5px;"
+                                                type="button" style="padding: 5px;" title="Working Status Proccess"
                                                 class="btn btn-xs btn-success shadow-none text-white"> <i
                                                     class="fas fa-spinner"></i>
                                             </button>
@@ -237,7 +242,7 @@ export default {
         },
 
         statusChange(id = null, status = null) {
-            if (confirm("Are you sure!")) {
+            if (confirm("Are you sure! want to change work status?")) {
                 if (status == 'proccess') {
                     this.calculate.id = id;
                     this.calculate.status = status;
@@ -270,6 +275,69 @@ export default {
                 dueAmount: 0,
             }
         },
+
+        async print() {
+				let reportContent = `
+					<div class="container">
+						<div class="row">
+							<div class="col-sm-12 text-center">
+								<h3 style="text-align:center; border-top: 1px dashed gray; border-bottom: 1px dashed gray; padding:3px; color:gray;">
+                                    Assign Service Worker List
+                                </h3>
+							</div>
+							<div class="col-sm-12">
+								${document.querySelector('#reportContent').innerHTML}
+							</div>
+						</div>
+					</div>
+				`;
+				var reportWindow = window.open('', 'PRINT', `height=${screen.height}, width=${screen.width}`);
+				reportWindow.document.write(`
+					<table>
+                        <tr>
+                            <td><img src="/uploads/logo/6524546_6517fde95908b.png"></td>
+                            <td>
+                                <strong style="padding:0;"> A2Z Services<strong>
+                                <p style="text-transform:capitalize;padding:0;margin:0;">
+                                    18/4 d bagomgonj line narinda Dhaka 1100
+                                </p>
+                            </td>
+                        </tr>
+                    </table>
+				`);
+
+				reportWindow.document.head.innerHTML += `
+
+					<style>
+						.record-table{
+							width: 100%;
+							border-collapse: collapse;
+						}
+						.record-table thead{
+							background-color: #0097df;
+							color:white;
+						}
+						.record-table th, .record-table td{
+							padding: 3px;
+							border: 1px solid #454545;
+						}
+						.record-table th{
+							text-align: center;
+						}
+					</style>
+				`;
+				reportWindow.document.body.innerHTML += reportContent;
+
+				let rows = reportWindow.document.querySelectorAll('.record-table tr');
+				rows.forEach(row => {
+					row.lastChild.remove();
+				})
+
+				reportWindow.focus();
+				await new Promise(resolve => setTimeout(resolve, 3000));
+				reportWindow.print();
+				reportWindow.close();
+			}
     },
 };
 </script>

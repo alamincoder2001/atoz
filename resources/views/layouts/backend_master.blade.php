@@ -6,12 +6,16 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="keywords" content="wrappixel, admin dashboard, html css dashboard, web dashboard, bootstrap 5 admin, bootstrap 5, css3 dashboard, bootstrap 5 dashboard, Matrix lite admin bootstrap 5 dashboard, frontend, responsive bootstrap 5 admin template, Matrix admin lite design, Matrix admin lite dashboard bootstrap 5 dashboard template" />
-    <meta name="description" content="Matrix Admin Lite Free Version is powerful and clean admin dashboard template, inpired from Bootstrap Framework" />
+    <meta name="keywords" content="admin dashboard" />
+    <meta name="description" content="Bootstrap Framework" />
     <meta name="robots" content="noindex,nofollow" />
     <title>@yield('title')</title>
     <!-- Favicon icon -->
     <link rel="shortcut icon" type="image/x-icon" href="{{asset($profile->navicon != null ? $profile->navicon : 'noImage.jpg')}}" />
+     {{-- toastify --}}
+     <link rel="stylesheet" href="{{asset('css/toastify.min.css')}}">
+     <script src="{{asset('js/toastify.min.js')}}"></script>
+     {{--end toastify --}}
     @include("layouts.backend.style")
 </head>
 
@@ -43,6 +47,25 @@
                     </div>
                 </div>
                 <!-- breadcrumb end -->
+
+
+
+                 {{-- message section --}}
+                    @if(Session::has('success'))
+                        <script>
+                            Toastify({text: "{{ Session::get('success') }}", duration: 2000, close: true, gravity: "top",  backgroundColor: "linear-gradient(to right, #4caf50, #4caf50)"}).showToast();
+                        </script>
+                    @endif
+                    @if(Session::has('error'))
+                        <script>
+                            Toastify({text: "{{ Session::get('error') }}", duration: 2000, close: true, gravity: "top",  backgroundColor: "linear-gradient(to right, #f44336, #e91e63)"}).showToast();
+                        </script>
+                    @endif
+                {{-- end message section --}}
+
+
+
+
 
                 <div class="container-fluid">
                     <div class="row">

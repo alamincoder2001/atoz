@@ -15,7 +15,7 @@ class CustomerController extends Controller
 {
     public function index()
     {
-        if (Auth::guard('web')->check()) {
+        if (Auth::guard('web')->check()) { 
             $orders = Order::with("orderDetails")->where("customer_id", Auth::guard("web")->user()->id)->orderBy("invoice", "DESC")->get();
             $pending = Order::with("orderDetails")->where("customer_id", Auth::guard("web")->user()->id)->where("status", "pending")->orderBy("invoice", "DESC")->get();
             $complete = Order::with("orderDetails")->where("customer_id", Auth::guard("web")->user()->id)->where("status", "complete")->orderBy("invoice", "DESC")->get();

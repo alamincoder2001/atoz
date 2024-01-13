@@ -5,7 +5,7 @@
                 <div class="card-body">
                     <form @submit.prevent="saveService">
                         <div class="row">
-                            <div class="col-lg-5">
+                            <div class="col-md-4 col-lg-4 col-sm-4 mb-2">
                                 <div class="row mt-2">
                                     <label for="service_code" class="col-5 col-lg-4 d-flex align-items-center">Service
                                         Code:</label>
@@ -15,6 +15,8 @@
                                             autocomplete="off" />
                                     </div>
                                 </div>
+                            </div>
+                            <div class="col-md-4 col-lg-4 col-sm-4 mb-2">
                                 <div class="row mt-2">
                                     <label for="category_id"
                                         class="col-5 col-lg-4 d-flex align-items-center">Category:</label>
@@ -23,42 +25,45 @@
                                             v-model="selectedCategory" label="name"></v-select>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="col-md-4 col-lg-4 col-sm-4 mb-2">
                                 <div class="row mt-2">
-                                    <label for="name" class="col-5 col-lg-4 d-flex align-items-center">Name:</label>
-                                    <div class="col-7 col-lg-8">
+                                    <label for="name" class="col-6 col-lg-3 d-flex align-items-center">Name:</label>
+                                    <div class="col-6 col-lg-9">
                                         <input type="text" id="name" name="name" class="form-control shadow-none"
                                             v-model="service.name" autocomplete="off" />
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-5">
-                                <div class="row mt-2">
-                                    <div class="col-12">
-                                        <ckeditor :editor="editor" v-model="service.description"></ckeditor>
-                                    </div>
-                                </div>
-                                <div class="row mt-4">
-                                    <label for="previous_due" class="col-5 col-lg-4 d-flex align-items-center"></label>
-                                    <div class="col-7 col-lg-8 text-end">
-                                        <button type="button" @click="clearData"
-                                            class="btn btn-sm btn-outline-secondary shadow-none">
-                                            Reset
-                                        </button>
-                                        <button type="submit" class="btn btn-sm btn-outline-success shadow-none">
-                                            Save Service
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-12 col-lg-2 d-flex justify-content-center align-items-center">
-                                <div class="form-group ImageBackground text-center">
-                                    <p class="text-danger" style="text-align: center;font-size: 11px;margin: 0px;">350px X
-                                        250px</p>
-                                    <img :src="imageSrc" class="imageShow" />
-                                    <label for="image">Image</label>
+
+                            <div class="col-md-8 col-lg-8 col-sm-8 mb-2">
+                                <div class="form-group">
+                                    <label for="image">Image <sup class="text-danger" title="Image must be this Width x Height">[350px X 250px]</sup></label>
                                     <input type="file" id="image" class="form-control shadow-none" @change="imageUrl" />
                                 </div>
                             </div>
+                            <div class="col-md-4 col-lg-4 col-sm-4 mb-2">
+                                <img :src="imageSrc" class="imageShow" style="height: 60px;" />
+                            </div>
+
+                            <div class="col-md-12">
+                                <ckeditor :editor="editor" v-model="service.description"></ckeditor>
+                            </div>
+
+                            <div class="mt-4">
+                                <label for="previous_due" class="d-flex align-items-center"></label>
+                                <div class="text-end">
+                                    <button type="button" @click="clearData"
+                                        class="btn btn-sm btn-outline-secondary shadow-none">
+                                        Reset
+                                    </button>
+                                    <button type="submit" class="btn btn-sm btn-outline-success shadow-none">
+                                        Save Service
+                                    </button>
+                                </div>
+                            </div>
+
+
                         </div>
                     </form>
                 </div>

@@ -18,8 +18,15 @@ class WorkerController extends Controller
             $data['orders'] = OrderDetail::with('service')->where('worker_id', Auth::guard('worker')->user()->id)->latest()->get();
             return view("dashboard.worker-dashboard", $data);
         } else {
-            return redirect("/login");
+            return redirect()->back()->with('error', 'You do not have any access to enter there!');
+            // return redirect("/login");
         }
+    }
+
+    public function viewWorkerOrder($id)
+    {
+        $orderDetail = OrderDetail::findOrFail($id);
+        return view("dashboard.worker-orderDetails", compact('orderDetail'));
     }
 
     public function update(Request $request)
@@ -32,21 +39,16 @@ class WorkerController extends Controller
                 "mobile"           => "required",
                 "district_id"      => "required",
                 "thana_id"         => "required",
-                "address"          => "required",
+                "present_address"  => "required",
             ]);
             if ($validator->fails()) {
-                return response()->json(["error" => $validator->errors()]);
+                return response()->json(["error" => $validator->errors()->first()]);
             }
 
-            $data              = Worker::find($technician->id);
-            $data->name        = $request->name;
-            $data->father_name = $request->father_name;
-            $data->mother_name = $request->mother_name;
-            $data->mobile      = $request->mobile;
-            $data->district_id = $request->district_id;
-            $data->thana_id    = $request->thana_id;
-            $data->address     = $request->address;
-            $data->save();
+            $input = $request->all();
+
+            Worker::find($technician->id)->update($input);
+
             return "Worker Profile Updated";
         } catch (\Throwable $e) {
             return "Opps! Something went wrong" . $e->getMessage();
@@ -88,7 +90,7 @@ class WorkerController extends Controller
     public function filterWorker(Request $request)
     {
         try {
-            $data = Worker::with('thana')->where("thana_id", $request->thana_id)->get();
+            $data = Worker::with('thana')->where('status', 'p')->where("thana_id", $request->thana_id)->get();
             return $data;
         } catch (\Throwable $e) {
             return "Opps! something went wrong";
@@ -102,11 +104,13 @@ class WorkerController extends Controller
             $orderId = $data->order_id;
 
             if ($request->status == 'complete') {
-                $data->bill_amount = $request->billAmount;
-                $data->paid_amount = $request->paidAmount;
-                $data->due         = $request->dueAmount;
+                Worker::findOrFail($data->worker_id)->update(['payment_receive' => 1]);
             }
+            $data->bill_amount = $request->billAmount;
+            $data->paid_amount = $request->paidAmount;
+            $data->due         = $request->dueAmount;
             $data->status = $request->status;
+
             $data->update();
 
             $msg = "";

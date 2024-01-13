@@ -84,6 +84,7 @@
             }
         })
     }
+
     function WorkerLogin(event) {
         event.preventDefault();
         let formdata = new FormData(event.target)

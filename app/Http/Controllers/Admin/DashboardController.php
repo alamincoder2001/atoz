@@ -34,8 +34,12 @@ class DashboardController extends Controller
         return view("admin.dashboard");
     }
 
-    public function getProfit()
+    public function getProfit(Request $request)
     {
+        $input = $request->all();
+        $dateFrom = $request->dateFrom;
+        $dateTo = $request->dateTo;
+
         $month = date("m");
         $year = date("Y");
         $today = date('Y-m-d');
@@ -50,61 +54,70 @@ class DashboardController extends Controller
         }
 
         $todayOrder = DB::select("SELECT sm.*,
-        c.district_id,
-        c.thana_id
-        FROM orders sm
-        LEFT JOIN users c ON c.id = sm.customer_id
-        WHERE sm.date = '$today' AND sm.status = 'pending'
-        $clauses
+            c.district_id,
+            c.thana_id
+            FROM orders sm
+            LEFT JOIN users c ON c.id = sm.customer_id
+            WHERE sm.date = '$today' AND sm.status = 'pending'
+            $clauses
         ");
+
         $pendingOrder = DB::select("SELECT sm.*,
-        c.district_id,
-        c.thana_id
-        FROM orders sm
-        LEFT JOIN users c ON c.id = sm.customer_id
-        WHERE sm.status = 'pending'
-        $clauses
+            c.district_id,
+            c.thana_id
+            FROM orders sm
+            LEFT JOIN users c ON c.id = sm.customer_id
+            WHERE sm.date BETWEEN '$dateFrom' AND '$dateTo'
+            AND sm.status = 'pending'
+            $clauses
         ");
+
         $yearOrder = DB::select("SELECT sm.*,
-        c.district_id,
-        c.thana_id
-        FROM orders sm
-        LEFT JOIN users c ON c.id = sm.customer_id
-        WHERE YEAR(sm.date) = '$year' AND sm.status = 'pending'
-        $clauses
+            c.district_id,
+            c.thana_id
+            FROM orders sm
+            LEFT JOIN users c ON c.id = sm.customer_id
+            WHERE YEAR(sm.date) = '$year' AND sm.status = 'pending'
+            $clauses
         ");
+
         $complete = DB::select("SELECT sm.*,
             c.district_id,
             c.thana_id
             FROM orders sm
             LEFT JOIN users c ON c.id = sm.customer_id
-            WHERE sm.status = 'complete'
-            $clauses
-        ");
-        $orderDetail = DB::select("SELECT
-                    od.*
-                FROM order_details od
-                LEFT JOIN orders o ON o.id = od.order_id
-                LEFT JOIN users c ON c.id = o.customer_id
-                WHERE od.status != 'cancel'
+            WHERE sm.date BETWEEN '$dateFrom' AND '$dateTo'
+            AND sm.status = 'complete'
             $clauses
         ");
 
-        $commission = DB::select("SELECT ifnull(sum(cm.amount), 0) as total FROM commissions cm WHERE 1 = 1 $managerId");
+        $orderDetail = DB::select("SELECT od.*
+            FROM order_details od
+            LEFT JOIN orders o ON o.id = od.order_id
+            LEFT JOIN users c ON c.id = o.customer_id
+            WHERE od.created_at between '$dateFrom' AND '$dateTo'
+            AND od.status != 'cancel'
+            $clauses
+        ");
+
+        $commission = DB::select("SELECT ifnull(sum(cm.amount), 0) as total FROM commissions cm WHERE cm.created_at BETWEEN '$dateFrom' AND '$dateTo' AND 1 = 1 $managerId");
 
         $worker = '';
         if (Auth::guard('admin')->user()->role == 'manager') {
-            $worker = Worker::where("thana_id", Auth::guard('admin')->user()->thana_id)->get();
+            $worker = Worker::where("thana_id", Auth::guard('admin')->user()->thana_id)->whereBetween('created_at',[$dateFrom, $dateTo])->get();
         }
+
         if ((Auth::guard('admin')->user()->role == 'admin') || (Auth::guard('admin')->user()->role == 'SuperAdmin')) {
-            $worker = Worker::get();
+            $worker = Worker::whereBetween('created_at',[$dateFrom, $dateTo])->get();
         }
+
         $customer = '';
         if (Auth::guard('admin')->user()->role == 'manager') {
-            $customer = User::where("thana_id", Auth::guard('admin')->user()->thana_id)->get();
+            $customer = User::where("thana_id", Auth::guard('admin')->user()->thana_id)->whereBetween('created_at',[$dateFrom, $dateTo])->get();
         }
+
         if ((Auth::guard('admin')->user()->role == 'admin') || (Auth::guard('admin')->user()->role == 'SuperAdmin')) {
-            $customer = User::get();
+            $customer = User::whereBetween('created_at',[$dateFrom, $dateTo])->get();
         }
 
         return response()->json([
@@ -114,9 +127,10 @@ class DashboardController extends Controller
             'completed'     => $complete,
             'order_detail'  => $orderDetail,
             'commission'    => $commission[0]->total,
-            'manager'       => Admin::where('role', 'manager')->get(),
+            'manager'       => Admin::where('role', 'manager')->whereBetween('created_at',[$dateFrom, $dateTo])->get(),
             'worker'        => $worker,
             'customer'      => $customer,
+            'input'      => $input,
         ]);
     }
 

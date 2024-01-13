@@ -8,10 +8,11 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Admin extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -23,6 +24,18 @@ class Admin extends Authenticatable
         'username',
         'email',
         'password',
+        'role',
+        'father_name',
+        'mother_name',
+        'image',
+        'nid_front_img',
+        'nid_back_img',
+        'present_address',
+        'permanent_address',
+        'description',
+        'district_id',
+        'thana_id',
+        'commission',
     ];
 
     /**

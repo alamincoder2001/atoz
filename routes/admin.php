@@ -17,7 +17,10 @@ use App\Http\Controllers\Admin\AdminAccessController;
 use App\Http\Controllers\Admin\AreaManagerController;
 use App\Http\Controllers\Admin\CommissionController;
 use App\Http\Controllers\Admin\CustomerController;
+use App\Http\Controllers\Admin\PaymentCollectionController;
 use App\Http\Controllers\Admin\WorkerController;
+use App\Http\Controllers\HowToOrderController;
+use App\Http\Controllers\WorkerCommissionController;
 
 // Admin Login Route
 Route::group(["prefix" => "admin"], function () {
@@ -27,7 +30,7 @@ Route::group(["prefix" => "admin"], function () {
 
     // admin dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
-    Route::get('/get-profit', [DashboardController::class, 'getProfit'])->name('admin.getprofit');
+    Route::post('/get-profit', [DashboardController::class, 'getProfit'])->name('admin.getprofit');
 
     //profile Route
     Route::get('/profile', [DashboardController::class, 'profileIndex'])->name('admin.profile');
@@ -73,6 +76,10 @@ Route::group(["prefix" => "admin"], function () {
     Route::post('/district', [DistrictController::class, 'store'])->name('admin.district.store');
     Route::post('/district/delete', [DistrictController::class, 'destroy'])->name('admin.district.destroy');
 
+    // How To Order
+    Route::get('how-to-order', [HowToOrderController::class, 'howToOrder'])->name('admin.howto.order');
+    Route::post('how-to-order', [HowToOrderController::class, 'howToOrderUpdate']);
+
     // thana Route
     Route::get('/thana', [ThanaContoller::class, 'index'])->name('admin.thana.index');
     Route::get('/thana/fetch/{id?}', [ThanaContoller::class, 'fetch'])->name('admin.thana.fetch');
@@ -111,15 +118,26 @@ Route::group(["prefix" => "admin"], function () {
 
     // worker route
     Route::get('/worker/assign-service', [WorkerController::class, 'assignService'])->name("admin.worker.assignservice");
+    Route::get('/worker/list', [WorkerController::class, 'list'])->name("admin.worker.list");
     Route::get('/worker', [WorkerController::class, 'create'])->name("admin.worker.create");
+
+    Route::get('/pending_worker', [WorkerController::class, 'pendingWorker'])->name('admin.worker.pending.list');
+    Route::get('/get_pending_worker', [WorkerController::class, 'getPendingWorker']);
+    Route::match(['get', 'post'], '/get_active_worker', [WorkerController::class, 'getActiveWorker']);
+    Route::get('/worker-assign-order', [WorkerController::class, 'workerAssignOrder']);
+
     Route::get('/get-worker/{id?}', [WorkerController::class, 'index'])->name("admin.worker.index");
     Route::post('/worker', [WorkerController::class, 'store'])->name("admin.worker.store");
-    Route::get('/worker/delete/{id}', [WorkerController::class, 'destroy'])->name("admin.worker.destroy");
+    // Route::get('/worker/delete/{id}', [WorkerController::class, 'destroy'])->name("admin.worker.destroy");
+    Route::post('/worker/delete', [WorkerController::class, 'destroy'])->name("admin.worker.destroy");
+    Route::post('/worker/change_status', [WorkerController::class, 'workerStatus'])->name("admin.worker.changeStatus");
     Route::post('/update/worker', [WorkerController::class, 'update'])->name('admin.worker.update');
     Route::post('/worker/status', [WorkerController::class, 'status'])->name("admin.worker.status");
     Route::get('/worker/fetch/{id?}', [WorkerController::class, 'fetch'])->name("admin.worker.fetch");
     Route::post('/worker/rating', [WorkerController::class, 'rating'])->name("admin.worker.rating");
     Route::post('/worker/assignwork-status-change', [WorkerController::class, 'statusChange'])->name("admin.worker.status.change");
+    // worker wise report
+    Route::get('/worker/wise/report/{id}', [WorkerController::class, 'workerWiseReport']);
 
     //user Route
     Route::get('/user', [AdminAccessController::class, 'create'])->name('admin.user.create');
@@ -132,14 +150,34 @@ Route::group(["prefix" => "admin"], function () {
 
     //manager Route
     Route::get('/manager', [AreaManagerController::class, 'create'])->name('admin.manager.create');
+    Route::get('/manager/list', [AreaManagerController::class, 'list'])->name('admin.manager.list');
     Route::get('/get-manager/{id?}', [AreaManagerController::class, 'index'])->name('admin.manager.index');
     Route::post('/manager', [AreaManagerController::class, 'store'])->name('admin.manager.store');
     Route::post('/update/manager', [AreaManagerController::class, 'update'])->name('admin.manager.update');
     Route::post('/manager/delete', [AreaManagerController::class, 'destroy'])->name('admin.manager.destroy');
+    Route::get('/manager/wise/worker/report/{id}', [AreaManagerController::class, 'getManagerWiseWorkerReport']);
 
     // commission Route
     Route::get('/commission-list', [CommissionController::class, 'list'])->name('admin.commission.list');
     Route::post('/commission-fetch', [CommissionController::class, 'fetch'])->name('admin.commission.fetch');
     Route::post('/pay-commission', [CommissionController::class, 'payCommission'])->name('admin.pay.commission');
     Route::post('/order/commission', [CommissionController::class, 'getCommission'])->name("admin.order.commission");
+
+    // payment collection
+    Route::get('/payment-collection', [PaymentCollectionController::class, 'index'])->name('admin.payment.collection');
+    Route::get('/get-worker-payment', [PaymentCollectionController::class, 'getPayment']);
+    Route::get('/get-workers-withDueAmount', [PaymentCollectionController::class, 'getWorkerWithDueAmount']);
+    Route::post('/worker/store/payment-collection', [PaymentCollectionController::class, 'storePayment']);
+    Route::post('/worker/delete/payment-collection', [PaymentCollectionController::class, 'deletePayment']);
+    Route::get('/worker/payment-receive/{id}', [PaymentCollectionController::class, 'paymentReceive']);
+
+    Route::get('worker/commission',[WorkerCommissionController::class, 'index'])->name('admin.worker.commission');
+    Route::get('/get-worker-commission',[WorkerCommissionController::class, 'getCommission']);
+    Route::get('/get-workers-with-commission',[WorkerCommissionController::class, 'getWorkerWithCommission']);
+    Route::post('/worker/commission-store', [WorkerCommissionController::class, 'storeWorkerCommission']);
+    Route::get('/worker/commission-receive/{id}', [WorkerCommissionController::class, 'commissionReceive']);
+    Route::post('/worker/delete/commission', [WorkerCommissionController::class, 'deleteWorkerCommission']);
+
+    // Order Due add by area manager
+    Route::post('/order/add-due',[OrderController::class, 'dueAdd']);
 });

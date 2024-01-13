@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Gloudemans\Shoppingcart\Facades\Cart;
 
 class FrontendLoginController extends Controller
 {
@@ -22,7 +23,7 @@ class FrontendLoginController extends Controller
         return view("auth.frontend.signup");
     }
 
-    //credentials checkb 
+    //credentials checkb
     public function credentials($username, $password)
     {
         if (filter_var($username, FILTER_VALIDATE_EMAIL)) {
@@ -43,9 +44,10 @@ class FrontendLoginController extends Controller
             if ($validator->fails()) {
                 return response()->json(["error" => $validator->errors()]);
             }
+
             // login successfull
             if (Auth::guard('web')->attempt($this->credentials($request->username, $request->password))) {
-                return response()->json("Successfully Login");
+                return response()->json(["success" => "Successfully Login","content" => Cart::content()->count()]);
             } else {
                 return response()->json(["errors" => "Password or Email Not Match"]);
             }
@@ -84,7 +86,7 @@ class FrontendLoginController extends Controller
             $data->save();
 
             if (Auth::guard('web')->attempt($this->credentials($request->username, $request->password))) {
-                return response()->json(["msg" => "Successfully Register"]);
+                return response()->json(["msg" => "Successfully Register", "content" => Cart::content()->count()]);
             }
         } catch (\Throwable $e) {
             return "Opps something went wrong";
@@ -133,7 +135,7 @@ class FrontendLoginController extends Controller
             ]);
 
             if ($validator->fails()) {
-                return response()->json(["error" => $validator->errors()]);
+                return response()->json(["error" => $validator->errors()->first()]);
             }
             // login successfull
             if (Auth::guard('worker')->attempt(['mobile' => $request->mobile, 'password' => $request->mobile])) {

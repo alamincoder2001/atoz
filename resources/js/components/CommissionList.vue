@@ -41,9 +41,13 @@
                             </button>
                         </div>
                     </div>
+                    <a href="" @click.prevent="print" :style="{ display: commissions.length > 0 ? '' : 'none' }" style="color: #3e5569;float: right !important;">
+                        <i class="fas fa-print" style="color: gray; font-size: 12px; padding: 0;"></i>
+                            Print
+                    </a>
                 </div>
-                <div class="card-body">
-                    <table v-if="commissions.length > 0" class="table table-bordered m-0">
+                <div class="card-body pt-0" id="reportContent">
+                    <table v-if="commissions.length > 0" class="table table-bordered m-0 record-table">
                         <thead style="background: #59d9ff">
                             <tr>
                                 <th class="text-white" style="font-weight: bold; width: 5%">
@@ -61,8 +65,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(item, index) in commissions">
-                                <td>{{ index + 1 }}</td>
+                            <tr v-for="(item, index) in commissions" :key="item.id">
+                                <td>{{ ++index }}</td>
                                 <td>{{ item.payment_date }}</td>
                                 <td>{{ item.manager_id ? item.manager_name : item.worker_name }}</td>
                                 <td class="text-end">{{ item.amount }}</td>
@@ -117,7 +121,7 @@ export default {
         },
         getManager() {
             axios.get("/admin/get-manager").then((res) => {
-                this.managers = res.data.data;
+                this.managers = res.data.manager;
             });
         },
 
@@ -142,6 +146,69 @@ export default {
                 this.commissions = res.data;
             });
         },
+
+        async print() {
+				let reportContent = `
+					<div class="container">
+						<div class="row">
+							<div class="col-sm-12 text-center">
+								<h3 style="text-align:center; border-top: 1px dashed gray; border-bottom: 1px dashed gray; padding:3px; color:gray;">
+                                  Area Manager Commission List
+                                </h3>
+							</div>
+							<div class="col-sm-12">
+								${document.querySelector('#reportContent').innerHTML}
+							</div>
+						</div>
+					</div>
+				`;
+				var reportWindow = window.open('', 'PRINT', `height=${screen.height}, width=${screen.width}`);
+				reportWindow.document.write(`
+					<table>
+                        <tr>
+                            <td><img src="/uploads/logo/6524546_6517fde95908b.png"></td>
+                            <td>
+                                <strong style="padding:0;"> A2Z Services<strong>
+                                <p style="text-transform:capitalize;padding:0;margin:0;">
+                                    18/4 d bagomgonj line narinda Dhaka 1100
+                                </p>
+                            </td>
+                        </tr>
+                    </table>
+				`);
+
+				reportWindow.document.head.innerHTML += `
+
+					<style>
+						.record-table{
+							width: 100%;
+							border-collapse: collapse;
+						}
+						.record-table thead{
+							background-color: #0097df;
+							color:white;
+						}
+						.record-table th, .record-table td{
+							padding: 3px;
+							border: 1px solid #454545;
+						}
+						.record-table th{
+							text-align: center;
+						}
+					</style>
+				`;
+				reportWindow.document.body.innerHTML += reportContent;
+
+				// let rows = reportWindow.document.querySelectorAll('.record-table tr');
+				// rows.forEach(row => {
+				// 	row.lastChild.remove();
+				// })
+
+				reportWindow.focus();
+				await new Promise(resolve => setTimeout(resolve, 3000));
+				reportWindow.print();
+				reportWindow.close();
+			}
     },
 };
 </script>

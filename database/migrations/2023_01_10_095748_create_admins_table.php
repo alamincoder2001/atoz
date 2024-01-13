@@ -20,13 +20,20 @@ class CreateAdminsTable extends Migration
             $table->string('role', 50);
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
+            $table->string("father_name");
+            $table->string("mother_name");
             $table->string('password');
             $table->string('image')->nullable();
+            $table->string('nid_front_img')->nullable();
+            $table->string('nid_back_img')->nullable();
             $table->integer('district_id')->nullable();
             $table->integer('thana_id')->nullable();
-            $table->string('address')->nullable();
+            $table->string('present_address')->nullable();
+            $table->string('permanent_address')->nullable();
+            $table->string('description')->nullable();
             $table->decimal('commission')->default(0);
             $table->rememberToken();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

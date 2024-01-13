@@ -18,7 +18,7 @@
             <div class="card-body">
 
                 @if (session('message'))
-                <div class="alert alert-{{ session('type') }}">{{ session('message') }}</div>
+                    <div class="alert alert-{{ session('type') }}">{{ session('message') }}</div>
                 @endif
 
                 <form action="{{ route('admin.store.permission') }}" method="POST">
@@ -44,18 +44,18 @@
                             </td>
                         </tr>
                         @foreach ($groups as $group)
-                        <tr>
-                            <td class="group">
-                                <input type="checkbox" id="role-{{ $group->group_name }}" value="{{ $group->group_name }}" onclick="selectGroup({{$group}})" {{\App\Models\Admin::checkGroupName($group->group_name, $access) ? 'checked' : ''}} />
-                                <label for="role-{{ $group->group_name }}">{{ $group->group_name }}</label>
-                            </td>
-                            <td class="role-{{ $group->group_name }}">
-                                @foreach ($group->permissionArr as $item)
-                                <input type="checkbox" name="permissions[]" onclick="singlePermission({{$group}})" id="{{ $item->permissions }}" value="{{ $item->id }}" {{ in_array($item->permissions, $userAccess) ? 'checked' : '' }} />
-                                <label for="{{ $item->permissions }}">{{ $item->permissions }}</label><br>
-                                @endforeach
-                            </td>
-                        </tr>
+                            <tr>
+                                <td class="group">
+                                    <input type="checkbox" id="role-{{ $group->group_name }}" value="{{ $group->group_name }}" onclick="selectGroup({{$group}})" {{\App\Models\Admin::checkGroupName($group->group_name, $access) ? 'checked' : ''}} />
+                                    <label for="role-{{ $group->group_name }}">{{ $group->group_name }}</label>
+                                </td>
+                                <td class="role-{{ $group->group_name }}">
+                                    @foreach ($group->permissionArr as $item)
+                                    <input type="checkbox" name="permissions[]" onclick="singlePermission({{$group}})" id="{{ $item->permissions }}" value="{{ $item->id }}" {{ in_array($item->permissions, $userAccess) ? 'checked' : '' }} />
+                                    <label for="{{ $item->permissions }}">{{ $item->permissions }}</label><br>
+                                    @endforeach
+                                </td>
+                            </tr>
                         @endforeach
                     </table>
                     <div class="form-group text-end">
@@ -93,7 +93,7 @@
     function singlePermission(group){
         var totalCheck = $(".role-"+group.group_name+" input:checkbox:checked").length
         var totalUnCheck = $(".role-"+group.group_name+" input:checkbox").length
-        
+
         if (totalCheck == totalUnCheck) {
             $("#role-"+group.group_name).prop("checked", true);
         }else{

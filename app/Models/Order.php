@@ -15,4 +15,9 @@ class Order extends Model
     {
         return $this->hasMany(OrderDetail::class)->with("service");
     }
+
+    public function customer()
+    {
+        return $this->belongsTo(User::class, 'customer_id');
+    }
 }

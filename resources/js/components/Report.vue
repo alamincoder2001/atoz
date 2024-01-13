@@ -10,18 +10,34 @@
                                     @input="onChangeManager" placeholder="Area Manager Select"></v-select>
                             </div>
                         </div>
-                        <div class="col-lg-2">
+                        <!-- <div class="col-lg-2">
                             <input type="month" v-model="month" :max="max" class="form-control" />
+                        </div> -->
+
+                        <div class="col-6 col-lg-2">
+                            <div class="form-group m-0">
+                                <input type="date" class="form-control" v-model="filter.dateFrom" />
+                            </div>
                         </div>
+                        <div class="col-6 col-lg-2">
+                            <div class="form-group m-0">
+                                <input type="date" class="form-control" v-model="filter.dateTo" />
+                            </div>
+                        </div>
+
                         <div class="col-lg-2">
                             <button type="button" @click="getCommission" class="btn btn-primary btn-sm shadow-none">
                                 Submit
                             </button>
                         </div>
                     </div>
+                    <a href="" @click.prevent="print" :style="{ display: commissions.length > 0 ? '' : 'none' }" style="color: #3e5569;float: right !important;">
+                        <i class="fas fa-print" style="color: gray; font-size: 12px; padding: 0;"></i>
+                            Print
+                    </a>
                 </div>
-                <div class="card-body">
-                    <table v-if="commissions.length > 0" class="table table-bordered m-0">
+                <div class="card-body pt-0" id="reportContent">
+                    <table v-if="commissions.length > 0" class="table table-bordered m-0 record-table">
                         <thead style="background: #59d9ff">
                             <tr>
                                 <th class="text-white" style="font-weight: bold; width: 5%">
@@ -99,7 +115,7 @@
                                     }}
                                 </th>
                             </tr>
-                            <tr v-if="parseFloat(totalCommission) > 0">
+                            <tr v-if="parseFloat(totalCommission) > 0" class="no-print">
                                 <td colspan="4" class="text-end">
                                     <button type="button" @click="modalShow"
                                         class="text-white btn btn-success shadow-none btn-sm">
@@ -157,7 +173,11 @@ export default {
     data() {
         return {
             max: moment().format("YYYY-MM"),
-            month: moment().format("YYYY-MM"),
+            // month: moment().format("YYYY-MM"),
+            filter: {
+                dateFrom: moment().format('YYYY-MM-DD'),
+                dateTo: moment().format('YYYY-MM-DD'),
+            },
             managers: [],
             selectedManager: null,
             commissions: [],
@@ -175,7 +195,7 @@ export default {
         },
         getCustomer() {
             axios.get("/admin/get-manager").then((res) => {
-                this.managers = res.data.data;
+                this.managers = res.data.manager;
             });
         },
 
@@ -186,7 +206,9 @@ export default {
                 return;
             }
             let formdata = {
-                month: this.month,
+                // month: this.month,
+                dateFrom: this.filter.dateFrom,
+                dateTo: this.filter.dateTo,
                 managerThana:
                     this.selectedManager != null
                         ? this.selectedManager.thana_id
@@ -223,6 +245,79 @@ export default {
                 }
             });
         },
+
+        async print() {
+				let reportContent = `
+					<div class="container">
+						<div class="row">
+							<div class="col-sm-12 text-center">
+								<h3 style="text-align:center; border-top: 1px dashed gray; border-bottom: 1px dashed gray; padding:3px; color:gray;">
+                                    Area Manager Commission Report
+                                </h3>
+							</div>
+							<div class="col-sm-12">
+								${document.querySelector('#reportContent').innerHTML}
+							</div>
+						</div>
+					</div>
+				`;
+                // old img link /uploads/logo/6524546_6517fde95908b-old.jpg
+				var reportWindow = window.open('', 'PRINT', `height=${screen.height}, width=${screen.width}`);
+				reportWindow.document.write(`
+					<table>
+                        <tr>
+                            <td><img src="/uploads/logo/6524546_6517fde95908b.png"></td>
+                            <td>
+                                <strong style="padding:0;"> A2Z Services<strong>
+                                <p style="text-transform:capitalize;padding:0;margin:0;">
+                                    18/4 d bagomgonj line narinda Dhaka 1100
+                                </p>
+                            </td>
+                        </tr>
+                    </table>
+				`);
+
+				reportWindow.document.head.innerHTML += `
+
+					<style>
+
+                        @media print
+                        {
+                            .no-print, .no-print *
+                            {
+                                display: none !important;
+                            }
+                        }
+
+						.record-table{
+							width: 100%;
+							border-collapse: collapse;
+						}
+						.record-table thead{
+							background-color: #0097df;
+							color:white;
+						}
+						.record-table th, .record-table td{
+							padding: 3px;
+							border: 1px solid #454545;
+						}
+						.record-table th{
+							text-align: center;
+						}
+					</style>
+				`;
+				reportWindow.document.body.innerHTML += reportContent;
+
+				// let rows = reportWindow.document.querySelectorAll('.record-table tr');
+				// rows.forEach(row => {
+				// 	row.lastChild.remove();
+				// })
+
+				reportWindow.focus();
+				await new Promise(resolve => setTimeout(resolve, 3000));
+				reportWindow.print();
+				reportWindow.close();
+			}
     },
 };
 </script>

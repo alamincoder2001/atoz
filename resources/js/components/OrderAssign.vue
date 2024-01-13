@@ -67,6 +67,10 @@
                                     <td class="text-center" v-html="statusText(item.orderDetails[0].status)"></td>
                                     <td>
                                         <button v-if="item.orderDetails[0].status != 'complete'" @click="modalShow(item.orderDetails[0], item.thanaId)" type="button" class="btn btn-danger btn-sm shadow-none fas fa-user"></button>
+                                        <br>
+                                        <button v-show="ManagerOrAdmin" title="Add Due Amount" v-if="item.orderDetails[0].status != 'complete'" @click="addDueModalShow(item.orderDetails[0].id)" type="button" class="btn btn-success btn-sm shadow-none">
+                                            Due
+                                        </button>
                                     </td>
                                 </tr>
                                 <tr v-for="(service, sl) in item.orderDetails.slice(1)">
@@ -78,8 +82,12 @@
                                     <td class="text-center">{{ service.due }}</td>
                                     <td class="text-center">{{ service.worker_name }}</td>
                                     <td class="text-center"  v-html="statusText(service.status)"></td>
-                                    <td>
+                                    <td class="">
                                         <button v-if="service.status != 'complete'" @click="modalShow(service, item.thanaId)" type="button" class="btn btn-danger btn-sm shadow-none fas fa-user"></button>
+                                        <br>
+                                        <button v-show="ManagerOrAdmin" href="javascript:void(0)" title="Add Due Amount" v-if="item.orderDetails[0].status != 'complete'" @click="addDueModalShow(item.orderDetails[0].id)" class="btn btn-success btn-sm shadow-none">
+                                            Due
+                                        </button>
                                     </td>
                                 </tr>
                                 <tr>
@@ -136,7 +144,8 @@
                         </table>
                         <div class="form-group mt-3">
                             <label for="workers">Worker</label>
-                            <v-select id="workers" :options="workers" v-model="selectedWorker" label="name"></v-select>
+                            <v-select id="workers" :options="workers" v-model="selectedWorker" label="display_name"></v-select>
+                            <!-- <v-select id="workers" :options="workers" v-model="workerSelected.display_name"></v-select> -->
                         </div>
                         <div class="form-group mt-3">
                             <button @click="assignWork" type="button" class="btn btn-info shadow-none w-100">Submit</button>
@@ -145,6 +154,31 @@
                 </div>
             </div>
         </div>
+
+        <!-- servie due add -->
+        <div class="modal fade" id="serviceDue" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+            aria-labelledby="serviceDueLabel" aria-hidden="true">
+            <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header d-flex justify-content-between">
+                        <h5 class="modal-title" id="serviceDueLabel">Service Due Add</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body p-4 row">
+                        <div class="form-group col-8">
+                            <label for="workers">Due Amount</label>
+                            <input type="number" class="form-control" v-model="addDueAmount">
+                            <input type="hidden" v-model="od_id">
+                        </div>
+                        <div class="form-group col-4">
+                            <button @click="addAmountAdd" type="button" class="btn btn-info shadow-none w-100 mt-3">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- servie due add -->
+
     </div>
 </template>
 
@@ -165,14 +199,19 @@ export default {
             },
             orders: [],
             thanas: [],
+            addDueAmount:'0.00',
             selectedThana: null,
             workers: [],
             selectedWorker: null,
+            workerSelected: {
+                display_name : 'select worker'
+            },
+            od_id:'',
 
             adminId: "",
             role: "",
-
             modalData: {},
+            ManagerOrAdmin: true
         };
     },
 
@@ -181,9 +220,14 @@ export default {
         this.getOrder();
         this.adminId = this.$attrs.admin_id
         this.role = this.$attrs.role
+
+        // if(this.role =='manager'){
+        //     this.ManagerOrAdmin = true;
+        // }
     },
 
     methods: {
+
         statusText(status) {
             let texT = "";
             if (status == 'pending') {
@@ -192,25 +236,37 @@ export default {
             if (status == 'proccess') {
                 texT = "<span class='badge bg-warning'>Proccessing</span>"
             }
+            if (status == 'Ongoing') {
+                texT = "<span class='badge bg-warning'>Ongoing</span>"
+            }
             if (status == 'complete') {
                 texT = "<span class='badge bg-success'>Completed</span>"
             }
-
             return texT;
         },
+
         getThana() {
             axios.get("/admin/thana/fetch").then((res) => {
                 this.thanas = res.data.data;
             });
         },
+
         getWorker(thana_id){
-            axios.get("/admin/get-worker").then((res) => {
-                this.workers = res.data.workers.filter(w => w.thana_id == thana_id);
+            // axios.get("/admin/get_active_worker").then((res) => {
+            axios.get("/admin/worker-assign-order").then((res) => {
+                this.workers = res.data.workers.filter(w => w.thana_id == thana_id)
+
+                this.workers = $.map(res.data.workers, function(user) {
+                    user.display_name = user.mobile +'-'+ user.name;
+                    return user;
+                });
             });
         },
+
         onChangeSearch() {
             this.selectedThana = null;
         },
+
         getOrder() {
             this.filter.thanaId = this.selectedThana == null ? null : this.selectedThana.id
 
@@ -232,17 +288,36 @@ export default {
             }
         },
 
+        addDueModalShow(od_id)
+        {
+            this.od_id = od_id;
+            $('#serviceDue').modal('show');
+        },
+
+        addAmountAdd()
+        {
+            let filter = {
+                orderDetailId: this.od_id,
+                due_amount: this.addDueAmount
+            }
+            axios.post("/admin/order/add-due", filter).then((res) => {
+                $.notify(res.data.success, "success");
+                this.getOrder();
+                $('#serviceDue').modal('hide');
+            });
+        },
+
         assignWork(){
             let filter = {
                 id: this.modalData.id,
                 worker_id: this.selectedWorker == null ? null : this.selectedWorker.id
             }
             axios.post("/admin/order/assign-worker", filter).then((res) => {
-                    $.notify(res.data, "success");
-                    this.getOrder();
-                    this.selectedWorker = null;
-                    $('#staticBackdrop').modal('hide');
-                });
+                $.notify(res.data, "success");
+                this.getOrder();
+                this.selectedWorker = null;
+                $('#staticBackdrop').modal('hide');
+            });
         },
 
         formatDate(date) {

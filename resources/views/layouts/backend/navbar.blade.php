@@ -4,8 +4,8 @@
         <a class="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)"><i class="ti-menu ti-close"></i></a>
             <a class="navbar-brand" href="{{url('admin')}}">
                 <!-- Logo text -->
-                <span style="width:100%;">
-                    <img style="width: 100%;height:50px;" src="{{asset($profile->logo != null ? $profile->logo : 'noImage.jpg')}}" alt="homepage" class="light-logo" />
+                <span style="width:100%;" title="{{ $profile->company_name }}">
+                    <img src="{{asset($profile->logo != null ? $profile->logo : 'noImage.jpg')}}" alt="homepage" class="light-logo" />
                 </span>
             </a>
             <a class="topbartoggler d-block d-md-none waves-effect waves-light" href="javascript:void(0)" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><i class="ti-more"></i></a>

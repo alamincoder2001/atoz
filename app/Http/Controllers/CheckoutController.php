@@ -28,6 +28,7 @@ class CheckoutController extends Controller
     public function CheckOut(Request $request)
     {
         try {
+            // dd($request->all());
             DB::beginTransaction();
             if (Cart::content()->count() > 0) {
                 if (isset($request->is_shipping) && $request->is_shipping == 1) {
@@ -44,7 +45,7 @@ class CheckoutController extends Controller
                 }
 
                 if ($validator->fails()) {
-                    return response()->json(["error" => $validator->errors()]);
+                    return response()->json(["error" => $validator->errors()->first()]);
                 }
 
                 $data                    = new Order();

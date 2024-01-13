@@ -11,10 +11,10 @@
 <script src="{{asset('backend')}}/dist/js/notify.js"></script>
 <script src="{{asset('backend')}}/dist/js/custom.min.js"></script>
 <script>
-    $("#datatable").DataTable();
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+    $("#datatable").DataTable();
 </script>

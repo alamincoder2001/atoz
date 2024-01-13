@@ -21,13 +21,16 @@ class CreateWorkersTable extends Migration
             $table->string("mother_name");
             $table->string("mobile", 15)->unique();
             $table->string("password");
-            $table->string("nid");
+            $table->string('nid_front_img')->nullable();
+            $table->string('nid_back_img')->nullable();
             $table->decimal("commission");
             $table->integer('category_id')->nullable();
             $table->integer('manager_id')->nullable();
             $table->integer('district_id')->nullable();
             $table->integer('thana_id')->nullable();
-            $table->string("address")->nullable();
+            $table->string('present_address')->nullable();
+            $table->string('permanent_address')->nullable();
+            $table->string('description')->nullable();
             $table->string('reference')->nullable();
             $table->char("status", 5)->default("p");
             $table->string("image")->nullable();

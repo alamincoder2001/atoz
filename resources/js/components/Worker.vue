@@ -5,128 +5,119 @@
                 <div class="card-body">
                     <form @submit.prevent="saveWorker">
                         <div class="row">
-                            <div class="col-md-10">
+                            <div class="col-md-9">
                                 <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group row mb-2">
-                                            <label for="worker_code" class="col-md-3">Code<span
+                                    <div class="col-md-6" style="border-right: 1px solid #cdc9c9;">
+                                        <div class="form-group mb-1">
+                                            <label for="worker_code" class="pe-0">Worker Code<span
                                                     class="text-danger fw-bold">*</span></label>
-                                            <div class="col-md-9">
-                                                <input type="text" id="worker_code" v-model="form.worker_code"
-                                                    class="form-control" autocomplete="off" readonly>
-                                                <span class="error-name error text-danger"></span>
-                                            </div>
+                                            <input type="text" id="worker_code" v-model="form.worker_code"
+                                                class="form-control" autocomplete="off" readonly>
+                                            <span class="error-name error text-danger"></span>
                                         </div>
-                                        <div class="form-group row mb-2">
-                                            <label for="name" class="col-md-3">Name<span
-                                                    class="text-danger fw-bold">*</span></label>
-                                            <div class="col-md-9">
-                                                <input type="text" id="name" v-model="form.name" class="form-control"
-                                                    autocomplete="off" placeholder="Name">
-                                                <span class="error-name error text-danger"></span>
-                                            </div>
+                                        <div class="form-group mb-1">
+                                            <label for="name" class="pe-0">Name<span class="text-danger fw-bold">*</span></label>
+                                            <input type="text" id="name" v-model="form.name" class="form-control"
+                                                autocomplete="off" placeholder="Name">
+                                            <span class="error-name error text-danger"></span>
                                         </div>
-                                        <div class="form-group row mb-2">
-                                            <label for="mobile" class="col-md-3">Mobile<span
+                                        <div class="form-group mb-1">
+                                            <label for="mobile" class="pe-0">Mobile<span
                                                     class="text-danger fw-bold">*</span></label>
-                                            <div class="col-md-9">
-                                                <input type="text" id="mobile" v-model="form.mobile" class="form-control"
-                                                    placeholder="Mobile" autocomplete="off">
-                                                <span class="error-mobile error text-danger"></span>
-                                            </div>
+                                            <input type="text" id="mobile" v-model="form.mobile" class="form-control"
+                                                placeholder="Mobile" autocomplete="off">
+                                            <span class="error-mobile error text-danger"></span>
                                         </div>
-                                        <div class="form-group row mb-2">
-                                            <label for="father_name" class="col-md-3">Father<span
+                                        <div class="form-group mb-1">
+                                            <label for="father_name" class="pe-0">Father Name<span
                                                     class="text-danger fw-bold">*</span></label>
-                                            <div class="col-md-9">
-                                                <input type="text" id="father_name" v-model="form.father_name"
-                                                    class="form-control" placeholder="Father Name" autocomplete="off">
-                                                <span class="error-father_name error text-danger"></span>
-                                            </div>
+                                            <input type="text" id="father_name" v-model="form.father_name"
+                                                class="form-control" placeholder="Father Name" autocomplete="off">
+                                            <span class="error-father_name error text-danger"></span>
                                         </div>
-                                        <div class="form-group row mb-2">
-                                            <label for="mother_name" class="col-md-3">Mother<span
-                                                    class="text-danger fw-bold">*</span></label>
-                                            <div class="col-md-9">
-                                                <input type="text" id="mother_name" v-model="form.mother_name"
-                                                    class="form-control" placeholder="Mother Name" autocomplete="off">
-                                                <span class="error-mother_name error text-danger"></span>
-                                            </div>
+                                        <div class="form-group mb-1">
+                                            <label for="mother_name" class="pe-0">Mother Name<span class="text-danger fw-bold">*</span></label>
+                                            <input type="text" id="mother_name" v-model="form.mother_name"
+                                                class="form-control" placeholder="Mother Name" autocomplete="off">
+                                            <span class="error-mother_name error text-danger"></span>
                                         </div>
-                                        <div class="form-group row mb-2">
-                                            <label for="commission" class="col-md-3 pe-md-0">Commission<span
+
+                                        <div class="form-group mb-1" v-show="ManagerOrAdmin">
+                                            <label for="commission" class="pe-0 pe-md-0">Commission<span
                                                     class="text-danger fw-bold">*</span></label>
-                                            <div class="col-md-9">
-                                                <div class="input-group d-flex align-items-center">
-                                                    <input type="number" step="0.01" min="0" id="commission" v-model="form.commission"
-                                                        class="form-control" placeholder="%" autocomplete="off">
-                                                    <span style="background: #8b006d;padding: 4px;color: white;">%</span>
-                                                </div>
-                                                <span class="error-commission error text-danger"></span>
+                                            <div class="input-group d-flex align-items-center">
+                                                <input type="number" step="0.01" min="0" id="commission" v-model="form.commission"
+                                                    class="form-control" placeholder="%" autocomplete="off">
+                                                <span style="background: #8b006d;padding: 4px;color: white;">%</span>
                                             </div>
+                                            <span class="error-commission error text-danger"></span>
                                         </div>
-                                        <div class="form-group row mb-2">
-                                            <label for="category_id" class="col-md-3">Category<span
+
+                                        <div class="form-group mb-1">
+                                            <label for="category_id" class="pe-0">Category<span
                                                     class="text-danger fw-bold">*</span></label>
-                                            <div class="col-md-9">
-                                                <v-select :options="categories" v-model="selectedCategory" label="name"></v-select>
-                                                <span class="error-category_id error text-danger"></span>
-                                            </div>
+                                            <v-select :options="categories" v-model="selectedCategory" multiple label="name"></v-select>
+                                            <span class="error-category_id error text-danger"></span>
+                                        </div>
+                                        <div class="form-group mb-1">
+                                                <label for="present_address" class="pe-0">Present Address<span class="text-danger fw-bold">*</span></label>
+                                                <input type="text" id="present_address" v-model="form.present_address"
+                                                    class="form-control" placeholder="Present Address" autocomplete="off">
+                                            <span class="error-present_address error text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="form-group row mb-2">
-                                            <label for="district_id" class="col-md-3">District<span
-                                                    class="text-danger fw-bold">*</span></label>
-                                            <div class="col-md-9">
-                                                <v-select :options="districts" v-model="selectedDistrict" label="name"
-                                                    @input="onChangeDistrict"></v-select>
-                                                <span class="error-district_id error text-danger"></span>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row mb-2">
-                                            <label for="thana_id" class="col-md-3">Thana<span
-                                                    class="text-danger fw-bold">*</span></label>
-                                            <div class="col-md-9">
-                                                <v-select :options="thanas" v-model="selectedThana" label="name"
-                                                    @input="onChangeThana"></v-select>
-                                                <span class="error-password error text-danger"></span>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row mb-2">
-                                            <label for="manager_id" class="col-md-3">Manager<span
-                                                    class="text-danger fw-bold">*</span></label>
-                                            <div class="col-md-9">
-                                                <v-select :options="managers" v-model="selectedManager"
-                                                    label="name"></v-select>
-                                                <span class="error-manager_id error text-danger"></span>
-                                            </div>
+
+                                        <div class="form-group mb-1">
+                                            <label for="permanent_address" class="pe-0">Permanent Address<span class="text-danger fw-bold">*</span></label>
+                                                <input type="text" id="permanent_address" v-model="form.permanent_address"
+                                                    class="form-control" placeholder="Permanent Address" autocomplete="off">
+                                            <span class="error-permanent_address error text-danger"></span>
                                         </div>
 
-                                        <div class="form-group row mb-2">
-                                            <label for="nid" class="col-md-3">NID<span
+                                        <div class="form-group mb-1">
+                                            <label for="description" class="pe-0">Description</label>
+                                                <input type="text" id="description" v-model="form.description"
+                                                    class="form-control" placeholder="Description" autocomplete="off">
+                                            <span class="error-description error text-danger"></span>
+                                        </div>
+
+                                        <div class="form-group mb-1">
+                                            <label for="district_id" class="pe-0">District<span
                                                     class="text-danger fw-bold">*</span></label>
-                                            <div class="col-md-9">
-                                                <input type="text" id="nid" v-model="form.nid" class="form-control"
-                                                    placeholder="NID" autocomplete="off">
-                                                <span class="error-nid error text-danger"></span>
-                                            </div>
+                                            <v-select :options="districts" v-model="selectedDistrict" label="name"
+                                                @input="onChangeDistrict"></v-select>
+                                            <span class="error-district_id error text-danger"></span>
                                         </div>
-                                        <div class="form-group row mb-2">
-                                            <label for="address" class="col-md-3">Address</label>
-                                            <div class="col-md-9">
-                                                <textarea id="address" v-model="form.address" class="form-control"
-                                                    placeholder="Address" autocomplete="off"></textarea>
-                                                <span class="error-address error text-danger"></span>
-                                            </div>
+
+                                        <div class="form-group mb-1">
+                                            <label for="thana_id" class="pe-0">Thana<span
+                                                    class="text-danger fw-bold">*</span></label>
+                                            <v-select :options="thanas" v-model="selectedThana" label="name"
+                                                @input="onChangeThana"></v-select>
+                                            <span class="error-password error text-danger"></span>
                                         </div>
-                                        <div class="form-group row mb-2">
-                                            <label for="reference" class="col-md-3">Reference</label>
-                                            <div class="col-md-9">
-                                                <textarea id="reference" v-model="form.reference" class="form-control"
-                                                    placeholder="Reference" autocomplete="off"></textarea>
-                                                <span class="error-reference error text-danger"></span>
-                                            </div>
+                                        <div class="form-group mb-1">
+                                            <label for="manager_id" class="pe-0">Manager<span
+                                                    class="text-danger fw-bold">*</span></label>
+                                            <v-select :options="managers" v-model="selectedManager"
+                                                label="name"></v-select>
+                                            <span class="error-manager_id error text-danger"></span>
+                                        </div>
+
+                                        <div class="form-group mb-1">
+                                            <label for="nid" class="pe-0">NID<span
+                                                    class="text-danger fw-bold">*</span></label>
+                                            <input type="text" id="nid" v-model="form.nid" class="form-control"
+                                                placeholder="NID" autocomplete="off">
+                                            <span class="error-nid error text-danger"></span>
+                                        </div>
+
+                                        <div class="form-group mb-1">
+                                            <label for="reference" class="pe-0">Reference</label>
+                                            <textarea id="reference" v-model="form.reference" class="form-control"
+                                                placeholder="Reference" autocomplete="off"></textarea>
+                                            <span class="error-reference error text-danger"></span>
                                         </div>
 
                                         <div class="form-group row text-end">
@@ -141,13 +132,53 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-2 d-flex justify-content-center align-items-center">
+                            <!-- <div class="col-md-2 d-flex justify-content-center align-items-center">
                                 <div class="form-group ImageBackground">
                                     <p class="text-danger" style="text-align: center;font-size: 11px;margin: 0px;">150px X
                                         150px</p>
                                     <img :src="imageSrc" class="imageShow" />
                                     <label for="image">Photo</label>
                                     <input type="file" id="image" class="form-control shadow-none" @change="imageUrl" />
+                                </div>
+                            </div> -->
+
+                            <div class="col-md-3" style="border-left: 1px solid #cdcdcd;">
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        Photo
+                                    </label>
+                                    <input type="file" accept="image/*" class="form-control" @change="imageUrl" >
+                                </div>
+                                <div class="form-group">
+                                    <label>Preview Photo</label>
+                                    <img :src="imageSrc" id="m_photo" class="imageShow" style="max-height: 60px;" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        NID Front
+                                        <sup class="text-danger" title="must be fillable">*</sup>
+                                        <small class="text-danger" style="font-size: 11px">150px x 150px</small>
+                                    </label>
+                                        <input type="file" name="nid_front_img" accept="image/*" class="form-control" @change="nidFrontUrl" >
+                                </div>
+                                <div class="form-group">
+                                    <label>Preview NID Front</label>
+                                    <img :src="nidFrontSrc" class="img-fluid" alt="nid_front" style="max-height: 60px;" >
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        NID Back
+                                        <sup class="text-danger" title="must be fillable">*</sup>
+                                        <small class="text-danger" style="font-size: 11px">150px x 150px</small>
+                                    </label>
+                                        <!-- <input type="file" accept="image/*" class="form-control" @change="nidBackUrl" onchange="document.getElementById('nidBack').src = window.URL.createObjectURL(this.files[0])" > -->
+                                        <input type="file" name="nid_back_img" accept="image/*" class="form-control" @change="nidBackUrl" >
+                                </div>
+                                <div class="form-group">
+                                    <label>Preview NID Back</label>
+                                    <img :src="nidBackSrc" id="nidBack" class="img-fluid" alt="nid_back" style="max-height: 60px;">
                                 </div>
                             </div>
                         </div>
@@ -172,8 +203,18 @@
                         <a href="" @click.prevent="editRow(props.row)">
                             <i class="fas fa-edit text-info"></i>
                         </a>
+
                         <a href="" @click.prevent="deleteRow(props.row.id)">
                             <i class="fas fa-trash text-danger"></i>
+                        </a>
+
+                        <a href="" @click.prevent="statusRow(props.row.id)">
+                            <span v-if="props.row.status == 'p'">
+                                <i class="fas fa-arrow-up text-success" title="Worker Status Active. Click To Change"></i>
+                            </span>
+                            <span v-else>
+                                <i class="fas fa-arrow-down text-warning" title="Worker Status Deactive. Click To Change"></i>
+                            </span>
                         </a>
                     </span>
                 </template>
@@ -203,15 +244,19 @@ export default {
                 mother_name: "",
                 commission: 0,
                 nid: "",
-                category_id: "",
+                category_id: [],
                 manager_id: "",
                 district_id: "",
                 thana_id: "",
-                address: "",
+                present_address: "",
+                permanent_address: "",
+                description: "",
                 reference: "",
                 image: "",
             }),
             imageSrc: "/noImage.jpg",
+            nidFrontSrc: "/noImage.jpg",
+            nidBackSrc: "/noImage.jpg",
             workers: [],
 
             districts: [],
@@ -221,7 +266,7 @@ export default {
             managers: [],
             selectedManager: null,
             categories: [],
-            selectedCategory: null,
+            selectedCategory: [],
             columns: [
                 { label: "Image", field: "img", html: true, },
                 { label: 'Name', field: 'name' },
@@ -238,6 +283,7 @@ export default {
             role: "",
             district_id: "",
             thana_id: "",
+            ManagerOrAdmin: true
         }
     },
 
@@ -257,27 +303,40 @@ export default {
             this.selectedManager = null
             this.getAreaManager();
         },
+
         getAreaManager() {
             axios.get("/admin/get-manager")
                 .then(res => {
-                    this.managers = res.data.data.filter(manager => manager.thana_id == this.selectedThana.id);
+                    this.managers = res.data.manager.filter(item => item.thana_id == this.selectedThana.id);
+                    this.selectedManager = {
+                        id: this.managers[0].id,
+                        name: this.managers[0].name,
+                    }
                 })
         },
+
         getCategory() {
             axios.get("/admin/category/fetch").then((res) => {
                 this.categories = res.data.data;
             });
         },
+
         getDistrict() {
             axios.get("/admin/district/fetch")
                 .then(res => {
                     if (this.role == 'manager') {
                         this.districts = res.data.data.filter(d => d.id == this.district_id)
+                        this.selectedDistrict = {
+                            id: this.districts[0].id,
+                            name: this.districts[0].name,
+                        }
+                        this.getThana();
                     } else {
                         this.districts = res.data.data
                     }
                 })
         },
+
         onChangeDistrict() {
             if (this.role != 'manager') {
                 if (this.selectedDistrict != null) {
@@ -289,6 +348,7 @@ export default {
                 this.getThana();
             }
         },
+
         getThana() {
             axios.get("/admin/thana/fetch")
                 .then(res => {
@@ -298,19 +358,24 @@ export default {
                         })
                     } else {
                         this.thanas = res.data.data.filter(th => th.id == this.thana_id)
+                        this.selectedThana = {
+                            id: this.thanas[0].id,
+                            name: this.thanas[0].name,
+                        }
+                        this.getAreaManager();
                     }
                 })
         },
+
         getWorker() {
             axios.get("/admin/get-worker")
                 .then(res => {
-                    this.form.worker_code = res.data.worker_code
+                    this.form.worker_code = res.data.worker_code;
                     this.workers = res.data.workers.map(c => {
                         c.img = c.image == null ? '<img src="/noImage.jpg" width="40px">' : '<img src="/' + c.image + '" width="40px">'
                         return c;
                     })
                 })
-
         },
 
         saveWorker() {
@@ -333,19 +398,25 @@ export default {
             this.form.manager_id = this.selectedManager.id;
             this.form.district_id = this.selectedDistrict.id;
             this.form.thana_id = this.selectedThana.id;
-            this.form.category_id = this.selectedCategory.id;
+
+            let cate_id = [];
+            this.selectedCategory.map(function(value, key) {
+                cate_id.push(value.id);
+            });
+
+            this.form.category_id = cate_id;
             let url = "/admin/worker";
             if (this.form.id != '') {
                 url = "/admin/update/worker";
             }
             this.form.post(url).then(res => {
                 if (res.data.status == "error") {
+                    $.notify(res.data.msg, "error");
                     this.showError(res.data.msg);
                     return
                 }
-                $.notify(res.data.msg, "success");
-
-                if (res.data.status) {
+                if (res.data.status == "success") {
+                    $.notify(res.data.msg, "success");
                     this.clearData();
                     this.getWorker();
                 }
@@ -373,10 +444,14 @@ export default {
             } else {
                 $('#mobile').removeClass('is-invalid');
             }
-
         },
 
         editRow(val) {
+
+            if(this.role =='manager'){
+                this.ManagerOrAdmin = false;
+            }
+
             this.form.id = val.id;
             this.form.worker_code = val.worker_code;
             this.form.name = val.name;
@@ -385,13 +460,31 @@ export default {
             this.form.mobile = val.mobile;
             this.form.commission = val.commission;
             this.form.nid = val.nid;
+
             this.form.category_id = val.category_id;
+            // this.selectedCategory.map(function(value, key) {
+            //     cate_id.push(value.id);
+            // });
+        //    let cateIDs = [];
+        //    cateIDs =  JSON.parse(val.category_id);
+        //     cateIDs.map(function(value, key) {
+        //         this.selectedCategory.push(value);
+        //     });
+
+            // val.category_id.foreach(data=>{
+            //     this.form.category_id.push(data);
+            // })
+
             this.form.manager_id = val.manager_id;
             this.form.district_id = val.district_id;
             this.form.thana_id = val.thana_id;
-            this.form.address = val.address;
+            this.form.present_address = val.present_address;
+            this.form.permanent_address = val.permanent_address;
+            this.form.description = val.description;
             this.form.reference = val.reference;
             this.imageSrc = val.image != null ? '/' + val.image : "/noImage.jpg";
+            this.nidFrontSrc = val.nid_front_img != null ? '/' + val.nid_front_img : "/noImage.jpg"
+            this.nidBackSrc = val.nid_back_img != null ? '/' + val.nid_back_img : "/noImage.jpg"
 
             if (val.manager_id) {
                 this.selectedManager = {
@@ -421,27 +514,70 @@ export default {
         deleteRow(id) {
             if (confirm("Are you sure want to delete this!")) {
                 axios.post("/admin/worker/delete", { id: id }).then((res) => {
-                    $.notify(res.data, "success");
+                    $.notify(res.data.msg, "success");
+                    this.getWorker();
+                });
+            }
+        },
+
+        statusRow(id) {
+            if (confirm("Are you sure want to change status!")) {
+                axios.post("/admin/worker/change_status", { id: id }).then((res) => {
+                    $.notify(res.data.msg, "success");
                     this.getWorker();
                 });
             }
         },
 
         imageUrl(event) {
-            if (event.target.files[0] && event.target.files[0].size < 256000) {
-                let img = new Image()
-                img.src = window.URL.createObjectURL(event.target.files[0]);
-                img.onload = () => {
-                    if (img.width === 150 && img.height === 150) {
+            // if (event.target.files[0] && event.target.files[0].size < 256000) {
+            //     let img = new Image()
+            //     img.src = window.URL.createObjectURL(event.target.files[0]);
+            //     img.onload = () => {
+            //         if (img.width === 150 && img.height === 150) {
                         this.imageSrc = window.URL.createObjectURL(event.target.files[0]);
                         this.form.image = event.target.files[0];
-                    } else {
-                        alert(`This image ${img.width}px X ${img.height}px but require image 150px X 150px`);
-                    }
-                }
-            }else{
-                alert(`This file size too big ${parseFloat(event.target.files[0].size / 1024).toFixed(2)}kb. require size 250kb`)
-            }
+            //         } else {
+            //             alert(`This image ${img.width}px X ${img.height}px but require image 150px X 150px`);
+            //         }
+            //     }
+            // }else{
+            //     alert(`This file size too big ${parseFloat(event.target.files[0].size / 1024).toFixed(2)}kb. require size 250kb`)
+            // }
+        },
+
+        nidFrontUrl(event) {
+            // if (event.target.files[0] && event.target.files[0].size < 256000) {
+            //     let img = new Image()
+            //     img.src = window.URL.createObjectURL(event.target.files[0]);
+            //     img.onload = () => {
+            //         if (img.width === 150 && img.height === 95) {
+                        this.nidFrontSrc = window.URL.createObjectURL(event.target.files[0]);
+                        this.form.nid_front_img = event.target.files[0];
+            //         } else {
+            //             alert(`This image ${img.width}px X ${img.height}px but require image 150px X 95px`);
+            //         }
+            //     }
+            // }else{
+            //     alert(`This file size too big ${parseFloat(event.target.files[0].size / 1024).toFixed(2)}kb. require size 250kb`)
+            // }
+        },
+
+        nidBackUrl(event) {
+            // if (event.target.files[0] && event.target.files[0].size < 256000) {
+            //     let img = new Image()
+            //     img.src = window.URL.createObjectURL(event.target.files[0]);
+            //     img.onload = () => {
+            //         if (img.width === 150 && img.height === 95) {
+                        this.nidBackSrc = window.URL.createObjectURL(event.target.files[0]);
+                        this.form.nid_back_img = event.target.files[0];
+            //         } else {
+            //             alert(`This image ${img.width}px X ${img.height}px but require image 150px X 95px`);
+            //         }
+            //     }
+            // }else{
+            //     alert(`This file size too big ${parseFloat(event.target.files[0].size / 1024).toFixed(2)}kb. require size 250kb`)
+            // }
         },
 
         clearData() {
@@ -455,10 +591,16 @@ export default {
             this.form.nid = "";
             this.form.district_id = "";
             this.form.thana_id = "";
-            this.form.address = "";
+            this.form.present_address = "";
+            this.form.permanent_address = "";
+            this.form.description = "";
             this.form.reference = "";
             this.imageSrc = "/noImage.jpg",
                 delete (this.form.image)
+            this.nidFrontSrc = "/noImage.jpg",
+                delete (this.form.nid_front_img)
+            this.nidBackSrc = "/noImage.jpg",
+                delete (this.form.nid_back_img)
 
             this.selectedDistrict = null;
             this.thanas = [];
@@ -467,5 +609,6 @@ export default {
             this.selectedCategory = null;
         }
     },
+
 }
 </script>

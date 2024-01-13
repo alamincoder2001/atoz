@@ -3,7 +3,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <form @submit.prevent="getOrder">
+                    <form @submit.prevent="getOrder" >
                         <div class="row">
                             <div class="col-6 col-md-2" v-if="role != 'manager'"
                                 :class="role != 'manager' ? '' : 'd-none'">
@@ -11,7 +11,15 @@
                                     <select class="form-select shadow-none" v-model="searchBy" @change="onChangeSearch">
                                         <option value="">All</option>
                                         <option value="thana">Area Wise</option>
+                                        <option value="manager">Manager Wise</option>
                                     </select>
+                                </div>
+                            </div>
+
+                            <div class="col-6 col-md-3 mb-1" v-if="searchBy == 'manager'"
+                                :class="searchBy == 'manager' ? '' : 'd-none'">
+                                <div class="form-group m-0">
+                                    <v-select id="managers" :options="managers" v-model="selectedManager" label="name"></v-select>
                                 </div>
                             </div>
                             <div class="col-6 col-md-3" v-if="searchBy == 'thana'"
@@ -47,9 +55,15 @@
                             </div>
                         </div>
                     </form>
+
+                    <br>
+                    <a href="" @click.prevent="print" :style="{ display: orders.length > 0 ? '' : 'none' }" style="color: #3e5569;">
+                        <i class="fas fa-print" style="color: gray; font-size: 12px; padding: 0;"></i>
+                            Print
+                    </a>
                 </div>
-                <div class="card-body" :style="{ display: orders.length > 0 ? '' : 'none' }">
-                    <table class="table table-bordered m-0" v-if="recordType == 'with'" style="display:none"
+                <div class="card-body pt-0" :style="{ display: orders.length > 0 ? '' : 'none' }" id="reportContent">
+                    <table class="table table-bordered m-0 record-table" v-if="recordType == 'with'" style="display:none"
                         :style="{ display: recordType == 'with' ? '' : 'none' }">
                         <thead style="background: #59d9ff">
                             <tr>
@@ -123,7 +137,7 @@
                             </template>
                         </tbody>
                     </table>
-                    <table class="table table-bordered m-0" v-else style="display:none"
+                    <table class="table table-bordered m-0 record-table" v-else style="display:none"
                         :style="{ display: recordType == 'without' ? '' : 'none' }">
                         <thead style="background: #59d9ff">
                             <tr>
@@ -204,7 +218,9 @@ export default {
             },
             orders: [],
             thanas: [],
-            selectedThana: null,
+            managers: [],
+            selectedThana: 'select area',
+            selectedManager: 'select manager',
 
             adminId: "",
             role: "",
@@ -214,6 +230,7 @@ export default {
     created() {
         this.getOrder();
         this.getThana();
+        this.getManager();
         this.adminId = this.$attrs.admin_id
         this.role = this.$attrs.role
     },
@@ -235,11 +252,18 @@ export default {
                 this.thanas = res.data.data;
             });
         },
+        getManager(){
+            axios.get("/admin/get-manager").then((res) => {
+                this.managers = res.data.manager;
+            });
+        },
         onChangeSearch() {
             this.selectedThana = null;
         },
+
         getOrder() {
             this.filter.thanaId = this.selectedThana == null ? null : this.selectedThana.id
+            this.filter.managerId = this.selectedManager == null ? null : this.selectedManager.id
 
             axios.post("/admin/order/fetch", this.filter).then((res) => {
                 this.orders = res.data.orders.filter(order => order.status == 'complete');
@@ -258,6 +282,70 @@ export default {
         formatDate(date) {
             return moment(date).format("DD-MM-YYYY");
         },
+
+
+        async print() {
+				let reportContent = `
+					<div class="container">
+						<div class="row">
+							<div class="col-sm-12 text-center">
+								<h3 style="text-align:center; border-top: 1px dashed gray; border-bottom: 1px dashed gray; padding:3px; color:gray;">
+                                    Delivered Order List
+                                </h3>
+							</div>
+							<div class="col-sm-12">
+								${document.querySelector('#reportContent').innerHTML}
+							</div>
+						</div>
+					</div>
+				`;
+				var reportWindow = window.open('', 'PRINT', `height=${screen.height}, width=${screen.width}`);
+				reportWindow.document.write(`
+					<table>
+                        <tr>
+                            <td><img src="/uploads/logo/6524546_6517fde95908b.png"></td>
+                            <td>
+                                <strong style="padding:0;"> A2Z Services<strong>
+                                <p style="text-transform:capitalize;padding:0;margin:0;">
+                                    18/4 d bagomgonj line narinda Dhaka 1100
+                                </p>
+                            </td>
+                        </tr>
+                    </table>
+				`);
+
+				reportWindow.document.head.innerHTML += `
+
+					<style>
+						.record-table{
+							width: 100%;
+							border-collapse: collapse;
+						}
+						.record-table thead{
+							background-color: #0097df;
+							color:white;
+						}
+						.record-table th, .record-table td{
+							padding: 3px;
+							border: 1px solid #454545;
+						}
+						.record-table th{
+							text-align: center;
+						}
+					</style>
+				`;
+				reportWindow.document.body.innerHTML += reportContent;
+
+				let rows = reportWindow.document.querySelectorAll('.record-table tr');
+				rows.forEach(row => {
+					row.lastChild.remove();
+				})
+
+				reportWindow.focus();
+				await new Promise(resolve => setTimeout(resolve, 3000));
+				reportWindow.print();
+				reportWindow.close();
+			}
     },
 };
 </script>

@@ -14,9 +14,9 @@ class Controller extends BaseController
     public function imageUpload($request, $image, $directory)
     {
         $doUpload = function ($image) use ($directory) {
-            $name = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+            // $name = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
             $extention = $image->getClientOriginalExtension();
-            $imageName = $name . '_' . uniqId() . '.' . $extention;
+            $imageName = uniqId() . '.' . $extention;
             $image->move($directory, $imageName);
             return $directory . '/' . $imageName;
         };

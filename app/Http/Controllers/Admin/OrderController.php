@@ -30,6 +30,7 @@ class OrderController extends Controller
         }
         return view("admin.order.index");
     }
+
     public function assign()
     {
         if (Auth::guard('admin')->user()->role != 'SuperAdmin') {
@@ -55,6 +56,7 @@ class OrderController extends Controller
         }
         return view("admin.order.delivery");
     }
+
     public function canceled()
     {
         if (Auth::guard('admin')->user()->role != 'SuperAdmin') {
@@ -76,8 +78,10 @@ class OrderController extends Controller
 
     public function fetch(Request $request)
     {
+        // dd($request->orderId);
         $clauses = "";
         $areaId = $request->thanaId;
+
         if (Auth::guard('admin')->user()->role == 'manager') {
             $areaId = Auth::guard()->user()->thana_id;
             $clauses .= " AND c.thana_id = '$areaId'";
@@ -94,6 +98,9 @@ class OrderController extends Controller
         }
         if (isset($request->id) && !empty($request->id)) {
             $clauses .= " AND o.id = '$request->id'";
+        }
+        if (isset($request->managerId) && !empty($request->managerId)) {
+            $clauses .= " AND wo.manager_id = '$request->managerId'";
         }
 
         $orders = DB::select("SELECT
@@ -116,8 +123,10 @@ class OrderController extends Controller
                         LEFT JOIN districts cd ON cd.id = cth.id
                         LEFT JOIN thanas sth ON sth.id = c.thana_id
                         LEFT JOIN districts sd ON sd.id = sth.id
+                        LEFT JOIN order_details od ON od.order_id = o.id
+                        LEFT JOIN workers wo ON wo.id = od.worker_id
                         WHERE 1=1
-                        $clauses ORDER BY o.invoice DESC                            
+                        $clauses GROUP BY od.order_id ORDER BY o.invoice DESC
                         ");
 
         foreach ($orders as $order) {
@@ -131,8 +140,12 @@ class OrderController extends Controller
                                 WHERE od.order_id = ?", [$order->id]);
         }
 
+        $commission = 0;
         $invoice = $this->invoiceGenerate("Order", "PI");
-        return response()->json(['invoice' => $invoice, 'orders' => $orders]);
+        if (Auth::guard('admin')->user()->role == 'manager') {
+            $commission = Auth::guard('admin')->user()->commission;
+        }
+        return response()->json(['invoice' => $invoice, 'orders' => $orders, 'commission' => $commission]);
     }
 
     public function destroy(Request $request)
@@ -151,6 +164,7 @@ class OrderController extends Controller
             $data = OrderDetail::where("id", $request->id)->first();
             $data->worker_id = $request->worker_id;
             $data->updated_at = Carbon::now();
+            Order::findOrFail($data->order_id)->update(['status' => 'Ongoing']);
             $data->save();
             return "Service assign successfully";
         } catch (\Throwable $e) {
@@ -158,8 +172,16 @@ class OrderController extends Controller
         }
     }
 
-    //update order
+    public function dueAdd(Request $request)
+    {
+        $data = OrderDetail::where("id", $request->orderDetailId)->where('status', '!=', 'complete')->first();
+        $data->update([
+            'due' => $request->due_amount
+        ]);
+        return response()->json(['success' => 'Due Amount Added']);
+    }
 
+    //update order
     public function update(Request $request)
     {
         try {
@@ -242,7 +264,7 @@ class OrderController extends Controller
                         LEFT JOIN workers w ON w.id = od.worker_id
                         LEFT JOIN orders o ON o.id = od.order_id
                         LEFT JOIN users c ON c.id = o.customer_id
-                        WHERE od.status != 'complete' 
+                        WHERE od.status != 'complete'
                         AND od.status != 'cancel'
                         AND od.worker_id is not null
                         $clauses
