@@ -76,7 +76,6 @@
                                 <td>{{ item.thana.name }}, {{ item.thana.district.name }} </td>
                                 <td>{{ item.father_name }} </td>
                                 <td>{{ item.mother_name }} </td>
-                                <!-- <td>{{ item.nid }} </td> -->
 
                                 <td class="text-end">
                                     <a href="" @click.prevent="statusRow(item.id)">
@@ -84,9 +83,6 @@
                                             <i class="fas fa-arrow-down text-warning" title="Worker Status Deactive. Click To Change"></i>
                                         </span>
                                     </a>
-                                    <!-- <a href="javascript:void(0)" @click="workerHistory(item.id)" class="btn shadow-none" title="View Worker Report">
-                                        <i class="fas fa-file"></i>
-                                    </a> -->
                                 </td>
                             </tr>
                         </tbody>

@@ -3,10 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Thana;
-use App\Models\AdminAccess;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class ThanaContoller extends Controller
@@ -18,13 +16,8 @@ class ThanaContoller extends Controller
 
     public function index()
     {
-        if (Auth::guard('admin')->user()->role != 'SuperAdmin') {
-            $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
-                ->pluck('permissions')
-                ->toArray();
-            if (!in_array("thanaEntry", $access)) {
-                return view("admin.unauthorize");
-            }
+        if (!userAccess("thanaEntry")) {
+            return view("admin.unauthorize");
         }
         return view("admin.bdgeocode.thana");
     }

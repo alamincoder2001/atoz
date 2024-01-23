@@ -92,10 +92,9 @@ class CartController extends Controller
                 'options' => ['image' => $service->image]
             ]);
 
-            return response()->json(['services' => $services,"content" => Cart::content()]);
+            return response()->json(['services' => $services, "content" => Cart::content()]);
         } catch (\Throwable $th) {
             return response()->json('error', 'Opps! something went wrong');
         }
-
     }
 }

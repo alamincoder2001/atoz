@@ -18,7 +18,7 @@ class OrderDetail extends Model
 
     public function order()
     {
-        return $this->belongsTo(Order::class);
+        return $this->belongsTo(Order::class, 'order_id', 'id')->with('customer');
     }
 
     public function worker()

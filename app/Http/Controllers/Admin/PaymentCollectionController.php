@@ -21,6 +21,9 @@ class PaymentCollectionController extends Controller
 
     public function index()
     {
+        if (!userAccess("paymentCollection")) {
+            return view("admin.unauthorize");
+        }
         return view('admin.payment.worker_payment_collection');
     }
 
@@ -32,14 +35,21 @@ class PaymentCollectionController extends Controller
 
     public function getWorkerWithDueAmount()
     {
-        $workers = DB::select("SELECT od.*, w.id as w_id, w.name, w.mobile,
-                    SUM(od.bill_amount) AS duetotal,
-                    concat(w.name,'-', w.mobile) as worker_name
-                    FROM order_details od
-                    JOIN workers w ON w.id = od.worker_id
-                    WHERE od.payment_receive_status = 0
-                    AND od.status = 'complete'
-                    GROUP BY od.worker_id ");
+        $workers = DB::select("SELECT
+                                w.worker_code,
+                                w.name,
+                                w.mobile,
+                                w.commission,
+                                d.name as district_name,
+                                t.name as thana_name,
+                                concat(w.name, '-', w.commission) as worker_name,
+                                SUM(od.commission_amount) as dueAmount
+                            FROM order_details od
+                            LEFT JOIN workers w ON w.id = od.worker_id
+                            LEFT JOIN districts d ON d.id = w.district_id
+                            LEFT JOIN thanas t ON t.id = w.thana_id
+                            WHERE od.status = 'complete'
+                            GROUP BY od.worker_id");
 
         return response()->json(['workers' => $workers]);
     }

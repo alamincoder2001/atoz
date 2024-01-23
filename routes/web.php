@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Admin\DistrictController;
 use App\Http\Controllers\Auth\FrontendLoginController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
@@ -48,8 +47,8 @@ Route::post('/removecart', [CartController::class, 'removeCart'])->name('removec
 Route::post('/cart_modal_data', [CartController::class, 'cartModalData']);
 
 // wishlist add route
-Route::post('/addwishlist', [WishlistController::class, 'addWishlist'])->name('addwishlist');
-Route::post('/deletewishlist', [WishlistController::class, 'deleteWishlist'])->name('deletewishlist');
+// Route::post('/addwishlist', [WishlistController::class, 'addWishlist'])->name('addwishlist');
+// Route::post('/deletewishlist', [WishlistController::class, 'deleteWishlist'])->name('deletewishlist');
 
 //
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
@@ -58,8 +57,8 @@ Route::post('/place-order', [CheckoutController::class, 'CheckOut'])->name('plac
 // worker and customer login
 // Route::get('/login', [FrontendLoginController::class, 'showSignInForm'])->name('showSignInForm')->middleware('checkAuth');
 Route::get('/register', [FrontendLoginController::class, 'showSignUpForm'])->name('showSignUpForm')->middleware('checkAuth');
-Route::post('/customer-register', [FrontendLoginController::class, 'CustomerRegister'])->name('customer.register')->middleware('checkAuth');
-Route::post('/customer-login', [FrontendLoginController::class, 'CustomerLogin'])->name('customer.login')->middleware('checkAuth');
+Route::post('/customer-register', [FrontendLoginController::class, 'CustomerRegister'])->name('customer.register');
+Route::post('/customer-login', [FrontendLoginController::class, 'CustomerLogin'])->name('customer.login');
 Route::post('/worker-login', [FrontendLoginController::class, 'WorkerLogin'])->name('worker.login')->middleware('checkAuth');
 
 // customer dashboard
@@ -88,4 +87,4 @@ Route::get("/getUpazila/{id}", [HomeController::class, "getUpazila"]);
 Route::get('/setting/fetch', [HomeController::class, 'fetch'])->name('setting.fetch');
 
 // customer register page
-Route::get('customer_register', [HomeController::class, 'customerRegister']);
+Route::get('customer_register', [HomeController::class, 'customerRegister'])->middleware('checkAuth');

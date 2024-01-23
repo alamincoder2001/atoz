@@ -4,10 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use Carbon\Carbon;
 use App\Models\Banner;
-use App\Models\AdminAccess;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 
@@ -20,14 +18,10 @@ class BannerController extends Controller
 
     public function index()
     {
-        if (Auth::guard('admin')->user()->role != 'SuperAdmin') {
-            $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
-                ->pluck('permissions')
-                ->toArray();
-            if (!in_array("bannerEntry", $access)) {
-                return view("admin.unauthorize");
-            }
+        if (!userAccess("bannerEntry")) {
+            return view("admin.unauthorize");
         }
+
         return view("admin.banner.index");
     }
 

@@ -6,11 +6,7 @@ use App\Models\Admin;
 use App\Models\AdminAccess;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Order;
-use App\Models\OrderDetail;
-use App\Models\Worker;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
@@ -24,26 +20,16 @@ class AreaManagerController extends Controller
 
     public function create()
     {
-        if (Auth::guard('admin')->user()->role != 'SuperAdmin') {
-            $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
-                ->pluck('permissions')
-                ->toArray();
-            if (!in_array("areaManagerEntry", $access)) {
-                return view("admin.unauthorize");
-            }
+        if (!userAccess("areaManagerEntry")) {
+            return view("admin.unauthorize");
         }
         return view("admin.manager.create");
     }
 
     public function list()
     {
-        if (Auth::guard('admin')->user()->role != 'SuperAdmin') {
-            $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
-                ->pluck('permissions')
-                ->toArray();
-            if (!in_array("areaManagerEntry", $access)) {
-                return view("admin.unauthorize");
-            }
+        if (!userAccess("areaManagerEntry")) {
+            return view("admin.unauthorize");
         }
         return view("admin.manager.manager_list");
     }
@@ -67,13 +53,13 @@ class AreaManagerController extends Controller
             ->join('admins as manager', 'w.manager_id', '=', 'manager.id')
             ->leftJoin('order_details as od', 'w.id', '=', 'od.worker_id')
             ->leftJoin('orders as or', 'od.order_id', '=', 'or.id')
-            ->select('w.id as w_id','w.name','manager.name as manager_name', 'or.*')
+            ->select('w.id as w_id', 'w.name', 'manager.name as manager_name', 'or.*')
             ->where('w.manager_id', $m_id)
             ->whereBetween('or.date', [$from_date, $to_date])
             ->groupBy('od.order_id')
             ->get();
 
-        return view('admin.manager.manager_wise_worker_order_list', compact('workers','manager','input'));
+        return view('admin.manager.manager_wise_worker_order_list', compact('workers', 'manager', 'input'));
     }
 
     public function index()
@@ -98,6 +84,7 @@ class AreaManagerController extends Controller
             'present_address'    => 'required|string|min:5|max:255',
             'username' => 'required|string|min:3|max:20|unique:admins',
             'email'    => 'required|email:rfc,dns|unique:admins',
+            'phone'     => 'required|string',
             'role'     => 'required|string',
             'nid_front_img'    => 'required|mimes:jpeg,png,jpg,gif',
             'nid_back_img'    => 'required|mimes:jpeg,png,jpg,gif',
@@ -116,30 +103,30 @@ class AreaManagerController extends Controller
 
             $input = $request->all();
 
-            if($request->file('nid_front_img')){
-                $nidFront = rand().date('YmdHis').'.'.$request->nid_front_img->extension();
+            if ($request->file('nid_front_img')) {
+                $nidFront = rand() . date('YmdHis') . '.' . $request->nid_front_img->extension();
                 $request->nid_front_img->move(public_path('uploads/manager/nid'), $nidFront);
-                $input['nid_front_img'] = 'uploads/manager/nid/'.$nidFront;
-            }else{
+                $input['nid_front_img'] = 'uploads/manager/nid/' . $nidFront;
+            } else {
                 unset($input['nid_front_img']);
             }
 
-            if($request->file('nid_back_img')){
-                $nidBack = rand().date('YmdHis').'.'.$request->nid_back_img->extension();
+            if ($request->file('nid_back_img')) {
+                $nidBack = rand() . date('YmdHis') . '.' . $request->nid_back_img->extension();
                 $request->nid_back_img->move(public_path('uploads/manager/nid'), $nidBack);
-                $input['nid_back_img'] = 'uploads/manager/nid/'.$nidBack;
-            }else{
+                $input['nid_back_img'] = 'uploads/manager/nid/' . $nidBack;
+            } else {
                 unset($input['nid_back_img']);
             }
 
             $input['role']        = 'manager';
             $input['password']    = Hash::make($request->password);
 
-            if($request->file('image')){
-                $imgName = rand().date('YmdHis').'.'.$request->image->extension();
+            if ($request->file('image')) {
+                $imgName = rand() . date('YmdHis') . '.' . $request->image->extension();
                 $request->image->move(public_path('uploads/manager'), $imgName);
-                $input['image'] = 'uploads/manager/'.$imgName;
-            }else{
+                $input['image'] = 'uploads/manager/' . $imgName;
+            } else {
                 unset($input['image']);
             }
 
@@ -199,6 +186,7 @@ class AreaManagerController extends Controller
             'username' => 'required|string|min:3|max:20|unique:admins,username,' . $request->id,
             'email'    => 'required|email:rfc,dns|unique:admins,email,' . $request->id,
             'role'     => 'required|string',
+            'phone'     => 'required|string',
             'name'     => 'required|string|min:3|max:30',
             'father_name'     => 'required|string|min:3|max:30',
             'mother_name'     => 'required|string|min:3|max:30',
@@ -216,54 +204,55 @@ class AreaManagerController extends Controller
         try {
             $input = $request->all();
 
+
             $manager = Admin::findOrFail($request->id);
             // dd($input, $manager);
 
-            if($request->file('nid_front_img')){
-                $nidFront = rand().date('YmdHis').'.'.$request->nid_front_img->extension();
+            if ($request->file('nid_front_img')) {
+                $nidFront = rand() . date('YmdHis') . '.' . $request->nid_front_img->extension();
                 $request->nid_front_img->move(public_path('uploads/manager/nid'), $nidFront);
-                $input['nid_front_img'] = 'uploads/manager/nid/'.$nidFront;
+                $input['nid_front_img'] = 'uploads/manager/nid/' . $nidFront;
 
-                 // remove old image
-                 $image_path = public_path($manager->nid_front_img);
-                 if(file_exists($image_path)){
+                // remove old image
+                $image_path = public_path($manager->nid_front_img);
+                if (file_exists($image_path)) {
                     unlink($image_path);
                 }
-            }else{
+            } else {
                 unset($input['nid_front_img']);
             }
 
-            if($request->file('nid_back_img')){
-                $nidBack = rand().date('YmdHis').'.'.$request->nid_back_img->extension();
+            if ($request->file('nid_back_img')) {
+                $nidBack = rand() . date('YmdHis') . '.' . $request->nid_back_img->extension();
                 $request->nid_back_img->move(public_path('uploads/manager/nid'), $nidBack);
-                $input['nid_back_img'] = 'uploads/manager/nid/'.$nidBack;
+                $input['nid_back_img'] = 'uploads/manager/nid/' . $nidBack;
 
                 // remove old image
                 $image_path = public_path($manager->nid_back_img);
-                if(file_exists($image_path)){
-                   unlink($image_path);
-               }
-            }else{
+                if (file_exists($image_path)) {
+                    unlink($image_path);
+                }
+            } else {
                 unset($input['nid_back_img']);
             }
 
-            if($request->file('image')){
-                $imgName = rand().date('YmdHis').'.'.$request->image->extension();
+            if ($request->file('image')) {
+                $imgName = rand() . date('YmdHis') . '.' . $request->image->extension();
                 $request->image->move(public_path('uploads/manager'), $imgName);
-                $input['image'] = 'uploads/manager/'.$imgName;
+                $input['image'] = 'uploads/manager/' . $imgName;
 
                 // remove old image
                 $image_path = public_path($manager->nid_back_img);
-                if(file_exists($image_path)){
+                if (file_exists($image_path)) {
                     unlink($image_path);
                 }
-            }else{
+            } else {
                 unset($input['image']);
             }
 
             if (!empty($request->password)) {
                 $input['password'] = Hash::make($request->password);
-            }else {
+            } else {
                 unset($input['password']);
             }
 

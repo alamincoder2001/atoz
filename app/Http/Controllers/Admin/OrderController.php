@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Order;
-use App\Models\AdminAccess;
 use App\Models\OrderDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -20,52 +19,32 @@ class OrderController extends Controller
 
     public function index()
     {
-        if (Auth::guard('admin')->user()->role != 'SuperAdmin') {
-            $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
-                ->pluck('permissions')
-                ->toArray();
-            if (!in_array("orderList", $access)) {
-                return view("admin.unauthorize");
-            }
+        if (!userAccess("orderList")) {
+            return view("admin.unauthorize");
         }
         return view("admin.order.index");
     }
 
     public function assign()
     {
-        if (Auth::guard('admin')->user()->role != 'SuperAdmin') {
-            $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
-                ->pluck('permissions')
-                ->toArray();
-            if (!in_array("orderAssign", $access)) {
-                return view("admin.unauthorize");
-            }
+        if (!userAccess("orderAssign")) {
+            return view("admin.unauthorize");
         }
         return view("admin.order.assign");
     }
 
     public function delivery()
     {
-        if (Auth::guard('admin')->user()->role != 'SuperAdmin') {
-            $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
-                ->pluck('permissions')
-                ->toArray();
-            if (!in_array("orderComplete", $access)) {
-                return view("admin.unauthorize");
-            }
+        if (!userAccess("orderComplete")) {
+            return view("admin.unauthorize");
         }
         return view("admin.order.delivery");
     }
 
     public function canceled()
     {
-        if (Auth::guard('admin')->user()->role != 'SuperAdmin') {
-            $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
-                ->pluck('permissions')
-                ->toArray();
-            if (!in_array("orderCancel", $access)) {
-                return view("admin.unauthorize");
-            }
+        if (!userAccess("orderCancel")) {
+            return view("admin.unauthorize");
         }
         return view("admin.order.canceled");
     }
@@ -115,14 +94,15 @@ class OrderController extends Controller
                             cth.name as customer_thana_name,
                             sd.name as shipping_district_name,
                             sth.name as shipping_thana_name,
+                            ifnull(sth.charge, cth.charge) as shipping_charge,
                             (SELECT count(*) FROM order_details od WHERE od.order_id = o.id) as totaldetail,
                             (SELECT count(*) FROM order_details od WHERE od.order_id = o.id AND od.worker_id is not null) as totalassign
                         FROM orders AS o
                         LEFT JOIN users AS c ON c.id = o.customer_id
                         LEFT JOIN thanas cth ON cth.id = c.thana_id
-                        LEFT JOIN districts cd ON cd.id = cth.id
-                        LEFT JOIN thanas sth ON sth.id = c.thana_id
-                        LEFT JOIN districts sd ON sd.id = sth.id
+                        LEFT JOIN districts cd ON cd.id = cth.district_id
+                        LEFT JOIN thanas sth ON sth.id = o.shipping_thana
+                        LEFT JOIN districts sd ON sd.id = sth.district_id
                         LEFT JOIN order_details od ON od.order_id = o.id
                         LEFT JOIN workers wo ON wo.id = od.worker_id
                         WHERE 1=1
@@ -214,13 +194,8 @@ class OrderController extends Controller
 
     public function report()
     {
-        if (Auth::guard('admin')->user()->role != 'SuperAdmin') {
-            $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
-                ->pluck('permissions')
-                ->toArray();
-            if (!in_array("reportShow", $access)) {
-                return view("admin.unauthorize");
-            }
+        if (!userAccess("reportShow")) {
+            return view("admin.unauthorize");
         }
         return view('admin.order.report');
     }

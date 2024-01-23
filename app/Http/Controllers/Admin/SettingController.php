@@ -19,13 +19,8 @@ class SettingController extends Controller
 
     public function index()
     {
-        if (Auth::guard('admin')->user()->role != 'SuperAdmin') {
-            $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
-                ->pluck('permissions')
-                ->toArray();
-            if (!in_array("settingUpdate", $access)) {
-                return view("admin.unauthorize");
-            }
+        if (!userAccess("settingUpdate")) {
+            return view("admin.unauthorize");
         }
         $data = Setting::first();
         return view("admin.setting", compact("data"));

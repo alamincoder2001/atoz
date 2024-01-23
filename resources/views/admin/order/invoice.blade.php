@@ -7,14 +7,17 @@
 @section("content")
 <div class="row">
     <div class="d-none header">
-        <div class="col-12 text-center">
-            <div class="text-center">
-                <img src="{{asset($profile->logo)}}" alt="{{ $profile->company_name }}" style="width: 150px;border: 1px solid #d5d5d5;">
+        <div class="col-2 d-flex align-items-center">
+            <div style="border: 1px solid #80808026;padding: 17px 0;">
+                <img src="{{asset($profile->logo)}}" alt="{{ $profile->company_name }}" />
             </div>
-            <h3 class="m-0">{{ $profile->company_name }}</h3>
-            <p class="m-0">{{ $profile->email }}</p>
-            <p class="m-0">{{ $profile->mobile }}</p>
-            <p class="m-0">{{ $profile->address }}</p>
+        </div>
+        <div class="col-10 text-left">
+            <div class="ms-3">
+                <h3 class="m-0">{{ $profile->company_name }}</h3>
+                <p class="m-0">{{ $profile->mobile }}</p>
+                <p class="m-0">{{ $profile->address }}</p>
+            </div>
         </div>
     </div>
     <div class="col-12 text-end mb-2">
@@ -39,7 +42,9 @@
                             <table style="width:100%;">
                                 <tr>
                                     <td>
-                                        ${document.querySelector(".header").innerHTML}
+                                        <div class="row">
+                                            ${document.querySelector(".header").innerHTML}
+                                        </div>
                                     </td>
                                 </tr>
                                 <tr>

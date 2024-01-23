@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Permission;
-use App\Models\AdminAccess;
 use Illuminate\Database\Seeder;
 
 class PermissionSeederTable extends Seeder
@@ -107,6 +106,8 @@ class PermissionSeederTable extends Seeder
                 'permission_name' => [
                     'reportShow',
                     'paymentShow',
+                    'commissionList',
+                    'paymentCollection'
                 ]
             ],
             [

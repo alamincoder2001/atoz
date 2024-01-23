@@ -15,7 +15,7 @@ class WorkerController extends Controller
     public function index()
     {
         if (Auth::guard('worker')->check()) {
-            $data['orders'] = OrderDetail::with('service')->where('worker_id', Auth::guard('worker')->user()->id)->latest()->get();
+            $data['orders'] = OrderDetail::with('service', 'order')->where('worker_id', Auth::guard('worker')->user()->id)->latest()->get();
             return view("dashboard.worker-dashboard", $data);
         } else {
             return redirect()->back()->with('error', 'You do not have any access to enter there!');
@@ -103,19 +103,17 @@ class WorkerController extends Controller
             $data = OrderDetail::where('id', $request->id)->first();
             $orderId = $data->order_id;
 
-            if ($request->status == 'complete') {
-                Worker::findOrFail($data->worker_id)->update(['payment_receive' => 1]);
-            }
-            $data->bill_amount = $request->billAmount;
-            $data->paid_amount = $request->paidAmount;
-            $data->due         = $request->dueAmount;
-            $data->status = $request->status;
+            $data->bill_amount       = $request->billAmount;
+            $data->paid_amount       = $request->status == 'complete'? $request->billAmount:0;
+            $data->commission_amount = $request->status == 'complete'? $request->commissionAmount:0;
+            $data->due               = 0;
+            $data->status            = $request->status;
 
             $data->update();
 
             $msg = "";
-            if ($request->status == 'proccess') {
-                $msg = 'Service proccessing successfully';
+            if ($request->status == 'bill') {
+                $msg = 'Service billing successfully';
             }
             if ($request->status == 'complete') {
                 $msg = 'Service complete successfully';

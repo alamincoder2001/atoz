@@ -20,13 +20,8 @@ class SliderController extends Controller
 
     public function index()
     {
-        if (Auth::guard('admin')->user()->role != 'SuperAdmin') {
-            $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
-                ->pluck('permissions')
-                ->toArray();
-            if (!in_array("sliderEntry", $access)) {
-                return view("admin.unauthorize");
-            }
+        if (!userAccess("sliderEntry")) {
+            return view("admin.unauthorize");
         }
         return view("admin.slider.index");
     }
@@ -44,14 +39,6 @@ class SliderController extends Controller
     public function store(Request $request)
     {
         try {
-            // $validator = Validator::make($request->all(), [
-            //     "title" => "required",
-            // ]);
-
-            // if ($validator->fails()) {
-            //     return response()->json(["error" => $validator->errors()]);
-            // }
-
             if (!empty($request->id)) {
                 $data             = Slider::find($request->id);
                 $old              = $data->image;

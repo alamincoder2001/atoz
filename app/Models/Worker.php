@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\District;
 use App\Thana;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -32,5 +33,9 @@ class Worker extends Authenticatable
     public function thana()
     {
         return $this->belongsTo(Thana::class, 'thana_id', 'id')->with('district');
+    }
+    public function district()
+    {
+        return $this->belongsTo(District::class, 'district_id', 'id');
     }
 }

@@ -2,110 +2,135 @@
 @section('title', ' - Service Single Page')
 
 @push('front_style')
-    <style>
-        #customScrol {
-            zoom: 0.9;
-            scroll-behavior: smooth;
-        }
-        .nav-pills .nav-link.active,
-        .nav-pills .show>.nav-link {
-            background-color: #ffffff;
-            border-right: 5px solid #cf58f6;
-            font-weight: 700;
-        }
+<style>
+    #customScrol {
+        zoom: 0.9;
+        scroll-behavior: smooth;
+    }
 
-        /* service card */
-        .single-listing-item .listing-image .listing-tag a {
-            color: #b654f1;
-        }
+    .nav-pills .nav-link.active,
+    .nav-pills .show>.nav-link {
+        background-color: #ffffff;
+        border-right: 5px solid #cf58f6;
+        font-weight: 700;
+    }
 
-        .single-listing-item .listing-image .listing-tag:hover {
-            background-color: #863ed2 !important;
-        }
+    /* service card */
+    .single-listing-item .listing-image .listing-tag a {
+        color: #b654f1;
+    }
 
-        .single-listing-item:hover .listing-image .listing-tag,
-        .single-listing-item:focus .listing-image .listing-tag {
-            background-color: #863ed2 !important;
-        }
-        /* .page-title-area { position: relative; z-index: 1; padding-top: 95px; padding-bottom: 0; background-color: #742f8d; } */
-        .breadcame{display: flex; justify-content: flex-start; margin: -147px 0 0 -80px;}
-        .list-style{list-style: square; font-size: 17px; color: #6001ff !important;}
+    .single-listing-item .listing-image .listing-tag:hover {
+        background-color: #863ed2 !important;
+    }
 
-        /* price card */
-        #element{position:fixed;bottom:0;right: 0; border: 1px solid #d75efb45;box-shadow: -12px 0px 20px 5px #d75efb1c;}
-        /* card-btn */
-        .default-btn { background-color: #a755f7 !important; color: #ffffff; }
-        .default-btn:hover {background-color: #6001ff !important; }
-    </style>
+    .single-listing-item:hover .listing-image .listing-tag,
+    .single-listing-item:focus .listing-image .listing-tag {
+        background-color: #863ed2 !important;
+    }
+
+    /* .page-title-area { position: relative; z-index: 1; padding-top: 95px; padding-bottom: 0; background-color: #742f8d; } */
+    .breadcame {
+        display: flex;
+        justify-content: flex-start;
+        margin: -147px 0 0 -80px;
+    }
+
+    .list-style {
+        list-style: square;
+        font-size: 17px;
+        color: #6001ff !important;
+    }
+
+    /* price card */
+    #element {
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        z-index: 99999;
+        border: 1px solid #d75efb45;
+        box-shadow: -12px 0px 20px 5px #d75efb1c;
+    }
+
+    /* card-btn */
+    .default-btn {
+        background-color: #a755f7 !important;
+        color: #ffffff;
+    }
+
+    .default-btn:hover {
+        background-color: #6001ff !important;
+    }
+</style>
 @endpush
 
 @section('front_content')
-    <!-- Start Page Title Area -->
-    {{-- <section class="page-title-area" style="background-image: url({{ asset('frontend/assets/img/laptopservicing.jpg') }})"> --}}
-    <section class="page-title-area" style="background-image: url({{ asset(''.$service->image) }})">
-        <div class="container">
-            <ul class="breadcame">
-                <li class="list-style">
-                    <a href="{{ url('/') }}" class="text-white">Home</a>
-                </li>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <li class="list-style">
-                    <a href="" class="text-white">@if(isset($service->category->name)) {{ $service->category->name }} @endif</a>
-                </li>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <li class="list-style">
-                    <a href="javascript:void(0)" class="text-white" >{{ $service->name }}</a>
-                </li>
-            </ul>
-            <div class="page-title-content">
-                <h2 style="line-height: 1.14; letter-spacing: .5px; color: #fff; margin-bottom: 17px;">{{ $service->name }}</h2>
+<!-- Start Page Title Area -->
+{{-- <section class="page-title-area" style="background-image: url({{ asset('frontend/assets/img/laptopservicing.jpg') }})"> --}}
+<section class="page-title-area" style="background-image: url({{ asset(''.$service->image) }})">
+    <div class="container">
+        <ul class="breadcame">
+            <li class="list-style">
+                <a href="{{ url('/') }}" class="text-white">Home</a>
+            </li>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <li class="list-style">
+                <a href="" class="text-white">@if(isset($service->category->name)) {{ $service->category->name }} @endif</a>
+            </li>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <li class="list-style">
+                <a href="javascript:void(0)" class="text-white">{{ $service->name }}</a>
+            </li>
+        </ul>
+        <div class="page-title-content">
+            <h2 style="line-height: 1.14; letter-spacing: .5px; color: #fff; margin-bottom: 17px;">{{ $service->name }}</h2>
 
-                {{-- <span class="text-white mt-3" style="border: 1px solid #bb54fa;padding: 10px;background-color: #bb54fa;border-radius: 3px;">
+            {{-- <span class="text-white mt-3" style="border: 1px solid #bb54fa;padding: 10px;background-color: #bb54fa;border-radius: 3px;">
                     <i class='bx bxs-star' style="color: #fff !important;font-size:17px"></i> 4.5 out of 5
                 </span>
                 <br>
                 <span class="reviews-total mt-3 d-inline-block text-white">
                     (2 reviews)
                 </span> --}}
-            </div>
         </div>
-    </section>
-    <!-- End Page Title Area -->
+    </div>
+</section>
+<!-- End Page Title Area -->
 
 {{-- {{ dd(request()->url()) }} --}}
 
 <!-- End listing Details Area -->
-    <section class="listing-area mt-5">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-3 col-lg-3 col-xl-3 col-xxl-3" style="border-right: 1px solid #d75efb45;box-shadow: 5px 0px 7px 0px #d75efb1c;">
-                    {{-- <div style="position: fixed; padding-top: 15px;"> --}}
-                    <div>
-                        <nav id="service-all" class="navbar navbar-light bg-light">
-                            <nav class="nav nav-pills flex-column">
-                                <a class="nav-link fw-bold active" href="#overview">Service</a>
-                                {{-- <a class="nav-link fw-bold ser_faq_txt" onclick="serviceActive('faq')" href="#faq">FAQ</a>
+<section class="listing-area mt-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3 col-lg-3 col-xl-3 col-xxl-3" style="border-right: 1px solid #d75efb45;box-shadow: 5px 0px 7px 0px #d75efb1c;">
+                {{-- <div style="position: fixed; padding-top: 15px;"> --}}
+                <div>
+                    <nav id="service-all" class="navbar navbar-light bg-light">
+                        <nav class="nav nav-pills flex-column">
+                            <a class="nav-link fw-bold active" href="#overview">Service</a>
+                            {{-- <a class="nav-link fw-bold ser_faq_txt" onclick="serviceActive('faq')" href="#faq">FAQ</a>
                                 <a class="nav-link fw-bold ser_details_txt" onclick="serviceActive('details')" href="#details">Details</a> --}}
-                                {{-- <a class="nav-link fw-bold ser_review_txt" onclick="serviceActive('review')" href="#review">Review</a> --}}
-                            </nav>
+                            {{-- <a class="nav-link fw-bold ser_review_txt" onclick="serviceActive('review')" href="#review">Review</a> --}}
                         </nav>
-                    </div>
+                    </nav>
                 </div>
+            </div>
 
-                <div class="col-md-9 col-lg-9 col-xl-9 col-xxl-9" id="customScrol">
+            <div class="col-md-9 col-lg-9 col-xl-9 col-xxl-9" id="customScrol">
 
-                    <div data-bs-spy="scroll" data-bs-target="#service-all" data-bs-offset="0" tabindex="0">
+                <div data-bs-spy="scroll" data-bs-target="#service-all" data-bs-offset="0" tabindex="0">
 
-                        <section class="listing-area">
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-lg-9 col-md-12">
-                                        <div class="listing-details-desc" id="overview">
-                                            <h3 class="text-capitalize mb-3" style="margin-bottom: 25px !important; color: #7b3edb;">Overview Of {{ $service->name }} </h3>
-                                            {!! $service->description !!}
-                                        </div>
+                    <section class="listing-area">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-9 col-md-12">
+                                    <div class="listing-details-desc" id="overview">
+                                        <h3 class="text-capitalize mb-3" style="margin-bottom: 25px !important; color: #7b3edb;">Overview Of {{ $service->name }} </h3>
+                                        {!! $service->description !!}
+                                    </div>
 
-                                        {{-- <div class="listing-details-desc" id="faq">
+                                    {{-- <div class="listing-details-desc" id="faq">
                                             <div class="container">
                                                 <h3>FAQ</h3>
                                                 <div class="tab faq-accordion-tab">
@@ -513,87 +538,87 @@
                                             </ul>
                                         </div> --}}
 
-                                        {{-- <div class="listing-details-desc" id="review">
+                                    {{-- <div class="listing-details-desc" id="review">
                                             <div class="listing-review-comments">
                                                 <h3>3 Reviews</h3>
 
                                                 <div class="user-review">
                                                     <img src="{{ asset('frontend/assets/img/user1.jpg') }}" alt="image">
 
-                                                    <div class="review-rating">
-                                                        <div class="review-stars">
-                                                            <i class='bx bxs-star'></i>
-                                                            <i class='bx bxs-star'></i>
-                                                            <i class='bx bxs-star'></i>
-                                                            <i class='bx bxs-star'></i>
-                                                            <i class='bx bxs-star'></i>
-                                                        </div>
+                                    <div class="review-rating">
+                                        <div class="review-stars">
+                                            <i class='bx bxs-star'></i>
+                                            <i class='bx bxs-star'></i>
+                                            <i class='bx bxs-star'></i>
+                                            <i class='bx bxs-star'></i>
+                                            <i class='bx bxs-star'></i>
+                                        </div>
 
-                                                        <span class="d-inline-block">James Anderson</span>
-                                                    </div>
-
-                                                    <span class="d-block sub-comment">Excellent</span>
-                                                    <p>Very well built theme, couldn't be happier with it. Can't wait for future updates to see what else they add in.</p>
-                                                </div>
-
-                                                <div class="user-review">
-                                                    <img src="{{ asset('frontend/assets/img/user2.jpg') }}" alt="image">
-
-                                                    <div class="review-rating">
-                                                        <div class="review-stars">
-                                                            <i class='bx bxs-star'></i>
-                                                            <i class='bx bxs-star'></i>
-                                                            <i class='bx bxs-star'></i>
-                                                            <i class='bx bxs-star'></i>
-                                                            <i class='bx bxs-star'></i>
-                                                        </div>
-
-                                                        <span class="d-inline-block">Sarah Taylor</span>
-                                                    </div>
-
-                                                    <span class="d-block sub-comment">Video Quality!</span>
-                                                    <p>Was really easy to implement and they quickly answer my additional questions!</p>
-                                                </div>
-
-                                                <div class="user-review">
-                                                    <img src="{{ asset('frontend/assets/img/user3.jpg') }}" alt="image">
-
-                                                    <div class="review-rating">
-                                                        <div class="review-stars">
-                                                            <i class='bx bxs-star'></i>
-                                                            <i class='bx bxs-star'></i>
-                                                            <i class='bx bxs-star'></i>
-                                                            <i class='bx bxs-star'></i>
-                                                            <i class='bx bxs-star'></i>
-                                                        </div>
-
-                                                        <span class="d-inline-block">David Warner</span>
-                                                    </div>
-
-                                                    <span class="d-block sub-comment">Perfect Coding!</span>
-                                                    <p>Stunning design, very dedicated crew who welcome new ideas suggested by customers, nice support.</p>
-                                                </div>
-                                            </div>
-                                        </div> --}}
+                                        <span class="d-inline-block">James Anderson</span>
                                     </div>
 
-                                    <div class="col-lg-3"> </div>
+                                    <span class="d-block sub-comment">Excellent</span>
+                                    <p>Very well built theme, couldn't be happier with it. Can't wait for future updates to see what else they add in.</p>
+                                </div>
+
+                                <div class="user-review">
+                                    <img src="{{ asset('frontend/assets/img/user2.jpg') }}" alt="image">
+
+                                    <div class="review-rating">
+                                        <div class="review-stars">
+                                            <i class='bx bxs-star'></i>
+                                            <i class='bx bxs-star'></i>
+                                            <i class='bx bxs-star'></i>
+                                            <i class='bx bxs-star'></i>
+                                            <i class='bx bxs-star'></i>
+                                        </div>
+
+                                        <span class="d-inline-block">Sarah Taylor</span>
+                                    </div>
+
+                                    <span class="d-block sub-comment">Video Quality!</span>
+                                    <p>Was really easy to implement and they quickly answer my additional questions!</p>
+                                </div>
+
+                                <div class="user-review">
+                                    <img src="{{ asset('frontend/assets/img/user3.jpg') }}" alt="image">
+
+                                    <div class="review-rating">
+                                        <div class="review-stars">
+                                            <i class='bx bxs-star'></i>
+                                            <i class='bx bxs-star'></i>
+                                            <i class='bx bxs-star'></i>
+                                            <i class='bx bxs-star'></i>
+                                            <i class='bx bxs-star'></i>
+                                        </div>
+
+                                        <span class="d-inline-block">David Warner</span>
+                                    </div>
+
+                                    <span class="d-block sub-comment">Perfect Coding!</span>
+                                    <p>Stunning design, very dedicated crew who welcome new ideas suggested by customers, nice support.</p>
                                 </div>
                             </div>
-                        </section>
-
-                    </div>
-
+                        </div> --}}
                 </div>
-            </div>
 
-            <div class="card" id="element">
-                <div class="card-body">
-                    <h3>{{ $service->name }}</h3>
-                    <div class="listing-details-header">
-                        <div class="align-items-center">
-                            <div class="listing-price">
-                                {{-- <div class="listing-review">
+                <div class="col-lg-3"> </div>
+            </div>
+        </div>
+</section>
+
+</div>
+
+</div>
+</div>
+
+<div class="card" id="element">
+    <div class="card-body">
+        <h3>{{ $service->name }}</h3>
+        <div class="listing-details-header">
+            <div class="align-items-center">
+                <div class="listing-price">
+                    {{-- <div class="listing-review">
                                     <div class="review-stars">
                                         <i class='bx bxs-star'></i>
                                         <i class='bx bxs-star'></i>
@@ -604,49 +629,48 @@
                                     <span class="reviews-total d-inline-block">(2 reviews)</span>
                                 </div> --}}
 
-                                <ul class="list-group list-group-flush border-0">
-                                    {{-- <li class="list-group-item">
+                    <ul class="list-group list-group-flush border-0">
+                        {{-- <li class="list-group-item">
                                         <a href="javascript:void(0)" onclick="cartModal('AC Installation')">
                                             <span style="float: left; color:rgba(0,0,0,.9)">AC Installation</span>
                                             <i class="bx bx-chevron-right" style="font-size: 25px;font-weight: bold;float: right;"></i>
                                         </a>
                                     </li> --}}
-                                    <li class="list-group-item mt-1 border-0">
-                                        @auth
-                                            <a href="javascript:void(0)" onclick="orderNow({{ $service->id }})" class="btn btn-sm btn-success">
-                                                <span style="">Order Now</span>
-                                                <i class="bx bx-chevron-right" style="font-size: 25px;font-weight: bold;float: right;"></i>
-                                            </a>
-                                            @else
-                                            <a href="javascript:void(0)" class="btn btn-sm btn-success" onclick="showLoginRegisterOption()">
-                                                <span style="">Order Now</span>
-                                                <i class="bx bx-chevron-right" style="font-size: 25px;font-weight: bold;float: right;"></i>
-                                            </a>
-                                        @endauth
-                                    </li>
-                                </ul>
+                        <li class="list-group-item mt-1 border-0">
+                            @auth
+                            <a href="javascript:void(0)" onclick="orderNow({{ $service->id }})" class="btn btn-sm btn-success">
+                                <span style="">Order Now</span>
+                                <i class="bx bx-chevron-right" style="font-size: 25px;font-weight: bold;float: right;"></i>
+                            </a>
+                            @else
+                            <a href="javascript:void(0)" class="btn btn-sm btn-success" onclick="showLoginRegisterOption()">
+                                <span style="">Order Now</span>
+                                <i class="bx bx-chevron-right" style="font-size: 25px;font-weight: bold;float: right;"></i>
+                            </a>
+                            @endauth
+                        </li>
+                    </ul>
 
-                                {{-- <div class="price" style="color:#a755f7">৳ 399</div>
+                    {{-- <div class="price" style="color:#a755f7">৳ 399</div>
                                 <a href="javascript:void(0)" class="default-btn">Order Now!</a> --}}
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
-
         </div>
-    </section>
+    </div>
+</div>
+
+</div>
+</section>
 @endsection
 
 @push('front_script')
-    <script>
-        function serviceActive(name)
-        {
-            $('.ser_faq_txt').removeClass('active');
-            $('.ser_review_txt').removeClass('active');
-            $('.ser_details_txt').removeClass('active');
+<script>
+    function serviceActive(name) {
+        $('.ser_faq_txt').removeClass('active');
+        $('.ser_review_txt').removeClass('active');
+        $('.ser_details_txt').removeClass('active');
 
-            $('.ser_'+name+'_txt').addClass('active');
-        }
-    </script>
+        $('.ser_' + name + '_txt').addClass('active');
+    }
+</script>
 @endpush

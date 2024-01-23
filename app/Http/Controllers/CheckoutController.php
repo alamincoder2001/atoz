@@ -28,7 +28,6 @@ class CheckoutController extends Controller
     public function CheckOut(Request $request)
     {
         try {
-            // dd($request->all());
             DB::beginTransaction();
             if (Cart::content()->count() > 0) {
                 if (isset($request->is_shipping) && $request->is_shipping == 1) {
@@ -53,7 +52,7 @@ class CheckoutController extends Controller
                 $data->date              = date("Y-m-d");
                 $data->customer_id       = Auth::guard('web')->user()->id;
                 $data->is_shipping       = isset($request->is_shipping) && $request->is_shipping == 1 ? $request->is_shipping : 0;
-                $data->shipping_thana    = isset($request->is_shipping) && $request->is_shipping == 1 ? $request->shipping_thana : Auth::guard('web')->user()->id;
+                $data->shipping_thana    = isset($request->is_shipping) && $request->is_shipping == 1 ? $request->shipping_thana : Auth::guard('web')->user()->thana_id;
                 $data->shipping_mobile   = isset($request->is_shipping) && $request->is_shipping == 1 ? $request->shipping_mobile : Auth::guard('web')->user()->mobile;
                 $data->shipping_address  = isset($request->is_shipping) && $request->is_shipping == 1 ? $request->shipping_address : $request->address;
                 $data->shipping_postcode = isset($request->is_shipping) && $request->is_shipping == 1 ? $request->shipping_postcode : $request->postcode;

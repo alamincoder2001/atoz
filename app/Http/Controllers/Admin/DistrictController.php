@@ -3,11 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\District;
-use Carbon\Carbon;
-use App\Models\AdminAccess;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class DistrictController extends Controller
@@ -19,13 +16,8 @@ class DistrictController extends Controller
 
     public function index()
     {
-        if (Auth::guard('admin')->user()->role != 'SuperAdmin') {
-            $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
-                ->pluck('permissions')
-                ->toArray();
-            if (!in_array("districtEntry", $access)) {
-                return view("admin.unauthorize");
-            }
+        if (!userAccess("districtEntry")) {
+            return view("admin.unauthorize");
         }
         return view("admin.bdgeocode.district");
     }

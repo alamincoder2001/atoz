@@ -10,17 +10,18 @@
 
                                     <div class="col-md-6">
                                         <div class="form-group mb-1">
-                                            <label for="name" class="">Name<span class="text-danger fw-bold">*</span></label>
-                                                <input type="text" id="name" v-model="form.name" class="form-control"
-                                                    autocomplete="off" placeholder="Name">
-                                                <span class="error-name error text-danger"></span>
+                                            <label for="name" class="">Name<span
+                                                    class="text-danger fw-bold">*</span></label>
+                                            <input type="text" id="name" v-model="form.name" class="form-control"
+                                                autocomplete="off" placeholder="Name">
+                                            <span class="error-name error text-danger"></span>
                                         </div>
                                         <div class="form-group mb-1">
                                             <label for="username" class="">User Name<span
                                                     class="text-danger fw-bold">*</span></label>
-                                                <input type="text" id="username" v-model="form.username"
-                                                    class="form-control" placeholder="User Name" autocomplete="off">
-                                                <span class="error-username error text-danger"></span>
+                                            <input type="text" id="username" v-model="form.username" class="form-control"
+                                                placeholder="User Name" autocomplete="off">
+                                            <span class="error-username error text-danger"></span>
                                         </div>
                                         <div class="form-group mb-1">
                                             <label for="email" class="col-md-3">Email<span
@@ -31,39 +32,49 @@
                                         </div>
 
                                         <div class="form-group mb-1">
+                                            <label for="phone" class="col-md-3">Phone<span
+                                                    class="text-danger fw-bold">*</span></label>
+                                            <input type="phone" id="phone" v-model="form.phone" class="form-control"
+                                                placeholder="Phone" autocomplete="off">
+                                            <span class="error-phone error text-danger"></span>
+                                        </div>
+
+                                        <div class="form-group mb-1">
                                             <label for="father_name" class="pe-0">Father<span
                                                     class="text-danger fw-bold">*</span></label>
-                                                <input type="text" id="father_name" v-model="form.father_name"
-                                                    class="form-control" placeholder="Father Name" autocomplete="off">
+                                            <input type="text" id="father_name" v-model="form.father_name"
+                                                class="form-control" placeholder="Father Name" autocomplete="off">
                                             <span class="error-father_name error text-danger"></span>
                                         </div>
                                         <div class="form-group mb-1">
                                             <label for="mother_name" class="pe-0">Mother<span
                                                     class="text-danger fw-bold">*</span></label>
-                                                    <input type="text" id="mother_name" v-model="form.mother_name"
-                                                        class="form-control" placeholder="Mother Name" autocomplete="off">
+                                            <input type="text" id="mother_name" v-model="form.mother_name"
+                                                class="form-control" placeholder="Mother Name" autocomplete="off">
                                             <span class="error-mother_name error text-danger"></span>
                                         </div>
                                         <div class="form-group mb-1">
-                                            <label for="present_address" class="pe-0">Present Address<span class="text-danger fw-bold">*</span></label>
-                                                <input type="text" id="present_address" v-model="form.present_address"
-                                                    class="form-control" placeholder="Present Address" autocomplete="off">
+                                            <label for="present_address" class="pe-0">Present Address<span
+                                                    class="text-danger fw-bold">*</span></label>
+                                            <input type="text" id="present_address" v-model="form.present_address"
+                                                class="form-control" placeholder="Present Address" autocomplete="off">
                                             <span class="error-present_address error text-danger"></span>
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="form-group mb-1">
-                                            <label for="permanent_address" class="pe-0">Permanent Address<span class="text-danger fw-bold">*</span></label>
-                                                <input type="text" id="permanent_address" v-model="form.permanent_address"
-                                                    class="form-control" placeholder="Permanent Address" autocomplete="off">
+                                            <label for="permanent_address" class="pe-0">Permanent Address<span
+                                                    class="text-danger fw-bold">*</span></label>
+                                            <input type="text" id="permanent_address" v-model="form.permanent_address"
+                                                class="form-control" placeholder="Permanent Address" autocomplete="off">
                                             <span class="error-permanent_address error text-danger"></span>
                                         </div>
 
                                         <div class="form-group mb-1">
                                             <label for="description" class="pe-0">Description</label>
-                                                <input type="text" id="description" v-model="form.description"
-                                                    class="form-control" placeholder="Description" autocomplete="off">
+                                            <input type="text" id="description" v-model="form.description"
+                                                class="form-control" placeholder="Description" autocomplete="off">
                                             <span class="error-description error text-danger"></span>
                                         </div>
 
@@ -71,8 +82,9 @@
                                             <label for="commission" class="col-md-3 pe-0">Commission<span
                                                     class="text-danger fw-bold">*</span></label>
                                             <div class="input-group d-flex align-items-center">
-                                                <input type="number" step="0.01" min="0" id="commission" v-model="form.commission"
-                                                    class="form-control" placeholder="%" autocomplete="off">
+                                                <input type="number" step="0.01" min="0" id="commission"
+                                                    v-model="form.commission" class="form-control" placeholder="%"
+                                                    autocomplete="off">
                                                 <span style="background: #8b006d;padding: 4px;color: white;">%</span>
                                             </div>
                                             <span class="error-commission error text-danger"></span>
@@ -100,18 +112,16 @@
                                                 class="form-control" placeholder="Password" autocomplete="off">
                                             <span class="error-password error text-danger"></span>
                                         </div>
-                                    </div>
-
-                                    <div class="form-group row text-end">
-                                        <label for="save" class="col-md-3"></label>
-                                        <div class="col-md-9">
-                                            <button type="submit" class="btn btn-success text-light shadow-none">
-                                                <i class="fa fa-floppy-o pe-1" aria-hidden="true"></i>
-                                                Save
-                                            </button>
+                                        <div class="form-group row text-end">
+                                            <label for="save" class="col-md-3"></label>
+                                            <div class="col-md-9">
+                                                <button type="submit" class="btn btn-success text-light shadow-none">
+                                                    <i class="fa fa-floppy-o pe-1" aria-hidden="true"></i>
+                                                    Save
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
 
@@ -120,7 +130,7 @@
                                     <label class="form-label">
                                         Photo
                                     </label>
-                                    <input type="file" accept="image/*" class="form-control" @change="imageUrl" >
+                                    <input type="file" accept="image/*" class="form-control" @change="imageUrl">
                                 </div>
                                 <div class="form-group">
                                     <label>Preview Photo</label>
@@ -133,11 +143,12 @@
                                         <sup class="text-danger" title="must be fillable">*</sup>
                                         <small class="text-danger" style="font-size: 11px">150px x 150px</small>
                                     </label>
-                                        <input type="file" name="nid_front_img" accept="image/*" class="form-control" @change="nidFrontUrl" >
+                                    <input type="file" name="nid_front_img" accept="image/*" class="form-control"
+                                        @change="nidFrontUrl">
                                 </div>
                                 <div class="form-group">
                                     <label>Preview NID Front</label>
-                                    <img :src="nidFrontSrc" class="img-fluid" alt="nid_front" style="max-height: 60px;" >
+                                    <img :src="nidFrontSrc" class="img-fluid" alt="nid_front" style="max-height: 60px;">
                                 </div>
 
                                 <div class="form-group">
@@ -146,12 +157,14 @@
                                         <sup class="text-danger" title="must be fillable">*</sup>
                                         <small class="text-danger" style="font-size: 11px">150px x 150px</small>
                                     </label>
-                                        <!-- <input type="file" accept="image/*" class="form-control" @change="nidBackUrl" onchange="document.getElementById('nidBack').src = window.URL.createObjectURL(this.files[0])" > -->
-                                        <input type="file" name="nid_back_img" accept="image/*" class="form-control" @change="nidBackUrl" >
+                                    <!-- <input type="file" accept="image/*" class="form-control" @change="nidBackUrl" onchange="document.getElementById('nidBack').src = window.URL.createObjectURL(this.files[0])" > -->
+                                    <input type="file" name="nid_back_img" accept="image/*" class="form-control"
+                                        @change="nidBackUrl">
                                 </div>
                                 <div class="form-group">
                                     <label>Preview NID Back</label>
-                                    <img :src="nidBackSrc" id="nidBack" class="img-fluid" alt="nid_back" style="max-height: 60px;">
+                                    <img :src="nidBackSrc" id="nidBack" class="img-fluid" alt="nid_back"
+                                        style="max-height: 60px;">
                                 </div>
 
                                 <!-- <div class="form-group ImageBackground">
@@ -205,6 +218,7 @@ export default {
                 name: "",
                 username: "",
                 email: "",
+                phone: "",
                 role: "manager",
                 password: "",
                 district_id: "",
@@ -230,6 +244,7 @@ export default {
                 { label: "Image", field: "img", html: true, },
                 { label: 'Name', field: 'name' },
                 { label: 'User Name', field: 'username' },
+                { label: 'Phone', field: 'phone' },
                 { label: 'Email', field: 'email' },
                 { label: "Action", field: "after" },
             ],
@@ -268,12 +283,12 @@ export default {
         },
         getUser() {
             axios.get("/admin/get-manager")
-            .then(res => {
-                this.users = res.data.manager.map(c => {
-                    c.img = c.image == null ? '<img src="/noImage.jpg" width="40px">' : '<img src="/' + c.image + '" width="40px">'
-                    return c;
+                .then(res => {
+                    this.users = res.data.manager.map(c => {
+                        c.img = c.image == null ? '<img src="/noImage.jpg" width="40px">' : '<img src="/' + c.image + '" width="40px">'
+                        return c;
+                    })
                 })
-            })
         },
 
         saveUser() {
@@ -324,6 +339,11 @@ export default {
             } else {
                 $('#email').removeClass('is-invalid');
             }
+            if (error.phone) {
+                $('#phone').addClass('is-invalid');
+            } else {
+                $('#phone').removeClass('is-invalid');
+            }
             if (error.father_name) {
                 $('#father_name').addClass('is-invalid');
             } else {
@@ -359,6 +379,7 @@ export default {
             this.form.father_name = val.father_name;
             this.form.mother_name = val.mother_name;
             this.form.role = val.role;
+            this.form.phone = val.phone;
             this.form.district_id = val.district_id;
             this.form.thana_id = val.thana_id;
             this.form.present_address = val.present_address;
@@ -395,8 +416,8 @@ export default {
             //     img.src = window.URL.createObjectURL(event.target.files[0]);
             //     img.onload = () => {
             //         if (img.width === 150 && img.height === 150) {
-                        this.imageSrc = window.URL.createObjectURL(event.target.files[0]);
-                        this.form.image = event.target.files[0];
+            this.imageSrc = window.URL.createObjectURL(event.target.files[0]);
+            this.form.image = event.target.files[0];
             //         } else {
             //             alert(`This image ${img.width}px X ${img.height}px but require image 150px X 150px`);
             //         }
@@ -412,8 +433,8 @@ export default {
             //     img.src = window.URL.createObjectURL(event.target.files[0]);
             //     img.onload = () => {
             //         if (img.width === 150 && img.height === 95) {
-                        this.nidFrontSrc = window.URL.createObjectURL(event.target.files[0]);
-                        this.form.nid_front_img = event.target.files[0];
+            this.nidFrontSrc = window.URL.createObjectURL(event.target.files[0]);
+            this.form.nid_front_img = event.target.files[0];
             //         } else {
             //             alert(`This image ${img.width}px X ${img.height}px but require image 150px X 95px`);
             //         }
@@ -429,8 +450,8 @@ export default {
             //     img.src = window.URL.createObjectURL(event.target.files[0]);
             //     img.onload = () => {
             //         if (img.width === 150 && img.height === 95) {
-                        this.nidBackSrc = window.URL.createObjectURL(event.target.files[0]);
-                        this.form.nid_back_img = event.target.files[0];
+            this.nidBackSrc = window.URL.createObjectURL(event.target.files[0]);
+            this.form.nid_back_img = event.target.files[0];
             //         } else {
             //             alert(`This image ${img.width}px X ${img.height}px but require image 150px X 95px`);
             //         }
@@ -445,6 +466,7 @@ export default {
             this.form.name = "";
             this.form.username = "";
             this.form.email = "";
+            this.form.phone = "";
             this.form.role = "manager";
             this.form.password = "";
             this.form.district_id = "";

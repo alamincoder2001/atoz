@@ -47,7 +47,7 @@
                                 <th style="text-align: center;color:white;">Due</th>
                                 <th style="text-align: center;color:white;">Worker</th>
                                 <th style="text-align: center;color:white;">Status</th>
-                                <th style="text-align: center; width: 5%;color:white;"> Action </th>
+                                <th style="text-align: center; width: 8%;color:white;"> Action </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -65,7 +65,7 @@
                                     <td class="text-center">{{ item.orderDetails[0].due }}</td>
                                     <td class="text-center">{{ item.orderDetails[0].worker_name }}</td>
                                     <td class="text-center" v-html="statusText(item.orderDetails[0].status)"></td>
-                                    <td>
+                                    <td style="display: flex;gap: 2px;">
                                         <button v-if="item.orderDetails[0].status != 'complete'" @click="modalShow(item.orderDetails[0], item.thanaId)" type="button" class="btn btn-danger btn-sm shadow-none fas fa-user"></button>
                                         <br>
                                         <button v-show="ManagerOrAdmin" title="Add Due Amount" v-if="item.orderDetails[0].status != 'complete'" @click="addDueModalShow(item.orderDetails[0].id)" type="button" class="btn btn-success btn-sm shadow-none">
@@ -82,7 +82,7 @@
                                     <td class="text-center">{{ service.due }}</td>
                                     <td class="text-center">{{ service.worker_name }}</td>
                                     <td class="text-center"  v-html="statusText(service.status)"></td>
-                                    <td class="">
+                                    <td style="display: flex;gap: 2px;">
                                         <button v-if="service.status != 'complete'" @click="modalShow(service, item.thanaId)" type="button" class="btn btn-danger btn-sm shadow-none fas fa-user"></button>
                                         <br>
                                         <button v-show="ManagerOrAdmin" href="javascript:void(0)" title="Add Due Amount" v-if="item.orderDetails[0].status != 'complete'" @click="addDueModalShow(item.orderDetails[0].id)" class="btn btn-success btn-sm shadow-none">

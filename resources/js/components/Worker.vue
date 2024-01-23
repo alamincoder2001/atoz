@@ -208,7 +208,7 @@
                             <i class="fas fa-trash text-danger"></i>
                         </a>
 
-                        <a href="" @click.prevent="statusRow(props.row.id)">
+                        <a v-if="role == 'Superadmin' || role == 'admin'" href="" @click.prevent="statusRow(props.row.id)">
                             <span v-if="props.row.status == 'p'">
                                 <i class="fas fa-arrow-up text-success" title="Worker Status Active. Click To Change"></i>
                             </span>
@@ -283,7 +283,7 @@ export default {
             role: "",
             district_id: "",
             thana_id: "",
-            ManagerOrAdmin: true
+            ManagerOrAdmin: true,
         }
     },
 
@@ -447,7 +447,6 @@ export default {
         },
 
         editRow(val) {
-
             if(this.role =='manager'){
                 this.ManagerOrAdmin = false;
             }
@@ -461,19 +460,13 @@ export default {
             this.form.commission = val.commission;
             this.form.nid = val.nid;
 
-            this.form.category_id = val.category_id;
-            // this.selectedCategory.map(function(value, key) {
-            //     cate_id.push(value.id);
-            // });
-        //    let cateIDs = [];
-        //    cateIDs =  JSON.parse(val.category_id);
-        //     cateIDs.map(function(value, key) {
-        //         this.selectedCategory.push(value);
-        //     });
+            this.form.category_id = JSON.parse(val.category_id);
+            let cats = [];
+            val.categories.map(function(value, key) {
+                cats.push(value);
+            });
 
-            // val.category_id.foreach(data=>{
-            //     this.form.category_id.push(data);
-            // })
+            this.selectedCategory = cats;
 
             this.form.manager_id = val.manager_id;
             this.form.district_id = val.district_id;
@@ -493,10 +486,6 @@ export default {
                 }
             } else {
                 this.selectedManager = null
-            }
-            this.selectedCategory = {
-                id: val.category_id,
-                name: val.category.name,
             }
             this.selectedDistrict = {
                 id: val.district_id,

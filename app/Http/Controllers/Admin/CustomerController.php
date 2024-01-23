@@ -3,11 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\User;
-use App\Models\AdminAccess;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 
 class CustomerController extends Controller
@@ -19,13 +17,8 @@ class CustomerController extends Controller
 
     public function index()
     {
-        if (Auth::guard('admin')->user()->role != 'SuperAdmin') {
-            $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
-                ->pluck('permissions')
-                ->toArray();
-            if (!in_array("customerList", $access)) {
-                return view("admin.unauthorize");
-            }
+        if (!userAccess("customerList")) {
+            return view("admin.unauthorize");
         }
         return view("admin.customer.index");
     }

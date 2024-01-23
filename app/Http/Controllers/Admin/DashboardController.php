@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Models\User;
 use App\Models\Admin;
 use App\Models\Worker;
-use App\Models\AdminAccess;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -23,13 +22,8 @@ class DashboardController extends Controller
 
     public function index()
     {
-        if (Auth::guard('admin')->user()->role != 'SuperAdmin') {
-            $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
-                ->pluck('permissions')
-                ->toArray();
-            if (!in_array("Dashboard", $access)) {
-                return view("admin.unauthorize");
-            }
+        if (!userAccess("Dashboard")) {
+            return view("admin.unauthorize");
         }
         return view("admin.dashboard");
     }
@@ -104,20 +98,20 @@ class DashboardController extends Controller
 
         $worker = '';
         if (Auth::guard('admin')->user()->role == 'manager') {
-            $worker = Worker::where("thana_id", Auth::guard('admin')->user()->thana_id)->whereBetween('created_at',[$dateFrom, $dateTo])->get();
+            $worker = Worker::where("thana_id", Auth::guard('admin')->user()->thana_id)->whereBetween('created_at', [$dateFrom, $dateTo])->get();
         }
 
         if ((Auth::guard('admin')->user()->role == 'admin') || (Auth::guard('admin')->user()->role == 'SuperAdmin')) {
-            $worker = Worker::whereBetween('created_at',[$dateFrom, $dateTo])->get();
+            $worker = Worker::whereBetween('created_at', [$dateFrom, $dateTo])->get();
         }
 
         $customer = '';
         if (Auth::guard('admin')->user()->role == 'manager') {
-            $customer = User::where("thana_id", Auth::guard('admin')->user()->thana_id)->whereBetween('created_at',[$dateFrom, $dateTo])->get();
+            $customer = User::where("thana_id", Auth::guard('admin')->user()->thana_id)->whereBetween('created_at', [$dateFrom, $dateTo])->get();
         }
 
         if ((Auth::guard('admin')->user()->role == 'admin') || (Auth::guard('admin')->user()->role == 'SuperAdmin')) {
-            $customer = User::whereBetween('created_at',[$dateFrom, $dateTo])->get();
+            $customer = User::whereBetween('created_at', [$dateFrom, $dateTo])->get();
         }
 
         return response()->json([
@@ -127,10 +121,10 @@ class DashboardController extends Controller
             'completed'     => $complete,
             'order_detail'  => $orderDetail,
             'commission'    => $commission[0]->total,
-            'manager'       => Admin::where('role', 'manager')->whereBetween('created_at',[$dateFrom, $dateTo])->get(),
+            'manager'       => Admin::where('role', 'manager')->whereBetween('created_at', [$dateFrom, $dateTo])->get(),
             'worker'        => $worker,
             'customer'      => $customer,
-            'input'      => $input,
+            'input'         => $input,
         ]);
     }
 

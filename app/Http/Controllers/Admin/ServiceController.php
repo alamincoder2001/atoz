@@ -21,13 +21,8 @@ class ServiceController extends Controller
 
     public function index()
     {
-        if (Auth::guard('admin')->user()->role != 'SuperAdmin') {
-            $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
-                ->pluck('permissions')
-                ->toArray();
-            if (!in_array("serviceEntry", $access)) {
-                return view("admin.unauthorize");
-            }
+        if (!userAccess("serviceEntry")) {
+            return view("admin.unauthorize");
         }
         return view("admin.service.index");
     }

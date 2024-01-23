@@ -43,7 +43,6 @@
                                             <div class="col-md-9">
                                                 <select id="role" v-model="form.role" class="form-select shadow-none">
                                                     <option value="">Select Role</option>
-                                                    <option value="SuperAdmin">Super Admin</option>
                                                     <option value="admin">Admin</option>
                                                     <option value="user">User</option>
                                                 </select>
@@ -74,7 +73,8 @@
                             </div>
                             <div class="col-md-2 d-flex justify-content-center align-items-center">
                                 <div class="form-group ImageBackground">
-                                    <p class="text-danger" style="text-align: center;font-size: 11px;margin: 0px;">150px X 150px</p>
+                                    <p class="text-danger" style="text-align: center;font-size: 11px;margin: 0px;">150px X
+                                        150px</p>
                                     <img :src="imageSrc" class="imageShow" />
                                     <label for="image">Photo</label>
                                     <input type="file" id="image" class="form-control shadow-none" @change="imageUrl" />
@@ -99,15 +99,18 @@
                 </template>
                 <template slot="table-row" slot-scope="props">
                     <span v-if="props.column.field == 'after'">
-                        <a v-if="props.row.role != 'SuperAdmin'" title="User Access" class="text-danger" :href="`${linkHref + '/admin/user/permission/' + props.row.id}`">
-                            <i class="fas fa-users text-warning"></i>
-                        </a>
-                        <a href="" v-if="props.row.role != 'SuperAdmin' || userId == 1"  @click.prevent="editRow(props.row)">
-                            <i class="fas fa-edit text-info"></i>
-                        </a>
-                        <a href="" v-if="props.row.role != 'SuperAdmin'" @click.prevent="deleteRow(props.row.id)">
-                            <i class="fas fa-trash text-danger"></i>
-                        </a>
+                        <span v-if="props.row.role != 'Superadmin'">
+                            <a v-if="props.row.role != 'admin'" title="User Access" class="text-danger"
+                                :href="`${linkHref + '/admin/user/permission/' + props.row.id}`">
+                                <i class="fas fa-users text-warning"></i>
+                            </a>
+                            <a href="" @click.prevent="editRow(props.row)">
+                                <i class="fas fa-edit text-info"></i>
+                            </a>
+                            <a v-if="props.row.role != 'admin'" @click.prevent="deleteRow(props.row.id)">
+                                <i class="fas fa-trash text-danger"></i>
+                            </a>
+                        </span>
                     </span>
                 </template>
             </vue-good-table>
@@ -140,7 +143,7 @@ export default {
                 { label: 'Name', field: 'name' },
                 { label: 'User Name', field: 'username' },
                 { label: 'Email', field: 'email' },
-                { label: 'Role', field: 'role' },
+                { label: 'Role', field: 'role', html: true },
                 { label: "Action", field: "after" },
             ],
             // rows: [],
@@ -160,6 +163,7 @@ export default {
                 .then(res => {
                     this.users = res.data.data.map(c => {
                         c.img = c.image == null ? '<img src="/noImage.jpg" width="40px">' : '<img src="/' + c.image + '" width="40px">'
+                        c.role
                         return c;
                     })
                 })
@@ -220,7 +224,7 @@ export default {
             this.form.username = val.username;
             this.form.email = val.email;
             this.form.role = val.role;
-            this.imageSrc = val.image != null ? '/'+val.image : "/noImage.jpg"
+            this.imageSrc = val.image != null ? '/' + val.image : "/noImage.jpg"
         },
 
         deleteRow(id) {
@@ -255,7 +259,7 @@ export default {
             this.form.role = "";
             this.form.password = "";
             this.imageSrc = "/noImage.jpg",
-            delete (this.form.image)
+                delete (this.form.image)
         }
     },
 }

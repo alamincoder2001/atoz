@@ -1,9 +1,9 @@
 <style>
- input[type=number]::-webkit-inner-spin-button,
-        input[type=number]::-webkit-outer-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
 </style>
 
 <template>
@@ -23,7 +23,7 @@
                                     </div>
                                     <div class="col-md-8">
                                         <div class="form-group mb-2">
-                                            <select class="form-select shadow-none" v-model="form.payment_type" >
+                                            <select class="form-select shadow-none" v-model="form.payment_type">
                                                 <option value="">---select---</option>
                                                 <option value="Cash">Cash</option>
                                                 <option value="Bank">Bank</option>
@@ -38,7 +38,8 @@
                                     </div>
                                     <div class="col-md-8">
                                         <div class="form-group mb-2">
-                                            <v-select :options="workers" v-model="selectedWorker" label="worker_name" @input="getworkerCommission" @change="onChangeWorker"></v-select>
+                                            <v-select :options="workers" v-model="selectedWorker" label="worker_name"
+                                                @input="getworkerCommission"></v-select>
                                         </div>
                                     </div>
 
@@ -81,7 +82,7 @@
                                         <label>Note</label>
                                     </div>
                                     <div class="col-md-8 mb-2">
-                                        <input type="text"  v-model="form.note" class="form-control">
+                                        <input type="text" v-model="form.note" class="form-control">
                                     </div>
 
                                 </div>
@@ -109,7 +110,7 @@
                 <div class="card-header pb-0">
                     <div class="row">
                         <div class="col-lg-2 col-md-2 col-sm-2">
-                            <a href="" @click.prevent="print" style="color: #3e5569;" v-if="workerPayments.length > 0" >
+                            <a href="" @click.prevent="print" style="color: #3e5569;" v-if="workerPayments.length > 0">
                                 <i class="fas fa-print" style="color: gray; font-size: 12px; padding: 0;"></i>
                                 Print
                             </a>
@@ -176,7 +177,8 @@
                                     <!-- <a href="javascript:void(0)" @click.prevent="editRow(item.id)">
                                         <i class="fas fa-edit text-info"></i>
                                     </a> -->
-                                    <a href="javascript:void(0)" target="_blank" @click="commissionReceive(item.id)" class="btn shadow-none" title="Worker Commission Report">
+                                    <a href="javascript:void(0)" @click="commissionReceive(item.id)" class="btn shadow-none"
+                                        title="Worker Commission Report">
                                         <i class="fas fa-print"></i>
                                     </a>
                                     <a href="javascript:void(0)" @click.prevent="deleteRow(item.id)">
@@ -195,8 +197,8 @@
 
 
 <script>
-    import moment from "moment";
-    export default
+import moment from "moment";
+export default
     {
         data() {
             return {
@@ -208,7 +210,7 @@
                     commission: '0.00',
                     payment_date: moment().format('YYYY-MM-DD'),
                     note: "",
-                    worker_id:'',
+                    worker_id: '',
                     last_payment: '0.00',
                 }),
 
@@ -228,35 +230,25 @@
 
             getWorkers() {
                 axios.get("/admin/get-workers-with-commission")
-                .then(res => {
-                    this.workers1 = res.data.workers.map(w => {
-                        w.commissionDue =parseFloat(w.amountTotal * w.commission/100);
-                        return w;
+                    .then(res => {
+                        this.workers1 = res.data.workers
+                        this.workers = this.workers1;
                     })
-                    this.workers = this.workers1;
-                })
             },
 
-            getworkerCommission()
-            {
-                this.form.commission = this.selectedWorker.commissionDue;
+            getworkerCommission() {
+                this.form.commission = this.selectedWorker.dueAmount;
             },
 
             getWorkerCommissions() {
                 axios.get("/admin/get-worker-commission")
-                .then(res => {
-                    this.workerPayments = res.data.commissionList;
-                })
+                    .then(res => {
+                        this.workerPayments = res.data.commissionList;
+                    })
             },
 
-            onChangeWorker(e) {
-                // console.log(e);
-                // this.form.workerCommission = '0.00';
-            },
-
-            commissionReceive(id)
-            {
-                window.open('/admin/worker/commission-receive/' +id, '_blank');
+            commissionReceive(id) {
+                window.open('/admin/worker/commission-receive/' + id, '_blank');
             },
 
             saveOrUpdateWorkerCommission() {
@@ -288,50 +280,20 @@
                         this.getWorkers();
                         this.getWorkerCommissions();
                         setTimeout(() => {
-                         if (confirm("Do you want to view worker commission receive!"))
-                         {
-                            window.open('/admin/worker/commission-receive/' +res.data.id, '_blank');
-                         }
+                            if (confirm("Do you want to view worker commission receive!")) {
+                                window.open('/admin/worker/commission-receive/' + res.data.id, '_blank');
+                            }
                         }, 500);
                     }
                 });
             },
 
-            // editRow(val) {
-            //     this.form.id = val.id;
-            //     this.form.name = val.name;
-            //     this.form.username = val.username;
-            //     this.form.email = val.email;
-            //     this.form.father_name = val.father_name;
-            //     this.form.mother_name = val.mother_name;
-            //     this.form.role = val.role;
-            //     this.form.district_id = val.district_id;
-            //     this.form.thana_id = val.thana_id;
-            //     this.form.present_address = val.present_address;
-            //     this.form.permanent_address = val.permanent_address;
-            //     this.form.description = val.description;
-            //     this.form.commission = val.commission;
-            //     this.imageSrc = val.image != null ? '/' + val.image : "/noImage.jpg"
-            //     this.nidFrontSrc = val.nid_front_img != null ? '/' + val.nid_front_img : "/noImage.jpg"
-            //     this.nidBackSrc = val.nid_back_img != null ? '/' + val.nid_back_img : "/noImage.jpg"
-
-            //     this.selectedDistrict = {
-            //         id: val.district_id,
-            //         name: val.thana.district.name,
-            //     }
-            //     this.getThana();
-            //     this.selectedWorker = {
-            //         id: val.thana_id,
-            //         name: val.thana.name
-            //     }
-            // },
-
             deleteRow(id) {
                 if (confirm("Are you sure want to delete this!")) {
                     axios.post("/admin/worker/delete/commission", { id: id }).then((res) => {
-                        if(res.data.error){
+                        if (res.data.error) {
                             $.notify(res.data, "error");
-                        }else{
+                        } else {
                             $.notify(res.data.success, "success");
                         }
                         this.getWorkers();
@@ -352,7 +314,7 @@
             },
 
             async print() {
-				let reportContent = `
+                let reportContent = `
                     <div class="container">
 						<div class="row">
 							<div class="col-sm-12 text-center">
@@ -364,7 +326,7 @@
 						${document.querySelector('#printThis').innerHTML}
 					</div>
 				`;
-				var reportWindow = window.open('', 'PRINT', `height=${screen.height}, width=${screen.width}`);
+                var reportWindow = window.open('', 'PRINT', `height=${screen.height}, width=${screen.width}`);
 
                 reportWindow.document.write(`
                     <table>
@@ -380,7 +342,7 @@
                     </table>
 				`);
 
-				reportWindow.document.head.innerHTML += `
+                reportWindow.document.head.innerHTML += `
                 <link rel="stylesheet" href="{{ asset('frontend/assets/css/bootstrap.min.css') }}">
                 <link rel="stylesheet" href="{{ asset('frontend/assets/css/boxicons.min.css') }}">
 					<style>
@@ -409,19 +371,19 @@
                         }
 					</style>
 				`;
-				reportWindow.document.body.innerHTML += reportContent;
+                reportWindow.document.body.innerHTML += reportContent;
 
-				let rows = reportWindow.document.querySelectorAll('.record-table tr');
-				rows.forEach(row => {
-					row.lastChild.remove();
-				})
+                let rows = reportWindow.document.querySelectorAll('.record-table tr');
+                rows.forEach(row => {
+                    row.lastChild.remove();
+                })
 
-				reportWindow.focus();
-				reportWindow.print();
+                reportWindow.focus();
+                reportWindow.print();
                 setTimeout(() => {
                     reportWindow.close();
                 }, 1000);
-			}
+            }
 
 
         },

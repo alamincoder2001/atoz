@@ -236,10 +236,6 @@ export default {
                 dateFrom: this.filter.dateFrom,
                 dateTo: this.filter.dateTo,
             };
-            // console.log(formdata);
-            // axios.post("/admin/commission-fetch", formdata).then((res) => {
-            //     this.commissions = res.data;
-            // });
             axios.post("/admin/get-profit", formdata).then(res => {
                 //other
                 this.worker = res.data.worker.length

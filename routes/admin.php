@@ -171,13 +171,13 @@ Route::group(["prefix" => "admin"], function () {
     Route::post('/worker/delete/payment-collection', [PaymentCollectionController::class, 'deletePayment']);
     Route::get('/worker/payment-receive/{id}', [PaymentCollectionController::class, 'paymentReceive']);
 
-    Route::get('worker/commission',[WorkerCommissionController::class, 'index'])->name('admin.worker.commission');
-    Route::get('/get-worker-commission',[WorkerCommissionController::class, 'getCommission']);
-    Route::get('/get-workers-with-commission',[WorkerCommissionController::class, 'getWorkerWithCommission']);
+    Route::get('worker/commission', [WorkerCommissionController::class, 'index'])->name('admin.worker.commission');
+    Route::get('/get-worker-commission', [WorkerCommissionController::class, 'getCommission']);
+    Route::get('/get-workers-with-commission', [WorkerCommissionController::class, 'getWorkerWithCommission']);
     Route::post('/worker/commission-store', [WorkerCommissionController::class, 'storeWorkerCommission']);
     Route::get('/worker/commission-receive/{id}', [WorkerCommissionController::class, 'commissionReceive']);
     Route::post('/worker/delete/commission', [WorkerCommissionController::class, 'deleteWorkerCommission']);
 
     // Order Due add by area manager
-    Route::post('/order/add-due',[OrderController::class, 'dueAdd']);
+    Route::post('/order/add-due', [OrderController::class, 'dueAdd']);
 });

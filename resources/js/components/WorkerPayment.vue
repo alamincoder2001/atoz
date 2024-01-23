@@ -38,7 +38,7 @@
                                     </div>
                                     <div class="col-md-8">
                                         <div class="form-group mb-2">
-                                            <v-select :options="workers" v-model="selectedWorker" label="worker_name" @input="getWorkerDue" @change="onChangeWorker"></v-select>
+                                            <v-select :options="workers" v-model="selectedWorker" label="worker_name" @input="getWorkerDue"></v-select>
                                         </div>
                                     </div>
 
@@ -168,7 +168,7 @@
                                     <!-- <a href="javascript:void(0)" @click.prevent="editRow(item.id)">
                                         <i class="fas fa-edit text-info"></i>
                                     </a> -->
-                                    <a href="javascript:void(0)" target="_blank" @click="paymentReceive(item.id)" class="btn shadow-none" title="Worker Payment Collection Report">
+                                    <a href="javascript:void(0)" @click="paymentReceive(item.id)" class="btn shadow-none" title="Worker Payment Collection Report">
                                         <i class="fas fa-print"></i>
                                     </a>
                                     <a href="javascript:void(0)" @click.prevent="deleteRow(item.id)">
@@ -226,7 +226,7 @@
 
             getWorkerDue()
             {
-                this.form.workerDue = this.selectedWorker.duetotal;
+                this.form.workerDue = this.selectedWorker.dueAmount;
             },
 
             getWorkerPayments() {
@@ -234,11 +234,6 @@
                 .then(res => {
                     this.workerPayments = res.data.paymentCollections;
                 })
-            },
-
-            onChangeWorker(e) {
-                // console.log(e);
-                // this.form.workerDue = '0.00';
             },
 
             saveOrUpdatePayment() {

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use Carbon\Carbon;
 use App\Models\Blog;
-use App\Models\AdminAccess;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -21,13 +20,9 @@ class BlogController extends Controller
 
     public function index()
     {
-        if (Auth::guard('admin')->user()->role != 'SuperAdmin') {
-            $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
-                ->pluck('permissions')
-                ->toArray();
-            if (!in_array("newsandeventEntry", $access)) {
-                return view("admin.unauthorize");
-            }
+
+        if (!userAccess("newsandeventEntry")) {
+            return view("admin.unauthorize");
         }
         return view("admin.blog.index");
     }

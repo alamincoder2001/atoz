@@ -12,10 +12,10 @@
     <title>@yield('title')</title>
     <!-- Favicon icon -->
     <link rel="shortcut icon" type="image/x-icon" href="{{asset($profile->navicon != null ? $profile->navicon : 'noImage.jpg')}}" />
-     {{-- toastify --}}
-     <link rel="stylesheet" href="{{asset('css/toastify.min.css')}}">
-     <script src="{{asset('js/toastify.min.js')}}"></script>
-     {{--end toastify --}}
+    {{-- toastify --}}
+    <link rel="stylesheet" href="{{asset('css/toastify.min.css')}}">
+    <script src="{{asset('js/toastify.min.js')}}"></script>
+    {{--end toastify --}}
     @include("layouts.backend.style")
 </head>
 
@@ -50,17 +50,29 @@
 
 
 
-                 {{-- message section --}}
-                    @if(Session::has('success'))
-                        <script>
-                            Toastify({text: "{{ Session::get('success') }}", duration: 2000, close: true, gravity: "top",  backgroundColor: "linear-gradient(to right, #4caf50, #4caf50)"}).showToast();
-                        </script>
-                    @endif
-                    @if(Session::has('error'))
-                        <script>
-                            Toastify({text: "{{ Session::get('error') }}", duration: 2000, close: true, gravity: "top",  backgroundColor: "linear-gradient(to right, #f44336, #e91e63)"}).showToast();
-                        </script>
-                    @endif
+                {{-- message section --}}
+                @if(Session::has('success'))
+                <script>
+                    Toastify({
+                        text: "{{ Session::get('success') }}",
+                        duration: 2000,
+                        close: true,
+                        gravity: "top",
+                        backgroundColor: "linear-gradient(to right, #4caf50, #4caf50)"
+                    }).showToast();
+                </script>
+                @endif
+                @if(Session::has('error'))
+                <script>
+                    Toastify({
+                        text: "{{ Session::get('error') }}",
+                        duration: 2000,
+                        close: true,
+                        gravity: "top",
+                        backgroundColor: "linear-gradient(to right, #f44336, #e91e63)"
+                    }).showToast();
+                </script>
+                @endif
                 {{-- end message section --}}
 
 

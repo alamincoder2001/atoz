@@ -21,13 +21,8 @@ class AdminAccessController extends Controller
 
     public function create()
     {
-        if (Auth::guard('admin')->user()->role != 'SuperAdmin') {
-            $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
-                ->pluck('permissions')
-                ->toArray();
-            if (!in_array("userEntry", $access)) {
-                return view("admin.unauthorize");
-            }
+        if (!userAccess("userEntry")) {
+            return view("admin.unauthorize");
         }
 
         return view("admin.user.create");
@@ -35,15 +30,15 @@ class AdminAccessController extends Controller
 
     public function index($id = null)
     {
-        if (Auth::guard('admin')->user()->role == 'SuperAdmin') {
+        if (Auth::guard('admin')->user()->role == 'Superadmin') {
             if ($id == null) {
-                $data = Admin::where('id', '!=', Auth::guard('admin')->user()->id)->where('role', '!=', 'manager')->where("id", "!=", 1)->get();
+                $data = Admin::where('role', '!=', 'manager')->get();
             } else {
                 $data = Admin::find($id);
             }
         } else {
             if ($id == null) {
-                $data = Admin::where('id', '!=', Auth::guard('admin')->user()->id)->where('role', '!=', 'manager')->where("id", "!=", 1)->get();
+                $data = Admin::where('role', '!=', 'manager')->get();
             } else {
                 $data = Admin::find($id);
             }
@@ -176,10 +171,7 @@ class AdminAccessController extends Controller
                 return back();
             }
 
-            $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
-                ->pluck('permissions')
-                ->toArray();
-            if (!in_array("userAccess", $access)) {
+            if (!userAccess("userAccess")) {
                 return view("admin.unauthorize");
             }
         }

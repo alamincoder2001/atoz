@@ -8,6 +8,7 @@ use App\Models\AdminAccess;
 use App\Models\OrderDetail;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
@@ -23,26 +24,16 @@ class WorkerController extends Controller
 
     public function list()
     {
-        if (Auth::guard('admin')->user()->role != 'SuperAdmin') {
-            $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
-                ->pluck('permissions')
-                ->toArray();
-            if (!in_array("workerEntry", $access)) {
-                return view("admin.unauthorize");
-            }
+        if (!userAccess("workerEntry")) {
+            return view("admin.unauthorize");
         }
         return view("admin.worker.list");
     }
 
     public function pendingWorker()
     {
-        if (Auth::guard('admin')->user()->role != 'SuperAdmin') {
-            $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
-                ->pluck('permissions')
-                ->toArray();
-            if (!in_array("workerEntry", $access)) {
-                return view("admin.unauthorize");
-            }
+        if (!userAccess("workerEntry")) {
+            return view("admin.unauthorize");
         }
         return view("admin.worker.pending_list");
     }
@@ -50,9 +41,9 @@ class WorkerController extends Controller
     public function getPendingWorker()
     {
         if (Auth::guard('admin')->user()->role == 'manager') {
-            $workers = Worker::with('thana', 'manager', 'category')->where('status', 'd')->where('manager_id', Auth::guard('admin')->user()->id)->latest()->get();
+            $workers = Worker::with('thana', 'manager')->where('status', 'd')->where('manager_id', Auth::guard('admin')->user()->id)->latest()->get();
         } else {
-            $workers = Worker::with('thana', 'manager', 'category')->where('status', 'd')->latest()->get();
+            $workers = Worker::with('thana', 'manager')->where('status', 'd')->latest()->get();
         }
         return response()->json(["workers" => $workers]);
     }
@@ -72,42 +63,51 @@ class WorkerController extends Controller
         }
 
         $orders = DB::table('orders as or')
-        ->leftJoin('order_details as od', 'or.id', '=', 'od.order_id')
-        ->select('or.*')
-        ->where('od.worker_id', $w_id)
-        ->whereBetween('or.date', [$from_date, $to_date])
-        ->groupBy('od.order_id')
-        ->get();
+            ->leftJoin('order_details as od', 'or.id', '=', 'od.order_id')
+            ->select('or.*')
+            ->where('od.worker_id', $w_id)
+            ->whereBetween('or.date', [$from_date, $to_date])
+            ->groupBy('od.order_id')
+            ->get();
 
-        return view('admin.worker.worker_wise_order_list', compact('worker','orders','input'));
+        return view('admin.worker.worker_wise_order_list', compact('worker', 'orders', 'input'));
     }
 
     public function create()
     {
-        if (Auth::guard('admin')->user()->role != 'SuperAdmin') {
-            $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
-                ->pluck('permissions')
-                ->toArray();
-            if (!in_array("workerEntry", $access)) {
-                return view("admin.unauthorize");
-            }
+        if (!userAccess('workerEntry')) {
+            return view("admin.unauthorize");
         }
         return view("admin.worker.create");
     }
 
     public function getActiveWorker(Request $request)
     {
-        $workers = Worker::with('thana', 'manager', 'category')->latest();
+        $workers = Worker::with('thana', 'manager', 'district')->latest();
 
         if (Auth::guard('admin')->user()->role == 'manager') {
             $workers = $workers->where('manager_id', Auth::guard('admin')->user()->id);
-        } 
+        }
 
-        if(isset($request->status) && $request->status != '') {
+        if (isset($request->status) && $request->status != '') {
             $workers = $workers->where('status',  $request->status);
         }
 
         $workers = $workers->get();
+
+        foreach ($workers as $key => $item) {
+            $catId = json_decode($item->category_id);
+            if ($item->category_id != null) {
+                $categories = [];
+                foreach ($catId as $cId) {
+                    $category = Category::find($cId);
+                    array_push($categories, $category);
+                }
+                $item['categories'] = $categories;
+            } else {
+                $item['categories'] = [];
+            }
+        }
 
         return response()->json(["workers" => $workers]);
     }
@@ -115,9 +115,22 @@ class WorkerController extends Controller
     public function workerAssignOrder()
     {
         if (Auth::guard('admin')->user()->role == 'manager') {
-            $workers = Worker::with('thana', 'manager', 'category')->where('status', 'p')->where('payment_receive', 0)->where('manager_id', Auth::guard('admin')->user()->id)->latest()->get();
+            $workers = Worker::with('thana', 'district', 'manager')->where('status', 'p')->where('payment_receive', 0)->where('manager_id', Auth::guard('admin')->user()->id)->latest()->get();
         } else {
-            $workers = Worker::with('thana', 'manager', 'category')->where('status', 'p')->where('payment_receive', 0)->latest()->get();
+            $workers = Worker::with('thana', 'district', 'manager')->where('status', 'p')->where('payment_receive', 0)->latest()->get();
+        }
+        foreach ($workers as $key => $item) {
+            $catId = json_decode($item->category_id);
+            if ($item->category_id != null) {
+                $categories = [];
+                foreach ($catId as $cId) {
+                    $category = Category::find($cId);
+                    array_push($categories, $category);
+                }
+                $item['categories'] = $categories;
+            } else {
+                $item['categories'] = [];
+            }
         }
         return response()->json(["workers" => $workers]);
     }
@@ -125,10 +138,22 @@ class WorkerController extends Controller
     public function index()
     {
         if (Auth::guard('admin')->user()->role == 'manager') {
-            $workers = Worker::with('thana', 'manager', 'category')->where('manager_id', Auth::guard('admin')->user()->id)->latest()->get();
-            // $workers = Worker::with('thana', 'manager', 'category')->where('thana_id', Auth::guard('admin')->user()->thana_id)->latest()->get();
+            $workers = Worker::with('thana', 'district', 'manager')->where('manager_id', Auth::guard('admin')->user()->id)->latest()->get();
         } else {
-            $workers = Worker::with('thana', 'manager', 'category')->latest()->get();
+            $workers = Worker::with('thana', 'district', 'manager')->latest()->get();
+        }
+        foreach ($workers as $key => $item) {
+            $catId = json_decode($item->category_id);
+            if ($item->category_id != null) {
+                $categories = [];
+                foreach ($catId as $cId) {
+                    $category = Category::find($cId);
+                    array_push($categories, $category);
+                }
+                $item['categories'] = $categories;
+            } else {
+                $item['categories'] = [];
+            }
         }
         $worker_code = $this->generateCode("Worker", "W");
         return response()->json(["workers" => $workers, "worker_code" => $worker_code]);
@@ -162,27 +187,25 @@ class WorkerController extends Controller
                 $input['category_id'] = json_encode($request->category_id);
             }
 
-            // if($request->password != null)
-            // {
-                $input['password'] = Hash::make($request->mobile);
-            // }else{
-            //     unset($input['password']);
-            // }
-
+            $input['password'] = Hash::make($request->mobile);
             if ($request->hasFile('image')) {
                 $input['image']    = $this->imageUpload($request, 'image', 'uploads/worker');
             }
 
-            if($request->file('nid_front_img')){
+            if ($request->hasFile('nid_front_img')) {
                 $input['nid_front_img'] = $this->imageUpload($request, 'nid_front_img', 'uploads/worker/nid');
-            }else{
+            } else {
                 unset($input['nid_front_img']);
             }
 
-            if($request->file('nid_back_img')){
+            if ($request->hasFile('nid_back_img')) {
                 $input['nid_back_img'] = $this->imageUpload($request, 'nid_back_img', 'uploads/worker/nid');
-            }else{
+            } else {
                 unset($input['nid_back_img']);
+            }
+
+            if (Auth::guard('admin')->user()->role == 'manager') {
+                $input['status'] = 'd';
             }
 
             Worker::create($input);
@@ -203,7 +226,7 @@ class WorkerController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name'   => 'required|string|min:3|max:30',
-            'mobile' => 'required|numeric|min:11|regex:/^01[13-9][\d]{8}$/|unique:workers,mobile,'.$request->id,
+            'mobile' => 'required|numeric|min:11|regex:/^01[13-9][\d]{8}$/|unique:workers,mobile,' . $request->id,
             'nid' => 'required',
             'father_name'     => 'required|string|min:3|max:30',
             'mother_name'     => 'required|string|min:3|max:30',
@@ -223,12 +246,7 @@ class WorkerController extends Controller
 
             $input = $request->all();
 
-            // if($request->password != null)
-            // {
-                $input['password'] = Hash::make($request->mobile);
-            // }else{
-            //     unset($input['password']);
-            // }
+            $input['password'] = Hash::make($request->mobile);
 
             if ($request->hasFile('image')) {
                 if (File::exists($data->image)) {
@@ -237,32 +255,37 @@ class WorkerController extends Controller
                 $input['image']    = $this->imageUpload($request, 'image', 'uploads/workers');
             }
 
-            if($request->file('nid_front_img')){
+            if ($request->file('nid_front_img')) {
                 $input['nid_front_img'] = $this->imageUpload($request, 'nid_front_img', 'uploads/worker/nid');
 
-                 // remove old image
+                // remove old image
                 try {
                     $image_path = public_path($data->nid_front_img);
-                    if(file_exists($image_path)){
-                       unlink($image_path);
-                   }
-                } catch (\Throwable $th) {  }
-            }else{
+                    if (file_exists($image_path)) {
+                        unlink($image_path);
+                    }
+                } catch (\Throwable $th) {
+                }
+            } else {
                 unset($input['nid_front_img']);
             }
 
-            if($request->file('nid_back_img')){
+            if (Auth::guard('admin')->user()->role == 'manager') {
+                $input['status'] = 'd';
+            }
+
+            if ($request->file('nid_back_img')) {
                 $input['nid_back_img'] = $this->imageUpload($request, 'nid_back_img', 'uploads/worker/nid');
 
                 // remove old image
                 try {
                     $image_path = public_path($data->nid_back_img);
-                    if(file_exists($image_path)){
-                    unlink($image_path);
+                    if (file_exists($image_path)) {
+                        unlink($image_path);
+                    }
+                } catch (\Throwable $th) {
                 }
-                } catch (\Throwable $th) {  }
-
-            }else{
+            } else {
                 unset($input['nid_back_img']);
             }
 
@@ -305,7 +328,7 @@ class WorkerController extends Controller
             $worker = Worker::findOrFail($request->id);
             if ($worker->status == 'p') {
                 $status = 'd'; //disable
-            }else {
+            } else {
                 $status = 'p'; // approve/active
             }
 
@@ -320,19 +343,13 @@ class WorkerController extends Controller
                 'msg' => $e->getMessage()
             ]);
         }
-
     }
 
     //assign work
     public function assignService()
     {
-        if (Auth::guard('admin')->user()->role != 'SuperAdmin') {
-            $access = AdminAccess::where('admin_id', Auth::guard('admin')->user()->id)
-                ->pluck('permissions')
-                ->toArray();
-            if (!in_array("assignWorkerService", $access)) {
-                return view("admin.unauthorize");
-            }
+        if (!userAccess("assignWorkerService")) {
+            return view("admin.unauthorize");
         }
         return view('admin.worker.assign');
     }

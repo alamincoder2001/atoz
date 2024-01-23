@@ -288,20 +288,23 @@
                 success: res => {
                     if (res.length > 0) {
                         $.each(res, (index, value) => {
-                            let row = `<div class="col-lg-3">
-                                            <div class="card" title="${value.name}" style="cursor: pointer;">
-                                                <div style="display: flex;align-items:center;justify-content:center;padding-top:15px;">
-                                                    <img style="height: 150px;width:60%;border:1px solid #d1d1d1;" src="${value.image != null ? location.origin+'/'+value.image:location.origin+'/nouser.png'}" />
+                            let row = `<div class="col-lg-3 mb-2">
+                                            <div class="card" title="${value.name}" style="cursor: pointer;position:relative;box-shadow: 0 0 20px 3px #ce5cf645;">
+                                                <div style="display: flex;align-values:center;justify-content:center;padding-top:15px;">
+                                                    <img style="height: 150px;width:60%;border:1px solid #d1d1d1;" src="${value.image != null ? value.image : '/nouser.png'}" />
                                                 </div>
                                                 <div class="card-body">
-                                                    <ul style="margin-left: 15px;">
+                                                    <ul style="margin-left: 15px; list-style: none;">
                                                         <li class="position-relative">
-                                                            <span class="fa fa-user" style="position: absolute;left:-15px;top:0;"></span>
-                                                            <span>${value.name}</span>
+                                                            <i class="bx bx-user-circle mt-1" style="position: absolute;left:-10px;"></i>
+                                                            <span>&nbsp; ${value.name}</span>
                                                         </li>
                                                         <li class="position-relative">
-                                                            <span class="fa fa-map-marker" style="position: absolute;left:-15px;top:0;"></span>
-                                                            <span>${value.address}${value.address != null ? ',':''} ${value.thana.name}, ${value.thana.district.name}</span>
+                                                            <i class="bx bx-map mt-1" style="position: absolute;left:-10px;"></i>
+                                                            <span>&nbsp; ${value.present_address}, ${value.thana.name}, ${value.thana.district.name}</span>
+                                                        </li>
+                                                        <li class="mt-2">
+                                                            <a href="javascript:void(0)" onclick="viewWorker(${value.id})" style="background: #ce5cf6;padding: 5px;color: white;">View Details</a>
                                                         </li>
                                                     </ul>
                                                 </div>

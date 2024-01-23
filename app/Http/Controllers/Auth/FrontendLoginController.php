@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Worker;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -47,7 +48,7 @@ class FrontendLoginController extends Controller
 
             // login successfull
             if (Auth::guard('web')->attempt($this->credentials($request->username, $request->password))) {
-                return response()->json(["success" => "Successfully Login","content" => Cart::content()->count()]);
+                return response()->json(["success" => "Successfully Login", "content" => Cart::content()->count()]);
             } else {
                 return response()->json(["errors" => "Password or Email Not Match"]);
             }
@@ -137,11 +138,19 @@ class FrontendLoginController extends Controller
             if ($validator->fails()) {
                 return response()->json(["error" => $validator->errors()->first()]);
             }
-            // login successfull
-            if (Auth::guard('worker')->attempt(['mobile' => $request->mobile, 'password' => $request->mobile])) {
-                return response()->json("Successfully Login");
+            $worker = Worker::where('mobile', $request->mobile)->first();
+            if (!empty($worker)) {
+                if ($worker->status == 'd') {
+                    return response()->json(["error" => "Worker inactive.. Please contact with admin"]);
+                }
+                // login successfull
+                if (Auth::guard('worker')->attempt(['mobile' => $request->mobile, 'password' => $request->mobile])) {
+                    return response()->json("Successfully Login");
+                } else {
+                    return response()->json(["errors" => "Mobile number not match"]);
+                }
             } else {
-                return response()->json(["errors" => "Mobile number not match"]);
+                return response()->json(["error" => "Worker not found"]);
             }
         } catch (\Throwable $e) {
             return "Opps! something went wrong" . $e->getMessage();
