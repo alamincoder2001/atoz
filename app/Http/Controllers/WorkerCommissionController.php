@@ -80,27 +80,27 @@ class WorkerCommissionController extends Controller
 
     public function dueListWorker()
     {
-        $dueWorker = $this->dueWorker();
-        return view('admin');
+        return view('admin.worker.dueworker');
     }
 
     protected function dueWorker()
     {
         $due = DB::select("SELECT
+                            w.id,
                             w.worker_code,
                             w.name,
                             w.mobile,
                             w.commission,
                             d.name as district_name,
                             t.name as thana_name,
-                            concat(w.name, '-', w.commission) as worker_name,
-                            SUM(od.commission_amount) as dueAmount
-                        FROM order_details od
-                        LEFT JOIN workers w ON w.id = od.worker_id
+                            concat( w.mobile,' - ',w.name, ' - (', w.commission , '%)') as worker_name,
+                            (SELECT ifnull(SUM(od.commission_amount), 0) FROM order_details od where od.status = 'complete' AND od.worker_id = w.id) as detailCommission,
+                            (SELECT ifnull(SUM(pc.amount), 0) FROM payment_collections pc where pc.worker_id = w.id) as paymentCollection,
+                           (SELECT detailCommission - paymentCollection) as dueAmount
+                        FROM workers w
                         LEFT JOIN districts d ON d.id = w.district_id
                         LEFT JOIN thanas t ON t.id = w.thana_id
-                        WHERE od.status = 'complete'
-                        GROUP BY od.worker_id");
+                        WHERE w.status = 'p'");
 
         return $due;
     }

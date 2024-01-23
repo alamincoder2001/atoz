@@ -31,6 +31,7 @@ Vue.component("assign-worker", require("./components/assignWorker.vue").default)
 Vue.component("commission-list", require("./components/CommissionList.vue").default);
 Vue.component("Worker", require("./components/Worker.vue").default);
 Vue.component("worker-list", require("./components/workerList.vue").default);
+Vue.component("workerdue-list", require("./components/dueworkerList.vue").default);
 Vue.component("pending-worker-list", require("./components/pendingWorkerList.vue").default);
 Vue.component("area-manager-list", require("./components/area_manager_list.vue").default);
 Vue.component("Slider", require("./components/Slider.vue").default);

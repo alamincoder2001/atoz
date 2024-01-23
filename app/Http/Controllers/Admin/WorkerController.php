@@ -115,9 +115,9 @@ class WorkerController extends Controller
     public function workerAssignOrder()
     {
         if (Auth::guard('admin')->user()->role == 'manager') {
-            $workers = Worker::with('thana', 'district', 'manager')->where('status', 'p')->where('payment_receive', 0)->where('manager_id', Auth::guard('admin')->user()->id)->latest()->get();
+            $workers = Worker::with('thana', 'district', 'manager')->where('status', 'p')->where('manager_id', Auth::guard('admin')->user()->id)->latest()->get();
         } else {
-            $workers = Worker::with('thana', 'district', 'manager')->where('status', 'p')->where('payment_receive', 0)->latest()->get();
+            $workers = Worker::with('thana', 'district', 'manager')->where('status', 'p')->latest()->get();
         }
         foreach ($workers as $key => $item) {
             $catId = json_decode($item->category_id);

@@ -13,8 +13,6 @@ input[type=number]::-webkit-outer-spin-button {
                 <div class="card-body">
                     <form @submit.prevent="saveOrUpdateWorkerCommission">
                         <div class="row">
-
-                            <!-- <div class="col-md-5"> -->
                             <div class="col-md-6">
                                 <div class="row">
 
@@ -51,14 +49,6 @@ input[type=number]::-webkit-outer-spin-button {
                                             <input type="text" v-model="form.commission" class="form-control" readonly>
                                         </div>
                                     </div>
-
-                                    <!-- <div class="col-md-4">
-                                        <label>Worker Commission<span class="text-danger fw-bold">*</span></label>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <span>{{  }}</span>
-                                    </div> -->
-
                                 </div>
                             </div>
 
@@ -115,16 +105,6 @@ input[type=number]::-webkit-outer-spin-button {
                                 Print
                             </a>
                         </div>
-
-                        <!-- <div class="col-lg-2 col-md-2 col-sm-2">
-                            <label for="findManager" class="pe-0 mt-1" style="float: right;">Find Manager</label>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4">
-                            <div class="form-group mb-1">
-                                <input type="text" id="findManager" v-model="search" v-on:input="findManager($event)" placeholder="By Name Or Email" class="form-control">
-                            </div>
-                        </div> -->
-
                         <div class="col-lg-5 col-md-5 col-sm-5"></div>
 
                         <div class="col-lg-5 col-md-5 col-sm-5">
@@ -174,9 +154,6 @@ input[type=number]::-webkit-outer-spin-button {
                                 <td>{{ item.given_by.name }} </td>
 
                                 <td class="text-end">
-                                    <!-- <a href="javascript:void(0)" @click.prevent="editRow(item.id)">
-                                        <i class="fas fa-edit text-info"></i>
-                                    </a> -->
                                     <a href="javascript:void(0)" @click="commissionReceive(item.id)" class="btn shadow-none"
                                         title="Worker Commission Report">
                                         <i class="fas fa-print"></i>
@@ -263,7 +240,7 @@ export default
                     return
                 }
 
-                this.form.worker_id = this.selectedWorker.worker_id;
+                this.form.worker_id = this.selectedWorker.id;
 
                 let url = "/admin/worker/commission-store";
                 if (this.form.id != '') {

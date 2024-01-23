@@ -113,7 +113,8 @@ class OrderController extends Controller
             $order->orderDetails = DB::select("SELECT
                                     od.*,
                                     s.name,
-                                    ifnull(w.name, 'N/A') as worker_name
+                                    ifnull(w.name, 'N/A') as worker_name,
+                                    w.mobile
                                 FROM order_details AS od
                                 LEFT JOIN services s ON s.id = od.service_id
                                 LEFT JOIN workers w ON w.id = od.worker_id
@@ -144,7 +145,7 @@ class OrderController extends Controller
             $data = OrderDetail::where("id", $request->id)->first();
             $data->worker_id = $request->worker_id;
             $data->updated_at = Carbon::now();
-            Order::findOrFail($data->order_id)->update(['status' => 'Ongoing']);
+            Order::findOrFail($data->order_id)->update(['status' => 'bill']);
             $data->save();
             return "Service assign successfully";
         } catch (\Throwable $e) {
@@ -227,6 +228,7 @@ class OrderController extends Controller
                             od.*,
                             s.name as service_name,
                             w.name as worker_name,
+                            w.mobile as mobile,
                             w.thana_id as worker_district,
                             w.district_id as worker_thana,
                             o.date,

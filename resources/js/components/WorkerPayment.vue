@@ -1,9 +1,9 @@
 <style>
- input[type=number]::-webkit-inner-spin-button,
-        input[type=number]::-webkit-outer-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
 </style>
 
 <template>
@@ -23,7 +23,7 @@
                                     </div>
                                     <div class="col-md-8">
                                         <div class="form-group mb-2">
-                                            <select class="form-select shadow-none" v-model="form.payment_type" >
+                                            <select class="form-select shadow-none" v-model="form.payment_type">
                                                 <option value="">---select---</option>
                                                 <option value="Cash">Cash</option>
                                                 <option value="Bank">Bank</option>
@@ -38,7 +38,8 @@
                                     </div>
                                     <div class="col-md-8">
                                         <div class="form-group mb-2">
-                                            <v-select :options="workers" v-model="selectedWorker" label="worker_name" @input="getWorkerDue"></v-select>
+                                            <v-select :options="workers" v-model="selectedWorker" label="worker_name"
+                                                @input="getWorkerDue"></v-select>
                                         </div>
                                     </div>
 
@@ -73,7 +74,7 @@
                                         <label>Note</label>
                                     </div>
                                     <div class="col-md-8 mb-2">
-                                        <input type="text"  v-model="form.note" class="form-control">
+                                        <input type="text" v-model="form.note" class="form-control">
                                     </div>
 
                                 </div>
@@ -101,20 +102,11 @@
                 <div class="card-header pb-0">
                     <div class="row">
                         <div class="col-lg-2 col-md-2 col-sm-2">
-                            <a href="" @click.prevent="print" style="color: #3e5569;" v-if="workerPayments.length > 0" >
+                            <a href="" @click.prevent="print" style="color: #3e5569;" v-if="workerPayments.length > 0">
                                 <i class="fas fa-print" style="color: gray; font-size: 12px; padding: 0;"></i>
                                 Print
                             </a>
                         </div>
-
-                        <!-- <div class="col-lg-2 col-md-2 col-sm-2">
-                            <label for="findManager" class="pe-0 mt-1" style="float: right;">Find Manager</label>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4">
-                            <div class="form-group mb-1">
-                                <input type="text" id="findManager" v-model="search" v-on:input="findManager($event)" placeholder="By Name Or Email" class="form-control">
-                            </div>
-                        </div> -->
 
                         <div class="col-lg-5 col-md-5 col-sm-5"></div>
 
@@ -165,10 +157,8 @@
                                 <td>{{ item.receive_by.name }} </td>
 
                                 <td class="text-end">
-                                    <!-- <a href="javascript:void(0)" @click.prevent="editRow(item.id)">
-                                        <i class="fas fa-edit text-info"></i>
-                                    </a> -->
-                                    <a href="javascript:void(0)" @click="paymentReceive(item.id)" class="btn shadow-none" title="Worker Payment Collection Report">
+                                    <a href="javascript:void(0)" @click="paymentReceive(item.id)" class="btn shadow-none"
+                                        title="Worker Payment Collection Report">
                                         <i class="fas fa-print"></i>
                                     </a>
                                     <a href="javascript:void(0)" @click.prevent="deleteRow(item.id)">
@@ -187,8 +177,8 @@
 
 
 <script>
-    import moment from "moment";
-    export default
+import moment from "moment";
+export default
     {
         data() {
             return {
@@ -200,7 +190,7 @@
                     workerDue: '0.00',
                     payment_date: moment().format('YYYY-MM-DD'),
                     note: "",
-                    worker_id:'',
+                    worker_id: '',
                     last_payment: '0.00',
                 }),
 
@@ -219,36 +209,40 @@
 
             getWorkers() {
                 axios.get("/admin/get-workers-withDueAmount")
-                .then(res => {
-                    this.workers = res.data.workers;
-                })
+                    .then(res => {
+                        this.workers = res.data.workers.filter(item => item.dueAmount > 0);
+                    })
             },
 
-            getWorkerDue()
-            {
+            getWorkerDue() {
                 this.form.workerDue = this.selectedWorker.dueAmount;
             },
 
             getWorkerPayments() {
                 axios.get("/admin/get-worker-payment")
-                .then(res => {
-                    this.workerPayments = res.data.paymentCollections;
-                })
+                    .then(res => {
+                        this.workerPayments = res.data.paymentCollections;
+                    })
             },
 
             saveOrUpdatePayment() {
 
                 if (this.selectedWorker == null || this.selectedWorker == '' || this.selectedWorker == undefined) {
-                    alert("Select Worker")
+                    $.notify("Select Worker", "error")
                     return
                 }
 
                 if (this.form.payment_type == null || this.form.payment_date == '' || this.form.payment_date == undefined) {
-                    alert("Select Payment Type")
+                    $.notify("Select Payment Type", "error")
                     return
                 }
 
-                this.form.worker_id = this.selectedWorker.worker_id;
+                if (parseFloat(this.form.amount) > parseFloat(this.form.workerDue)) {
+                    $.notify("Amount not valid", "error");
+                    return
+                }
+
+                this.form.worker_id = this.selectedWorker.id;
 
                 let url = "/admin/worker/store/payment-collection";
                 if (this.form.id != '') {
@@ -264,56 +258,25 @@
                         this.getWorkers();
                         this.getWorkerPayments();
                         setTimeout(() => {
-                         if (confirm("Do you want to view payment receive!"))
-                         {
-                            window.open('/admin/worker/payment-receive/' +res.data.id, '_blank');
-                         }
+                            if (confirm("Do you want to view payment receive!")) {
+                                window.open('/admin/worker/payment-receive/' + res.data.id, '_blank');
+                            }
                         }, 500);
                     }
                 });
             },
 
-            paymentReceive(id)
-            {
-                window.open('/admin/worker/payment-receive/' +id, '_blank');
+            paymentReceive(id) {
+                window.open('/admin/worker/payment-receive/' + id, '_blank');
             },
-
-            // editRow(val) {
-            //     this.form.id = val.id;
-            //     this.form.name = val.name;
-            //     this.form.username = val.username;
-            //     this.form.email = val.email;
-            //     this.form.father_name = val.father_name;
-            //     this.form.mother_name = val.mother_name;
-            //     this.form.role = val.role;
-            //     this.form.district_id = val.district_id;
-            //     this.form.thana_id = val.thana_id;
-            //     this.form.present_address = val.present_address;
-            //     this.form.permanent_address = val.permanent_address;
-            //     this.form.description = val.description;
-            //     this.form.commission = val.commission;
-            //     this.imageSrc = val.image != null ? '/' + val.image : "/noImage.jpg"
-            //     this.nidFrontSrc = val.nid_front_img != null ? '/' + val.nid_front_img : "/noImage.jpg"
-            //     this.nidBackSrc = val.nid_back_img != null ? '/' + val.nid_back_img : "/noImage.jpg"
-
-            //     this.selectedDistrict = {
-            //         id: val.district_id,
-            //         name: val.thana.district.name,
-            //     }
-            //     this.getThana();
-            //     this.selectedWorker = {
-            //         id: val.thana_id,
-            //         name: val.thana.name
-            //     }
-            // },
 
             deleteRow(id) {
                 if (confirm("Are you sure want to delete this!")) {
                     axios.post("/admin/worker/delete/payment-collection", { id: id }).then((res) => {
                         console.log(res.data);
-                        if(res.data.error){
+                        if (res.data.error) {
                             $.notify(res.data, "error");
-                        }else{
+                        } else {
                             $.notify(res.data.success, "success");
                         }
                         this.getWorkers();
@@ -334,7 +297,7 @@
             },
 
             async print() {
-				let reportContent = `
+                let reportContent = `
                     <div class="container">
 						<div class="row">
 							<div class="col-sm-12 text-center">
@@ -346,7 +309,7 @@
 						${document.querySelector('#printThis').innerHTML}
 					</div>
 				`;
-				var reportWindow = window.open('', 'PRINT', `height=${screen.height}, width=${screen.width}`);
+                var reportWindow = window.open('', 'PRINT', `height=${screen.height}, width=${screen.width}`);
 
                 reportWindow.document.write(`
                     <table>
@@ -362,7 +325,7 @@
                     </table>
 				`);
 
-				reportWindow.document.head.innerHTML += `
+                reportWindow.document.head.innerHTML += `
                 <link rel="stylesheet" href="{{ asset('frontend/assets/css/bootstrap.min.css') }}">
                 <link rel="stylesheet" href="{{ asset('frontend/assets/css/boxicons.min.css') }}">
 					<style>
@@ -391,19 +354,19 @@
                         }
 					</style>
 				`;
-				reportWindow.document.body.innerHTML += reportContent;
+                reportWindow.document.body.innerHTML += reportContent;
 
-				let rows = reportWindow.document.querySelectorAll('.record-table tr');
-				rows.forEach(row => {
-					row.lastChild.remove();
-				})
+                let rows = reportWindow.document.querySelectorAll('.record-table tr');
+                rows.forEach(row => {
+                    row.lastChild.remove();
+                })
 
-				reportWindow.focus();
-				reportWindow.print();
+                reportWindow.focus();
+                reportWindow.print();
                 setTimeout(() => {
                     reportWindow.close();
                 }, 1000);
-			}
+            }
 
 
         },

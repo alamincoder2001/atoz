@@ -177,6 +177,12 @@
                             </li>
 
                             <li class="sidebar-item">
+                                <a href="{{route('admin.due.worker')}}" class="sidebar-link {{Request::is('admin.due.worker') ? 'active':''}}">
+                                    <i class="fas fa-list"></i><span class="hide-menu">Due Worker</span>
+                                </a>
+                            </li>
+
+                            <li class="sidebar-item">
                                 <a href="{{route('admin.worker.create')}}" class="sidebar-link {{Request::is('admin.worker.create') ? 'active':''}}">
                                     <i class="fas fa-plus"></i><span class="hide-menu">Worker Create</span>
                                 </a>

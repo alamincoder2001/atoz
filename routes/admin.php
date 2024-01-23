@@ -177,6 +177,7 @@ Route::group(["prefix" => "admin"], function () {
     Route::post('/worker/commission-store', [WorkerCommissionController::class, 'storeWorkerCommission']);
     Route::get('/worker/commission-receive/{id}', [WorkerCommissionController::class, 'commissionReceive']);
     Route::post('/worker/delete/commission', [WorkerCommissionController::class, 'deleteWorkerCommission']);
+    Route::get('/due-worker-list', [WorkerCommissionController::class, 'dueListWorker'])->name('admin.due.worker');
 
     // Order Due add by area manager
     Route::post('/order/add-due', [OrderController::class, 'dueAdd']);

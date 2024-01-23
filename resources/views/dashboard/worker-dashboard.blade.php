@@ -327,7 +327,7 @@
                                     @endforeach
                                     @else
                                     <tr>
-                                        <td class="text-center" colspan="5">Not Found Order</td>
+                                        <td class="text-center" colspan="8">Not Found Order</td>
                                     </tr>
                                     @endif
                                 </tbody>

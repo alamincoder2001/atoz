@@ -66,9 +66,14 @@
                                     <td class="text-center">{{ item.orderDetails[0].worker_name }}</td>
                                     <td class="text-center" v-html="statusText(item.orderDetails[0].status)"></td>
                                     <td style="display: flex;gap: 2px;">
-                                        <button v-if="item.orderDetails[0].status != 'complete'" @click="modalShow(item.orderDetails[0], item.thanaId)" type="button" class="btn btn-danger btn-sm shadow-none fas fa-user"></button>
+                                        <button v-if="item.orderDetails[0].status != 'complete'"
+                                            @click="modalShow(item.orderDetails[0], item.thanaId)" type="button"
+                                            class="btn btn-danger btn-sm shadow-none fas fa-user"></button>
                                         <br>
-                                        <button v-show="ManagerOrAdmin" title="Add Due Amount" v-if="item.orderDetails[0].status != 'complete'" @click="addDueModalShow(item.orderDetails[0].id)" type="button" class="btn btn-success btn-sm shadow-none">
+                                        <button v-show="ManagerOrAdmin" title="Add Due Amount"
+                                            v-if="item.orderDetails[0].status != 'complete'"
+                                            @click="addDueModalShow(item.orderDetails[0].id)" type="button"
+                                            class="btn btn-success btn-sm shadow-none">
                                             Due
                                         </button>
                                     </td>
@@ -81,11 +86,16 @@
                                     <td class="text-center">{{ service.paid_amount }}</td>
                                     <td class="text-center">{{ service.due }}</td>
                                     <td class="text-center">{{ service.worker_name }}</td>
-                                    <td class="text-center"  v-html="statusText(service.status)"></td>
+                                    <td class="text-center" v-html="statusText(service.status)"></td>
                                     <td style="display: flex;gap: 2px;">
-                                        <button v-if="service.status != 'complete'" @click="modalShow(service, item.thanaId)" type="button" class="btn btn-danger btn-sm shadow-none fas fa-user"></button>
+                                        <button v-if="service.status != 'complete'"
+                                            @click="modalShow(service, item.thanaId)" type="button"
+                                            class="btn btn-danger btn-sm shadow-none fas fa-user"></button>
                                         <br>
-                                        <button v-show="ManagerOrAdmin" href="javascript:void(0)" title="Add Due Amount" v-if="item.orderDetails[0].status != 'complete'" @click="addDueModalShow(item.orderDetails[0].id)" class="btn btn-success btn-sm shadow-none">
+                                        <button v-show="ManagerOrAdmin" href="javascript:void(0)" title="Add Due Amount"
+                                            v-if="service.status != 'complete'"
+                                            @click="addDueModalShow(service.id)"
+                                            class="btn btn-success btn-sm shadow-none">
                                             Due
                                         </button>
                                     </td>
@@ -95,15 +105,6 @@
                                         <div class="devider"></div>
                                     </td>
                                 </tr>
-                                <!-- <tr style="font-weight:bold;">
-                                    <td colspan="6" style="font-weight:normal;"><strong>Note: </strong>{{ item.note }}</td>
-                                    <td style="text-align:center;">Total Quantity<br>{{ item.orderDetails.reduce((prev,
-                                        curr) => { return prev + parseFloat(curr.quantity) }, 0) }}</td>
-                                    <td style="text-align:left;">
-                                        Total: 0<br>
-                                        Paid: 0<br>
-                                    </td>
-                                </tr> -->
                             </template>
                         </tbody>
                     </table>
@@ -144,8 +145,8 @@
                         </table>
                         <div class="form-group mt-3">
                             <label for="workers">Worker</label>
-                            <v-select id="workers" :options="workers" v-model="selectedWorker" label="display_name"></v-select>
-                            <!-- <v-select id="workers" :options="workers" v-model="workerSelected.display_name"></v-select> -->
+                            <v-select id="workers" :options="workers" v-model="selectedWorker"
+                                label="display_name"></v-select>
                         </div>
                         <div class="form-group mt-3">
                             <button @click="assignWork" type="button" class="btn btn-info shadow-none w-100">Submit</button>
@@ -171,7 +172,8 @@
                             <input type="hidden" v-model="od_id">
                         </div>
                         <div class="form-group col-4">
-                            <button @click="addAmountAdd" type="button" class="btn btn-info shadow-none w-100 mt-3">Submit</button>
+                            <button @click="addAmountAdd" type="button"
+                                class="btn btn-info shadow-none w-100 mt-3">Submit</button>
                         </div>
                     </div>
                 </div>
@@ -199,14 +201,14 @@ export default {
             },
             orders: [],
             thanas: [],
-            addDueAmount:'0.00',
+            addDueAmount: '0.00',
             selectedThana: null,
             workers: [],
             selectedWorker: null,
             workerSelected: {
-                display_name : 'select worker'
+                display_name: 'select worker'
             },
-            od_id:'',
+            od_id: '',
 
             adminId: "",
             role: "",
@@ -220,10 +222,6 @@ export default {
         this.getOrder();
         this.adminId = this.$attrs.admin_id
         this.role = this.$attrs.role
-
-        // if(this.role =='manager'){
-        //     this.ManagerOrAdmin = true;
-        // }
     },
 
     methods: {
@@ -233,11 +231,8 @@ export default {
             if (status == 'pending') {
                 texT = "<span class='badge bg-danger'>Pending</span>"
             }
-            if (status == 'proccess') {
-                texT = "<span class='badge bg-warning'>Proccessing</span>"
-            }
-            if (status == 'Ongoing') {
-                texT = "<span class='badge bg-warning'>Ongoing</span>"
+            if (status == 'bill') {
+                texT = "<span class='badge bg-warning'>On Going</span>"
             }
             if (status == 'complete') {
                 texT = "<span class='badge bg-success'>Completed</span>"
@@ -251,15 +246,12 @@ export default {
             });
         },
 
-        getWorker(thana_id){
-            // axios.get("/admin/get_active_worker").then((res) => {
-            axios.get("/admin/worker-assign-order").then((res) => {
-                this.workers = res.data.workers.filter(w => w.thana_id == thana_id)
-
-                this.workers = $.map(res.data.workers, function(user) {
-                    user.display_name = user.mobile +'-'+ user.name;
-                    return user;
-                });
+        async getWorker(thana) {
+            await axios.get("/admin/worker-assign-order").then((res) => {
+                this.workers = res.data.workers.filter(w => w.thana_id == thana).map(item => {
+                    item.display_name = item.mobile + '-' + item.name;
+                    return item;
+                })
             });
         },
 
@@ -275,7 +267,7 @@ export default {
             });
         },
 
-        modalShow(service, thana_id){
+        modalShow(service, thana_id) {
             $('#staticBackdrop').modal('show');
             this.getWorker(thana_id);
             this.modalData = service;
@@ -283,19 +275,18 @@ export default {
             if (service.worker_id) {
                 this.selectedWorker = {
                     id: service.worker_id,
-                    name: service.worker_name
+                    name: service.worker_name,
+                    display_name: `${service.mobile}-${service.worker_name}`
                 }
             }
         },
 
-        addDueModalShow(od_id)
-        {
+        addDueModalShow(od_id) {
             this.od_id = od_id;
             $('#serviceDue').modal('show');
         },
 
-        addAmountAdd()
-        {
+        addAmountAdd() {
             let filter = {
                 orderDetailId: this.od_id,
                 due_amount: this.addDueAmount
@@ -307,7 +298,7 @@ export default {
             });
         },
 
-        assignWork(){
+        assignWork() {
             let filter = {
                 id: this.modalData.id,
                 worker_id: this.selectedWorker == null ? null : this.selectedWorker.id
@@ -331,6 +322,7 @@ export default {
 #thanas [role="combobox"] {
     padding: 0 !important;
 }
+
 .devider {
     width: 15px;
     height: 10px;
@@ -340,7 +332,7 @@ export default {
     border-bottom-right-radius: 50px;
 }
 
-.devider::before{
+.devider::before {
     content: "";
     border: 1px dashed #59d9ff;
     position: absolute;
@@ -348,7 +340,8 @@ export default {
     width: 450px;
     height: 8px;
 }
-.devider::after{
+
+.devider::after {
     content: "";
     border: 1px dashed #59d9ff;
     position: absolute;

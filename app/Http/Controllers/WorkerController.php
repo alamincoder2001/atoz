@@ -106,7 +106,6 @@ class WorkerController extends Controller
             $data->bill_amount       = $request->billAmount;
             $data->paid_amount       = $request->status == 'complete'? $request->billAmount:0;
             $data->commission_amount = $request->status == 'complete'? $request->commissionAmount:0;
-            $data->due               = 0;
             $data->status            = $request->status;
 
             $data->update();
