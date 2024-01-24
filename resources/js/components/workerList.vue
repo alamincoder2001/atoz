@@ -100,12 +100,12 @@
                                                 <div class="row">
                                                     <div class="col-12 col-md-5">
                                                         <div class="row">
-                                                            <div class="col-12 text-center mb-2">
+                                                            <div class="col-3 col-md-12 text-center mb-2">
                                                                 <img :src="baseUrl + '' + image"
                                                                     style="width: 150px;height:150px; border-bottom: 1px solid gray;"
                                                                     alt="worker-img">
                                                             </div>
-                                                            <div class="col-12" style="border: 1px solid gray;">
+                                                            <div class="col-9 col-md-12" style="border: 1px solid gray;">
                                                                 <div class="row d-flex align-items-center">
                                                                     <div class="col-6 text-center">
                                                                         <p class="m-0">NID Front Image</p>
@@ -448,7 +448,7 @@ export default {
 						<div class="row">
 							<div class="col-sm-12 text-center">
 								<h3 style="text-align:center; border-top: 1px dashed gray; border-bottom: 1px dashed gray; padding:3px; color:gray;">
-                                    Workers List
+                                    Worker Information
                                 </h3>
 							</div>
 							<div class="col-12">
@@ -465,13 +465,18 @@ export default {
                         <tr>
                             <td><img src="/uploads/logo/6524546_6517fde95908b.png"></td>
                             <td>
-                                <strong style="padding:0;"> A2Z Services<strong>
+                                <strong style="padding:0;">A2Z Services<strong>
                                 <p style="text-transform:capitalize;padding:0;margin:0;">
                                     18/4 d bagomgonj line narinda Dhaka 1100
                                 </p>
                             </td>
                         </tr>
                     </table>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-3"></div>
+                        </div>    
+                    </div>
 				`);
 
             reportWindow.document.head.innerHTML += `

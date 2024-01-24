@@ -53,6 +53,14 @@
                                     </td>
                                 </tr>
                             </table>
+                            <div class="row" style="margin-top:50px;">
+                                <div class="col-6">
+                                    <span style="text-decoration:overline;">Received by</span>
+                                </div>
+                                <div class="col-6 text-end">
+                                    <span style="text-decoration:overline;">Authorized Signature</span>                                    
+                                </div>
+                            </div>
                         </div>
                     </body>
                 </html>

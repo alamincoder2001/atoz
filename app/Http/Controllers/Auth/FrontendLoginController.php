@@ -141,7 +141,7 @@ class FrontendLoginController extends Controller
             $worker = Worker::where('mobile', $request->mobile)->first();
             if (!empty($worker)) {
                 if ($worker->status == 'd') {
-                    return response()->json(["error" => "Worker inactive.. Please contact with admin"]);
+                    return response()->json(["error" => "আপনার একাউন্টটি অচলবস্থায় আছে, অনুগ্রহ করে অফিসে যোগাযোগ করুন।"]);
                 }
                 // login successfull
                 if (Auth::guard('worker')->attempt(['mobile' => $request->mobile, 'password' => $request->mobile])) {

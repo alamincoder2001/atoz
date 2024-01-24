@@ -318,7 +318,7 @@
                                                 @if($item->status == 'pending')
                                                 <i onclick="showModal(event, {{$item->id}}, 'bill')" class="bx bx-money" style="font-size: 22px;padding-top: 2px;color: gray !important;cursor: pointer;"></i>
                                                 @elseif($item->status == 'bill')
-                                                <i onclick="showModal(event, {{$item->id}}, 'complete', {{$item->bill_amount}})" class="bx bx-check-square" style="font-size: 22px;padding-top: 2px;color: #55bd00 !important;cursor: pointer;"></i>
+                                                <i onclick="showModal(event, {{$item->id}}, 'complete', {{$item}})" class="bx bx-check-square" style="font-size: 22px;padding-top: 2px;color: #55bd00 !important;cursor: pointer;"></i>
                                                 @else
                                                 @endif
                                             </div>
@@ -425,7 +425,25 @@
                                     <input type="number" min="0" step="0.01" class="form-control" id="billAmount" oninput="calculateTotal(event)" name="billAmount" value="0" />
                                 </div>
                             </div>
-                            <div class="col-md-4 d-none commissionAmount">
+                            <div class="col-md-6 d-none discountAmount">
+                                <div class="form-group">
+                                    <label for="discountAmount">Discount</label>
+                                    <input type="number" min="0" step="0.01" class="form-control" id="discountAmount" oninput="calculateTotal(event)" name="discountAmount" value="0" readonly />
+                                </div>
+                            </div>
+                            <div class="col-md-6 d-none dueAmount">
+                                <div class="form-group">
+                                    <label for="dueAmount">Due Amount</label>
+                                    <input type="number" min="0" step="0.01" class="form-control" id="dueAmount" oninput="calculateTotal(event)" name="dueAmount" value="0" readonly />
+                                </div>
+                            </div>
+                            <div class="col-md-6 d-none total">
+                                <div class="form-group">
+                                    <label for="total">Total</label>
+                                    <input type="number" min="0" step="0.01" class="form-control" id="total" oninput="calculateTotal(event)" name="total" value="0" readonly />
+                                </div>
+                            </div>
+                            <div class="col-md-12 d-none commissionAmount">
                                 <div class="form-group">
                                     <label for="commissionAmount">Commission</label>
                                     <input type="number" min="0" step="0.01" class="form-control" id="commissionAmount" oninput="calculateTotal(event)" name="commissionAmount" value="0" readonly />
@@ -538,24 +556,33 @@
         })
     }
 
-    function showModal(event, id, type, amount = null) {
+    function showModal(event, id, type, item) {
         $("#staticBackdrop").modal('show');
         $("#staticBackdrop").find('#id').val(id);
         $("#staticBackdrop").find('#status').val(type);
         if (type == 'complete') {
             $("#staticBackdrop").find('.billAmount').removeClass("col-md-12").addClass("col-md-6");
             $("#staticBackdrop").find('.commissionAmount').removeClass("d-none");
-            $("#staticBackdrop").find('#billAmount').val(amount);
+            $("#staticBackdrop").find('.discountAmount').removeClass("d-none");
+            $("#staticBackdrop").find('.dueAmount').removeClass("d-none");
+            $("#staticBackdrop").find('.total').removeClass("d-none");
+            $("#staticBackdrop").find('#billAmount').val(item.bill_amount);
+            $("#staticBackdrop").find('#discountAmount').val(item.discount);
+            $("#staticBackdrop").find('#dueAmount').val(item.due);
+
             calculateTotal();
         }
     }
 
     function calculateTotal(event) {
         let billAmount = $("#staticBackdrop").find('#billAmount').val();
+        let discount = $("#staticBackdrop").find('#discountAmount').val();
         let commissionPer = "{{Auth::guard('worker')->user()->commission}}";
-
-        let commAmount = (billAmount * parseFloat(commissionPer)) / 100;
+        let total = parseFloat(billAmount) - parseFloat(discount);
+        
+        let commAmount = (total * parseFloat(commissionPer)) / 100;
         $("#staticBackdrop").find('#commissionAmount').val(parseFloat(commAmount).toFixed(2));
+        $("#staticBackdrop").find('#total').val(parseFloat(parseFloat(total)).toFixed(2));
     }
 
     function changeStatus(event) {

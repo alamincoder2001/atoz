@@ -89,29 +89,29 @@ class DashboardController extends Controller
             FROM order_details od
             LEFT JOIN orders o ON o.id = od.order_id
             LEFT JOIN users c ON c.id = o.customer_id
-            WHERE od.created_at between '$dateFrom' AND '$dateTo'
+            WHERE DATE_FORMAT(od.created_at, '%Y-%m-%d') between '$dateFrom' AND '$dateTo'
             AND od.status != 'cancel'
             $clauses
         ");
 
         $commission = DB::select("SELECT ifnull(sum(cm.amount), 0) as total FROM commissions cm WHERE cm.created_at BETWEEN '$dateFrom' AND '$dateTo' AND 1 = 1 $managerId");
 
-        $worker = '';
+        $worker = [];
         if (Auth::guard('admin')->user()->role == 'manager') {
-            $worker = Worker::where("thana_id", Auth::guard('admin')->user()->thana_id)->whereBetween('created_at', [$dateFrom, $dateTo])->get();
+            $worker = DB::table('workers')->where("thana_id", Auth::guard('admin')->user()->thana_id)->select("workers.*")->whereBetween(DB::raw("(DATE_FORMAT(workers.created_at,'%Y-%m-%d'))"), [$dateFrom, $dateTo])->get();
         }
 
-        if ((Auth::guard('admin')->user()->role == 'admin') || (Auth::guard('admin')->user()->role == 'SuperAdmin')) {
-            $worker = Worker::whereBetween('created_at', [$dateFrom, $dateTo])->get();
+        if ((Auth::guard('admin')->user()->role == 'admin') || (Auth::guard('admin')->user()->role == 'Superadmin')) {
+            $worker = DB::table('workers')->select("workers.*")->whereBetween(DB::raw("(DATE_FORMAT(workers.created_at,'%Y-%m-%d'))"), [$dateFrom, $dateTo])->get();
         }
 
-        $customer = '';
+        $customer = [];
         if (Auth::guard('admin')->user()->role == 'manager') {
-            $customer = User::where("thana_id", Auth::guard('admin')->user()->thana_id)->whereBetween('created_at', [$dateFrom, $dateTo])->get();
+            $customer = DB::table('users')->where("thana_id", Auth::guard('admin')->user()->thana_id)->select("users.*")->whereBetween(DB::raw("(DATE_FORMAT(users.created_at,'%Y-%m-%d'))"), [$dateFrom, $dateTo])->get();
         }
 
-        if ((Auth::guard('admin')->user()->role == 'admin') || (Auth::guard('admin')->user()->role == 'SuperAdmin')) {
-            $customer = User::whereBetween('created_at', [$dateFrom, $dateTo])->get();
+        if ((Auth::guard('admin')->user()->role == 'admin') || (Auth::guard('admin')->user()->role == 'Superadmin')) {
+            $customer = DB::table('users')->select("users.*")->whereBetween(DB::raw("(DATE_FORMAT(users.created_at,'%Y-%m-%d'))"), [$dateFrom, $dateTo])->get();
         }
 
         return response()->json([
@@ -121,7 +121,7 @@ class DashboardController extends Controller
             'completed'     => $complete,
             'order_detail'  => $orderDetail,
             'commission'    => $commission[0]->total,
-            'manager'       => Admin::where('role', 'manager')->whereBetween('created_at', [$dateFrom, $dateTo])->get(),
+            'manager'       => DB::table('admins')->where('role', 'manager')->select("admins.*")->whereBetween(DB::raw("(DATE_FORMAT(admins.created_at,'%Y-%m-%d'))"), [$dateFrom, $dateTo])->get(),
             'worker'        => $worker,
             'customer'      => $customer,
             'input'         => $input,

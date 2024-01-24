@@ -43,6 +43,7 @@
                                 <th style="text-align: center;color:white;">Service</th>
                                 <th style="text-align: center;color:white;">Quantity</th>
                                 <th style="text-align: center;color:white;">Bill</th>
+                                <th style="text-align: center;color:white;">Discount</th>
                                 <th style="text-align: center;color:white;">Paid</th>
                                 <th style="text-align: center;color:white;">Due</th>
                                 <th style="text-align: center;color:white;">Worker</th>
@@ -61,6 +62,7 @@
                                     <td class="text-center">{{ item.orderDetails[0].name }}</td>
                                     <td class="text-center">{{ item.orderDetails[0].quantity }}</td>
                                     <td class="text-center">{{ item.orderDetails[0].bill_amount }}</td>
+                                    <td class="text-center">{{ item.orderDetails[0].discount }}</td>
                                     <td class="text-center">{{ item.orderDetails[0].paid_amount }}</td>
                                     <td class="text-center">{{ item.orderDetails[0].due }}</td>
                                     <td class="text-center">{{ item.orderDetails[0].worker_name }}</td>
@@ -72,9 +74,15 @@
                                         <br>
                                         <button v-show="ManagerOrAdmin" title="Add Due Amount"
                                             v-if="item.orderDetails[0].status != 'complete'"
-                                            @click="addDueModalShow(item.orderDetails[0].id)" type="button"
+                                            @click="addDueModalShow(item.orderDetails[0].id, 'due')" type="button"
                                             class="btn btn-success btn-sm shadow-none">
                                             Due
+                                        </button>
+                                        <button v-show="ManagerOrAdmin" title="Add Discount Amount"
+                                            v-if="item.orderDetails[0].status != 'complete'"
+                                            @click="addDueModalShow(item.orderDetails[0].id, 'discount')" type="button"
+                                            class="btn btn-success btn-sm shadow-none">
+                                            Discount
                                         </button>
                                     </td>
                                 </tr>
@@ -83,6 +91,7 @@
                                     <td class="text-center">{{ service.name }}</td>
                                     <td class="text-center">{{ service.quantity }}</td>
                                     <td class="text-center">{{ service.bill_amount }}</td>
+                                    <td class="text-center">{{ service.discount }}</td>
                                     <td class="text-center">{{ service.paid_amount }}</td>
                                     <td class="text-center">{{ service.due }}</td>
                                     <td class="text-center">{{ service.worker_name }}</td>
@@ -94,9 +103,15 @@
                                         <br>
                                         <button v-show="ManagerOrAdmin" href="javascript:void(0)" title="Add Due Amount"
                                             v-if="service.status != 'complete'"
-                                            @click="addDueModalShow(service.id)"
+                                            @click="addDueModalShow(service.id, 'due')"
                                             class="btn btn-success btn-sm shadow-none">
                                             Due
+                                        </button>
+                                        <button v-show="ManagerOrAdmin" href="javascript:void(0)" title="Add Discount Amount"
+                                            v-if="service.status != 'complete'"
+                                            @click="addDueModalShow(service.id, 'discount')"
+                                            class="btn btn-success btn-sm shadow-none">
+                                            Discount
                                         </button>
                                     </td>
                                 </tr>
@@ -162,17 +177,18 @@
             <div class="modal-dialog modal-md modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header d-flex justify-content-between">
-                        <h5 class="modal-title" id="serviceDueLabel">Service Due Add</h5>
+                        <h5 class="modal-title" id="serviceDueLabel">Service {{ txt }} Add</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body p-4 row">
                         <div class="form-group col-8">
-                            <label for="workers">Due Amount</label>
-                            <input type="number" class="form-control" v-model="addDueAmount">
+                            <label for="workers">{{ txt }} Amount</label>
+                            <input type="number" class="form-control" v-model="Amount">
                             <input type="hidden" v-model="od_id">
+                            <input type="hidden" v-model="txt">
                         </div>
                         <div class="form-group col-4">
-                            <button @click="addAmountAdd" type="button"
+                            <button @click="addAmount" type="button"
                                 class="btn btn-info shadow-none w-100 mt-3">Submit</button>
                         </div>
                     </div>
@@ -201,7 +217,7 @@ export default {
             },
             orders: [],
             thanas: [],
-            addDueAmount: '0.00',
+            Amount: '0.00',
             selectedThana: null,
             workers: [],
             selectedWorker: null,
@@ -213,7 +229,8 @@ export default {
             adminId: "",
             role: "",
             modalData: {},
-            ManagerOrAdmin: true
+            ManagerOrAdmin: true,
+            txt: "",
         };
     },
 
@@ -281,15 +298,18 @@ export default {
             }
         },
 
-        addDueModalShow(od_id) {
+        addDueModalShow(od_id, type) {
             this.od_id = od_id;
+            this.txt = type == 'due' ? "Due" : "Discount";
+            this.Amount = 0;
             $('#serviceDue').modal('show');
         },
 
-        addAmountAdd() {
+        addAmount() {
             let filter = {
                 orderDetailId: this.od_id,
-                due_amount: this.addDueAmount
+                amount: this.Amount,
+                type: this.txt
             }
             axios.post("/admin/order/add-due", filter).then((res) => {
                 $.notify(res.data.success, "success");

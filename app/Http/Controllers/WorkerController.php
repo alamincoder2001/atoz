@@ -104,8 +104,8 @@ class WorkerController extends Controller
             $orderId = $data->order_id;
 
             $data->bill_amount       = $request->billAmount;
-            $data->paid_amount       = $request->status == 'complete'? $request->billAmount:0;
-            $data->commission_amount = $request->status == 'complete'? $request->commissionAmount:0;
+            $data->paid_amount       = $request->status == 'complete' ? $request->billAmount - ($data->discount + $data->due) : 0;
+            $data->commission_amount = $request->status == 'complete' ? $request->commissionAmount : 0;
             $data->status            = $request->status;
 
             $data->update();
@@ -120,11 +120,13 @@ class WorkerController extends Controller
             $orderdetail = OrderDetail::where('order_id', $orderId)->get();
             $ordercomplete = OrderDetail::where('order_id', $orderId)->where('status', 'complete')->get();
             if (count($orderdetail) == count($ordercomplete)) {
-                $order = Order::where('id', $orderId)->first();
+                $order           = Order::where('id', $orderId)->first();
                 $order->subtotal = array_sum(array_column($ordercomplete->toArray(), 'bill_amount'));
-                $order->total = array_sum(array_column($ordercomplete->toArray(), 'paid_amount'));
-                $order->due = array_sum(array_column($ordercomplete->toArray(), 'due'));
-                $order->status = 'complete';
+                $order->discount = array_sum(array_column($ordercomplete->toArray(), 'discount'));
+                $order->total    = $order->subtotal - $order->discount;
+                $order->due      = array_sum(array_column($ordercomplete->toArray(), 'due'));
+                $order->paid     = $order->total - $order->due;
+                $order->status   = 'complete';
                 $order->update();
             }
             return response()->json(['status' => true, 'msg' => $msg]);

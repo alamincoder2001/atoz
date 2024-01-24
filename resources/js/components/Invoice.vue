@@ -17,9 +17,7 @@
         <div class="col-6 mb-2 text-end">
             <p class="m-0">
                 <span style="font-weight:700;border-bottom: 1px dashed darkgray;">Billing Address</span> <br />
-                <span style="font-weight:700;">Mobile: </span>{{ modalData.shipping_mobile }} <br />
-                <span style="font-weight:700;">Address: </span>{{ modalData.shipping_address }} , {{
-                    modalData.shipping_thana_name }} , {{ modalData.shipping_district_name }}
+                <span style="font-weight:700;">Address: </span>{{ modalData.shipping_address }}, {{ modalData.shipping_thana_name }}, {{ modalData.shipping_district_name }}
             </p>
             <p class="m-0" style="border-top: 1px solid #a1a1a1;">
                 <span style="font-weight: 900; text-transform: uppercase;font-style: italic;">Invoice no: </span>{{
@@ -82,12 +80,12 @@
                 <tr>
                     <td style="width: 47%;font-style: italic;font-weight: 900;">Total</td>
                     <td>:</td>
-                    <td class="text-end">{{ parseFloat(parseFloat(modalData.subtotal) + parseFloat(modalData.shipping_charge)).toFixed(2) }}</td>
+                    <td class="text-end">{{ parseFloat(parseFloat(modalData.total) + parseFloat(modalData.shipping_charge)).toFixed(2) }}</td>
                 </tr>
                 <tr>
                     <td style="width: 47%;font-style: italic;font-weight: 900;">Paid</td>
                     <td>:</td>
-                    <td class="text-end">{{ modalData.total }}</td>
+                    <td class="text-end">{{ parseFloat(parseFloat(modalData.paid) + +parseFloat(modalData.shipping_charge)).toFixed(2)  }}</td>
                 </tr>
                 <tr>
                     <td colspan="3" style="border-bottom: 1px dashed gray;"></td>

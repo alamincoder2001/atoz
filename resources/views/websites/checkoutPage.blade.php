@@ -79,27 +79,21 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="road_no" class="form-label"><b>City<sup class="text-danger">*</sup></b></label>
-                                            {{-- <select id="inputCity" name="shipping_thana" class="thana_id getThana form-select mb-2 selectTwo" style="border-radius: 3px; height: 39px;">
-                                                <option value="">Select a City</option>
-                                                @foreach($upazilas as $item)
-                                                    <option value="{{$item->id}}" {{Auth::guard('web')->user()->thana_id ? Auth::guard('web')->user()->thana_id == $item->id ? 'selected':'':'' }}>{{$item->name}}</option>
-                                                @endforeach
-                                            </select> --}}
                                             <div class="form-group">
-                                                <select name="shipping_thana" class="thana_id getThana form-select selectTwo" style="border-radius: 3px; height: 39px;">
+                                                <select name="billing_thana" class="thana_id getThana form-select selectTwo" style="border-radius: 3px; height: 39px;">
 
                                                 </select>
                                                 <span class="text-danger error-thana_id error"></span>
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div class="col-md-12">
+                                    <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="block_no" class="form-label"><b>Billing Address<sup class="text-danger">*</sup> </b></label>
-                                            <input type="text" class="form-control" id="block_no" value="{{Auth::guard('web')->user()->address}}" name="address" style="border-radius: 3px; height: 39px;">
+                                            <label for="email" class="form-label"><b>Email Address</b></label>
+                                            <input type="email" class="form-control" value="{{Auth::guard('web')->user()->email}}" id="email" disabled style="border-radius: 3px; height: 39px;">
                                         </div>
                                     </div>
+                                    
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="postcode" class="form-label"><b>Postcode / ZIP</b></label>
@@ -107,10 +101,48 @@
                                         </div>
                                     </div>
 
+                                    <div class="col-md-12">
+                                        <div class="mb-3">
+                                            <label for="address" class="form-label"><b>Billing Address<sup class="text-danger">*</sup> </b></label>
+                                            <textarea class="form-control" id="address" name="address" style="background:none;border-color: #b5b5b5 !important;border-radius: 3px; height: 39px;">{{Auth::guard('web')->user()->address}}</textarea>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <!-- shipping address -->
+                                    <div class="col-md-12">
+                                        <div class="mb-3 d-flex align-items-center">
+                                            <input type="checkbox" value="1" id="is_shipping" onchange="IsShipping(event)" name="is_shipping" checked>
+                                            <label for="is_shipping" style="margin: 0;margin-left: 8px;" class="form-label"><b>Same as</b></label>
+                                        </div>
+                                    </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="email" class="form-label"><b>Email Address</b></label>
-                                            <input type="email" class="form-control" value="{{Auth::guard('web')->user()->email}}" id="email" disabled style="border-radius: 3px; height: 39px;">
+                                            <label for="road_no" class="form-label"><b>District<sup class="text-danger">*</sup></b></label>
+                                            <select id="shippingDistrict" onchange="getUpazilaShipping()" name="shipping_district" class="form-select mb-2 selectTwo" style="border-radius: 3px; height: 39px;">
+                                                <option value="">Select a District</option>
+                                                @foreach($districts as $item)
+                                                    <option value="{{$item->id}}" {{Auth::guard('web')->user()->district_id ? Auth::guard('web')->user()->district_id == $item->id ? 'selected':'':'' }}>
+                                                        {{$item->name}}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="road_no" class="form-label"><b>City<sup class="text-danger">*</sup></b></label>
+                                            <div class="form-group">
+                                                <select name="shipping_thana" id="shipping_thana" class="shipping_thana getshippingThana form-select selectTwo" style="border-radius: 3px; height: 39px;">
+
+                                                </select>
+                                                <span class="text-danger error-shipping_thana error"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="mb-3">
+                                            <label for="shipping_address" class="form-label"><b>Shipping Address</b></label>
+                                            <textarea class="form-control" style="background:none;border-color: #b5b5b5 !important;border-radius: 3px; height: 39px;" id="shipping_address" name="shipping_address">{{Auth::guard('web')->user()->address}}</textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -125,8 +157,6 @@
 
                                 <div class="row rowCustom pb-1">
                                     <div class="col-md-12">
-                                        {{-- <strong class="border-bottom" style="color: #bd00ff;">Services</strong>
-                                        <br> --}}
 
                                         <table class="table">
                                             <thead>
@@ -169,46 +199,7 @@
                                         </table>
 
                                     </div>
-                                    {{-- <div class="col-md-4">
-                                        <label for="">Quantity</label>
-                                        <span class="fs-13" style="float: right; font-weight: bold;">1</span>
-                                    </div> --}}
-                                    {{-- <div class="col-md-4">
-                                        <span class="fs-13" style="float: right; font-weight: bold;"> ৳ 1,900</span>
-                                    </div> --}}
                                 </div>
-
-                                {{-- <div class="row rowCustom pb-1">
-                                    <div class="col-md-8">
-                                        <p class="fs-13">Subtotal</p>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <span class="fs-13" style="float: right; font-weight: bold;"> ৳ 1,900</span>
-                                    </div>
-
-                                    <div class="col-md-8">
-                                        <p class="fs-13">Delivery Charge</p>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <span class="fs-13" style="float: right; font-weight: bold;"> 0</span>
-                                    </div>
-
-                                    <div class="col-md-8">
-                                        <p class="fs-13"><b style="color: #6001ff">Discount</b></p>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <span class="fs-13" style="float: right; font-weight: bold;"> 0</span>
-                                    </div>
-                                </div> --}}
-
-                                {{-- <div class="row mt-1">
-                                    <div class="col-md-8">
-                                        <h6 class="">Amount to be paid</h6>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <span class="fs-13" style="float: right; font-weight: bold;"> ৳ 1,900</span>
-                                    </div>
-                                </div> --}}
 
 
                                 <div class="row mt-3">
@@ -243,183 +234,6 @@
         </div>
     </section>
 
-    {{-- modal --}}
-    {{-- <div class="modal fade" id="ScheduleModal" data-bs-backdrop="static" data-bs-keyboard="false"
-        tabindex="-1" aria-labelledby="schedule" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content">
-                <div class="modal-title">
-                    <h5 class="text-center p-3"
-                        style="box-shadow: 0px 20px 20px 0px #57287e1f; margin-bottom:0;font-size: 18px;">
-                        <span class="divisionTxt">Choose Your Preferable Schedule Time</span>
-                    </h5>
-                </div>
-                <div class="modal-header border-0">
-                    <button type="button" class="btn-close btn btn-secondary" data-bs-dismiss="modal"
-                        aria-label="Close"
-                        style="margin-top: -135px;margin-right: -37px;background-color: #ffffff;box-shadow: 0px 0px 5px 3px #ae45d866;background-image: none;font-size: 21px;font-weight: bold;z-index: 99999;height: 30px;width: 30px;border-radius: 50%;">
-                        X
-                    </button>
-                </div>
-                <div class="modal-body"
-                    style="height: 60vh; padding: 0 40px 0 40px; overflow: auto; background-color: #f9f8fb !important">
-                    <div class="row pt-0 pb-2">
-                        <h5 class="text-center">When would you like A2Z.Services to serve you?</h5>
-
-                        <p class="text-center">Select your prefer date</p>
-
-
-                        <div class="col-12 offset-1 d-flex">
-
-                            @if(date('d') == 18)
-                                <div class="card col-16 activecard">
-                                    <div class="card-body" style="display: grid;justify-content: space-evenly;">
-                                        <h4 class="m-0 text-center">18</h4>
-                                        <p class="text-center fw-bold">TODAY</p>
-                                    </div>
-                                </div>
-                            @else
-                                <div class="card col-16">
-                                    <div class="card-body" style="display: grid;">
-                                        <h4 class="m-0 text-center">18</h4>
-                                        <p class="text-center">SAT</p>
-                                    </div>
-                                </div>
-                            @endif
-
-                            &nbsp;
-                            <div class="card col-16">
-                                <div class="card-body" style="display: grid;">
-                                    <h4 class="m-0">19</h4>
-                                    <p>SUN</p>
-                                </div>
-                            </div>
-                            &nbsp;
-                            <div class="card col-16">
-                                <div class="card-body" style="display: grid;">
-                                    <h4 class="m-0">20</h4>
-                                    <p>MON</p>
-                                </div>
-                            </div>
-                            &nbsp;
-                            <div class="card col-16">
-                                <div class="card-body" style="display: grid;">
-                                    <h4 class="m-0">21</h4>
-                                    <p>TUE</p>
-                                </div>
-                            </div>
-                            &nbsp;
-                            <div class="card col-16">
-                                <div class="card-body" style="display: grid;">
-                                    <h4 class="m-0">22</h4>
-                                    <p>WED</p>
-                                </div>
-                            </div>
-                            <div class="card col-16">
-                                <div class="card-body" style="display: grid;">
-                                    <h4 class="m-0">23</h4>
-                                    <p>THU</p>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <p class="text-center mt-4">Select your prefer time, expert will arrive by your selected time</p>
-
-                        <div class="col-2"></div>
-                        <div class="col-2">
-                            <div class="card">
-                                <div class="card-body d-flex p-1">
-                                    <p class="text-center m-0" style="color: #532581">&nbsp; 10-11 &nbsp;</p><span>am</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-2">
-                            <div class="card">
-                                <div class="card-body d-flex p-1">
-                                    <p class="text-center m-0" style="color: #532581"> &nbsp; 11-12 &nbsp;</p> <span>pm</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-2">
-                            <div class="card">
-                                <div class="card-body d-flex p-1">
-                                    <p class="text-center m-0" style="color: #532581"> &nbsp; 12-01 &nbsp;</p> <span>pm</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-2">
-                            <div class="card">
-                                <div class="card-body d-flex p-1">
-                                    <p class="text-center m-0" style="color: #532581"> &nbsp; 01-02 &nbsp;</p> <span>pm</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-2"></div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> --}}
-    {{-- end modal --}}
-
-    {{-- modal --}}
-    {{-- <div class="modal fade" id="orderForModal" data-bs-backdrop="static" data-bs-keyboard="false"
-        tabindex="-1" aria-labelledby="orderFor" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content">
-                <div class="modal-title">
-                    <h5 class="text-center p-3"
-                        style="box-shadow: 0px 20px 20px 0px #57287e1f; margin-bottom:0;font-size: 18px;">
-                        <span class="divisionTxt">Order for</span>
-                    </h5>
-                </div>
-                <div class="modal-header border-0">
-                    <button type="button" class="btn-close btn btn-secondary" data-bs-dismiss="modal"
-                        aria-label="Close"
-                        style="margin-top: -135px;margin-right: -37px;background-color: #ffffff;box-shadow: 0px 0px 5px 3px #ae45d866;background-image: none;font-size: 21px;font-weight: bold;z-index: 99999;height: 30px;width: 30px;border-radius: 50%;">
-                        X
-                    </button>
-                </div>
-                <div class="modal-body"
-                    style="height: 60vh; padding: 0 40px 0 40px; overflow: auto; background-color: #f9f8fb !important">
-                    <div class="row pt-0 pb-2">
-                        <h5 class="text-center">Whose this service ordered for?</h5>
-
-                        <div class="col-md-2"></div>
-                        <div class="col-md-8">
-                            <div class="mb-3">
-                                <label for="person_name" class="form-label"><b>Name</b></label>
-                                <input type="text" class="form-control" id="person_name" placeholder="Write the name of the contact person" style="border-radius: 3px; height: 39px;">
-                            </div>
-                        </div>
-                        <div class="col-md-2"></div>
-
-                        <div class="col-md-2"></div>
-                        <div class="col-md-8">
-                            <div class="mb-3">
-                                <label for="person_number" class="form-label"><b>Contact Number</b></label>
-                                <div class="input-group mb-3">
-                                    <span class="input-group-text" style="font-weight: bold; background: #672e7b; color: white; border: #672e7b;" id="basic-addon1">+88</span>
-                                    <input type="text" class="form-control" id="person_number" placeholder="Write the number of the contact person" style="border-radius: 3px; height: 39px;">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-2"></div>
-
-                        <div class="col-md-2"></div>
-                        <div class="col-md-8 d-flex p-1 justify-content-center mt-3">
-                            <button type="button" class="btn btn-success confirm_btn" disabled> Confirm Contact</button>
-                        </div>
-                        <div class="col-md-2"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> --}}
-    {{-- end modal --}}
-
 @endsection
 
 @push('front_script')
@@ -431,11 +245,32 @@
             $('.selectTwo').select2();
             let district_id = $("#inputDistrict").val();
             getCity(district_id);
+            getCityShipping(district_id);
+
+            let isShipp = $("#is_shipping").val();
+            if (isShipp == 1) {
+                $("#shippingDistrict").attr("disabled", true)
+                $("#shipping_thana").attr("disabled", true)
+                $("#shipping_address").prop("disabled", true)
+            }
         });
+
+        function IsShipping(event){
+            if (!event.target.checked) {
+                $("#shippingDistrict").attr("disabled", false)
+                $("#shipping_thana").attr("disabled", false)
+                $("#shipping_address").prop("disabled", false)
+            }else{
+                $("#shippingDistrict").attr("disabled", true)
+                $("#shipping_thana").attr("disabled", true)
+                $("#shipping_address").prop("disabled", true)
+            }
+        }
 
         setTimeout(() => {
             let customerDefaultCity_id = "{{ Auth::guard('web')->user()->thana_id }}";
             $(".getThana").val(customerDefaultCity_id).trigger('change')
+            $(".getshippingThana").val(customerDefaultCity_id).trigger('change')
        }, 1000);
 
         function getUpazila()
@@ -463,6 +298,31 @@
                 $(".thana_id").html(`<option value="">Select city</option>`)
             }
         }
+        function getUpazilaShipping()
+        {
+            let district_id = $("#shippingDistrict").val();
+            getCityShipping(district_id);
+        }
+
+
+        function getCityShipping(id) {
+            if (id) {
+                $.ajax({
+                    url: location.origin + "/getUpazila/" + id,
+                    method: "GET",
+                    beforeSend: () => {
+                        $(".shipping_thana").html(`<option value="">Select city</option>`)
+                    },
+                    success: res => {
+                        $.each(res, (index, value) => {
+                            $(".getshippingThana").append(`<option value="${value.id}">${value.name}</option>`)
+                        })
+                    }
+                })
+            } else {
+                $(".shipping_thana").html(`<option value="">Select city</option>`)
+            }
+        }
 
         // get current location name
         if (getDataFromLocalStorage('districtName') == null) {
@@ -470,16 +330,6 @@
         }else{
             $('#area').val(getDataFromLocalStorage('districtName'));
         }
-
-        // function orderFor()
-        // {
-        //     $("#orderForModal").modal('show');
-        // }
-
-        // function scheduleSelect()
-        // {
-        //     $("#ScheduleModal").modal('show');
-        // }
 
         // check mobile number
         $('#person_number').on('input', function() {
@@ -492,10 +342,8 @@
 
                 if (regex.test(mobileNumber)) {
                     $('.confirm_btn').prop('disabled', false);
-                    // alert("Mobile number is valide");
                 } else {
                     $('.confirm_btn').prop('disabled', true);
-                    // alert("Mobile number is not valide");
                 }
             } else {
                 $('.confirm_btn').prop('disabled', true);
@@ -528,9 +376,6 @@
                             gravity: "top",
                             backgroundColor: "linear-gradient(to right, #7b3edb, #7b3edb)"
                         }).showToast();
-                        // $.each(res.error, (index, value) => {
-                        //     $(".error-"+index).text(value);
-                        // })
                     }else{
                         Toastify({
                             text: res.msg,

@@ -91,8 +91,10 @@ class WorkerCommissionController extends Controller
                             w.name,
                             w.mobile,
                             w.commission,
+                            ifnull(w.present_address, w.permanent_address) as address,
                             d.name as district_name,
                             t.name as thana_name,
+                            ad.name as manager_name,
                             concat( w.mobile,' - ',w.name, ' - (', w.commission , '%)') as worker_name,
                             (SELECT ifnull(SUM(od.commission_amount), 0) FROM order_details od where od.status = 'complete' AND od.worker_id = w.id) as detailCommission,
                             (SELECT ifnull(SUM(pc.amount), 0) FROM payment_collections pc where pc.worker_id = w.id) as paymentCollection,
@@ -100,6 +102,7 @@ class WorkerCommissionController extends Controller
                         FROM workers w
                         LEFT JOIN districts d ON d.id = w.district_id
                         LEFT JOIN thanas t ON t.id = w.thana_id
+                        LEFT JOIN admins ad ON ad.id = w.manager_id
                         WHERE w.status = 'p'");
 
         return $due;

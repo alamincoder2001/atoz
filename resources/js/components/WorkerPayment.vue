@@ -210,7 +210,7 @@ export default
             getWorkers() {
                 axios.get("/admin/get-workers-withDueAmount")
                     .then(res => {
-                        this.workers = res.data.workers.filter(item => item.dueAmount > 0);
+                        this.workers = res.data.workers;
                     })
             },
 
@@ -237,10 +237,10 @@ export default
                     return
                 }
 
-                if (parseFloat(this.form.amount) > parseFloat(this.form.workerDue)) {
-                    $.notify("Amount not valid", "error");
-                    return
-                }
+                // if (parseFloat(this.form.amount) > parseFloat(this.form.workerDue)) {
+                //     $.notify("Amount not valid", "error");
+                //     return
+                // }
 
                 this.form.worker_id = this.selectedWorker.id;
 

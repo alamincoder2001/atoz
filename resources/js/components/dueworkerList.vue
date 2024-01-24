@@ -4,7 +4,10 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="card">
-                <div class="text-end pt-2 pe-1">
+                <div class="text-end pt-2 pe-1 d-flex justify-content-between">
+                    <div class="ms-4">
+                        <input type="search" class="form-control" @input="SearchWorker($event)" placeholder="Search....">
+                    </div>
                     <a href="" @click.prevent="print" style="color: #3e5569;">
                         <i class="fas fa-print" style="color: gray; font-size: 12px; padding: 0;"></i>
                         Print
@@ -19,10 +22,19 @@
                                         Sl
                                     </th>
                                     <th class="text-white" style="font-weight: bold">
+                                        Code
+                                    </th>
+                                    <th class="text-white" style="font-weight: bold">
                                         Name
                                     </th>
                                     <th class="text-white" style="font-weight: bold">
                                         Mobile
+                                    </th>
+                                    <th class="text-white" style="font-weight: bold">
+                                        Location
+                                    </th>
+                                    <th class="text-white" style="font-weight: bold">
+                                        Area Manager
                                     </th>
                                     <th class="text-white text-end" style="font-weight: bold">
                                         Due Amount
@@ -32,9 +44,11 @@
                             <tbody>
                                 <tr v-for="(item, index) in workers" :key="item.id">
                                     <td>{{ ++index }}</td>
-
+                                    <td>{{ item.worker_code }} </td>
                                     <td>{{ item.name }} </td>
                                     <td>{{ item.mobile }} </td>
+                                    <td>{{ item.address }}, {{ item.thana_name }}, {{ item.district_name }} </td>
+                                    <td>{{ item.manager_name }}</td>
                                     <td class="text-end">{{ item.dueAmount }} </td>
                                 </tr>
                             </tbody>
@@ -52,6 +66,7 @@ export default {
     data() {
         return {
             workers: [],
+            workers1: [],
         };
     },
 
@@ -63,7 +78,8 @@ export default {
         getWorkers() {
             axios.get("/admin/get-workers-withDueAmount")
                 .then(res => {
-                    this.workers = res.data.workers.filter(item => item.dueAmount > 0);
+                    this.workers = res.data.workers.filter(item => item.dueAmount != 0);
+                    this.workers1 = this.workers;
                 })
         },
 
@@ -130,6 +146,17 @@ export default {
             reportWindow.print();
             reportWindow.close();
         },
+
+        SearchWorker(event) {
+            this.workers = this.workers1.filter(item => {
+                return item.worker_code.toLowerCase().startsWith(event.target.value.toLowerCase()) ||
+                    item.name.toLowerCase().startsWith(event.target.value.toLowerCase()) ||
+                    item.thana_name.toLowerCase().startsWith(event.target.value.toLowerCase()) ||
+                    item.district_name.toLowerCase().startsWith(event.target.value.toLowerCase()) ||
+                    item.address.toLowerCase().startsWith(event.target.value.toLowerCase()) ||
+                    item.manager_name.toLowerCase().startsWith(event.target.value.toLowerCase());
+            })
+        }
 
     },
 };

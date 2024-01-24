@@ -83,10 +83,8 @@
                         <a href="javascript:void(0)">
                             <h3 class="font-light text-white fontSize">Due Amount</h3>
                             <h4 class="text-white">{{ orderDetail.reduce((acc, pre) => {
-                                return acc +
-                                    parseFloat(pre.due)
-                            },
-                                0).toFixed(2) }}</h4>
+                                return acc + parseFloat(pre.due)
+                            }, 0).toFixed(2) }}</h4>
                         </a>
                     </div>
                 </div>
@@ -100,7 +98,9 @@
                     <div class="box bg-info text-center">
                         <a href="/admin/order/report" title="View Commission Report">
                             <h3 class="font-light text-white fontSize">Commission</h3>
-                            <h4 class="text-white">{{ commission }}</h4>
+                            <h4 class="text-white">{{ orderDetail.reduce((acc, pre) => {
+                                return acc + parseFloat(pre.commission_amount)
+                            }, 0).toFixed(2) }}</h4>
                         </a>
                     </div>
                 </div>

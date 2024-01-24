@@ -156,10 +156,16 @@ class OrderController extends Controller
     public function dueAdd(Request $request)
     {
         $data = OrderDetail::where("id", $request->orderDetailId)->where('status', '!=', 'complete')->first();
-        $data->update([
-            'due' => $request->due_amount
-        ]);
-        return response()->json(['success' => 'Due Amount Added']);
+        if ($request->type == 'Due') {
+            $data->update([
+                'due' => $request->amount
+            ]);
+        }else{
+            $data->update([
+                'discount' => $request->amount
+            ]);
+        }
+        return response()->json(['success' => "{$request->type} amount added"]);
     }
 
     //update order
