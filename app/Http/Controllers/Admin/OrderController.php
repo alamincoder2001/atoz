@@ -204,7 +204,7 @@ class OrderController extends Controller
         if (!userAccess("reportShow")) {
             return view("admin.unauthorize");
         }
-        return view('admin.order.report');
+        return view('admin.report.manager_paymentreport');
     }
 
     public function orderDetails(Request $request)

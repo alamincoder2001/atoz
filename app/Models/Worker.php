@@ -14,7 +14,7 @@ class Worker extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    protected $fillable = ['worker_code', 'name', 'father_name', 'mother_name', 'mobile', 'password', 'nid', 'commission', 'category_id', 'manager_id', 'district_id', 'thana_id', 'present_address', 'permanent_address', 'description', 'reference', 'status', 'image', 'nid_front_img', 'nid_back_img','payment_receive'];
+    protected $fillable = ['worker_code', 'name', 'father_name', 'mother_name', 'mobile', 'password', 'nid', 'commission', 'category_id', 'manager_id', 'district_id', 'thana_id', 'area_id', 'present_address', 'permanent_address', 'description', 'reference', 'status', 'image', 'nid_front_img', 'nid_back_img','payment_receive'];
 
     public function category()
     {
@@ -33,6 +33,10 @@ class Worker extends Authenticatable
     public function thana()
     {
         return $this->belongsTo(Thana::class, 'thana_id', 'id')->with('district');
+    }
+    public function area()
+    {
+        return $this->belongsTo(Area::class, 'area_id', 'id');
     }
     public function district()
     {

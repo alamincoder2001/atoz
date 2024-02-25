@@ -9,7 +9,7 @@ class PaymentCollection extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['transaction_id','payment_type','amount','payment_date','note','last_payment','worker_id','receive_by'];
+    protected $fillable = ['transaction_id','payment_type','amount','payment_date','note','previous_due','worker_id','receive_by'];
 
     public function worker()
     {

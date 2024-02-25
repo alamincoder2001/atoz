@@ -28,6 +28,7 @@ class CreateWorkersTable extends Migration
             $table->integer('manager_id')->nullable();
             $table->integer('district_id')->nullable();
             $table->integer('thana_id')->nullable();
+            $table->integer('area_id')->nullable();
             $table->string('present_address')->nullable();
             $table->string('permanent_address')->nullable();
             $table->string('description')->nullable();

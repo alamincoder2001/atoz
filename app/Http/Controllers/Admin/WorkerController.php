@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Order;
 use App\Models\Worker;
-use App\Models\AdminAccess;
 use App\Models\OrderDetail;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -138,9 +137,9 @@ class WorkerController extends Controller
     public function index()
     {
         if (Auth::guard('admin')->user()->role == 'manager') {
-            $workers = Worker::with('thana', 'district', 'manager')->where('manager_id', Auth::guard('admin')->user()->id)->latest()->get();
+            $workers = Worker::with('area', 'thana', 'district', 'manager')->where('manager_id', Auth::guard('admin')->user()->id)->latest()->get();
         } else {
-            $workers = Worker::with('thana', 'district', 'manager')->latest()->get();
+            $workers = Worker::with('area', 'thana', 'district', 'manager')->latest()->get();
         }
         foreach ($workers as $key => $item) {
             $catId = json_decode($item->category_id);
@@ -185,6 +184,9 @@ class WorkerController extends Controller
 
             if ($request->category_id && $request->category_id != null) {
                 $input['category_id'] = json_encode($request->category_id);
+            }
+            if (!empty($request->area_id)) {
+                $input['area_id'] = $request->area_id;
             }
 
             $input['password'] = Hash::make($request->mobile);
@@ -287,6 +289,10 @@ class WorkerController extends Controller
                 }
             } else {
                 unset($input['nid_back_img']);
+            }
+
+            if (!empty($request->area_id)) {
+                $input['area_id'] = $request->area_id;
             }
 
             $data->update($input);

@@ -4,6 +4,23 @@ input[type=number]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
+
+.vs__selected-options {
+    flex-wrap: nowrap;
+    overflow: hidden;
+}
+.vs--single .vs__selected {
+    position: absolute;
+    font-size: 12px;
+    font-weight: 900;
+    color: #878787;
+}
+.vs__search {
+    border: 0 !important;
+    border-left: none;
+    box-shadow: none;
+    line-height: normal !important;
+}
 </style>
 
 <template>
@@ -67,7 +84,7 @@ input[type=number]::-webkit-outer-spin-button {
                                         <label class="pe-0">Amount<span class="text-danger fw-bold">*</span></label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input type="number" v-model="form.amount" class="form-control mb-2">
+                                        <input type="number" step="0.01" min="0" v-model="form.amount" class="form-control mb-2">
                                     </div>
 
                                     <div class="col-md-4">
@@ -215,11 +232,15 @@ export default
             },
 
             getWorkerDue() {
-                this.form.workerDue = this.selectedWorker.dueAmount;
+                if (this.selectedWorker != null) {
+                    this.form.workerDue = this.selectedWorker.dueAmount;
+                } else {
+                    this.form.workerDue = 0;
+                }
             },
 
             getWorkerPayments() {
-                axios.get("/admin/get-worker-payment")
+                axios.post("/admin/get-worker-payment")
                     .then(res => {
                         this.workerPayments = res.data.paymentCollections;
                     })
@@ -236,11 +257,6 @@ export default
                     $.notify("Select Payment Type", "error")
                     return
                 }
-
-                // if (parseFloat(this.form.amount) > parseFloat(this.form.workerDue)) {
-                //     $.notify("Amount not valid", "error");
-                //     return
-                // }
 
                 this.form.worker_id = this.selectedWorker.id;
 
@@ -273,7 +289,6 @@ export default
             deleteRow(id) {
                 if (confirm("Are you sure want to delete this!")) {
                     axios.post("/admin/worker/delete/payment-collection", { id: id }).then((res) => {
-                        console.log(res.data);
                         if (res.data.error) {
                             $.notify(res.data, "error");
                         } else {

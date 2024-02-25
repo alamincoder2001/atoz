@@ -6,7 +6,6 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ReviewController;
-use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\WorkerController;
 use Illuminate\Support\Facades\Route;
 
@@ -83,7 +82,8 @@ Route::post("/order-status-update", [WorkerController::class, 'statusUpdate'])->
 Route::get('view-worker-order-details/{id}', [WorkerController::class, 'viewWorkerOrder']);
 
 // get data from database
-Route::get("/getUpazila/{id}", [HomeController::class, "getUpazila"]);
+Route::post("/getUpazila", [HomeController::class, "getUpazila"]);
+Route::post("/getArea", [HomeController::class, "getArea"]);
 Route::get('/setting/fetch', [HomeController::class, 'fetch'])->name('setting.fetch');
 
 // customer register page

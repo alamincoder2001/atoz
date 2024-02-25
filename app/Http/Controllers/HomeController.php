@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Division;
+use App\Models\Area;
 use App\Thana;
 use App\Models\Blog;
 use App\Models\Slider;
@@ -37,13 +38,11 @@ class HomeController extends Controller
     {
         try {
             $items = Cart::content();
-            // if (isset($items) && count($items) > 0) {
                 if (Auth::guard('web')->user()) {
                     return view('websites.checkoutPage',compact('items'));
                 }else {
                     return redirect()->back()->with('error', 'Please Login/Register First');
                 }
-            // }
         } catch (\Throwable $th) {
             return redirect()->back();
         }
@@ -119,9 +118,15 @@ class HomeController extends Controller
         return view('websites.contact');
     }
 
-    public function getUpazila($id)
+    public function getUpazila(Request $request)
     {
-        return Thana::where("district_id", $id)->orderBy("name", "ASC")->get();
+        $thanas = Thana::where("district_id", $request->id)->orderBy("name", "ASC")->get();
+        return response()->json($thanas);
+    }
+    public function getArea(Request $request)
+    {
+        $areas = Area::where("upazila_id", $request->id)->orderBy("name", "ASC")->get();
+        return response()->json($areas);
     }
 
     public function fetch()

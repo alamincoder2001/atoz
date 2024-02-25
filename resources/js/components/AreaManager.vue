@@ -101,8 +101,16 @@
                                         <div class="form-group">
                                             <label for="thana_id" class="">Thana<span
                                                     class="text-danger fw-bold">*</span></label>
-                                            <v-select :options="thanas" v-model="selectedThana" label="name"></v-select>
+                                            <v-select :options="thanas" v-model="selectedThana" @input="onChangeThana" label="name"></v-select>
                                             <span class="error-thana_id error text-danger"></span>
+                                        </div>
+
+                                        <div class="form-group mb-1">
+                                            <label for="area_id" class="pe-0">Area<span
+                                                    class="text-danger fw-bold">*</span></label>
+                                            <v-select :options="areas" v-model="selectedArea" label="name"
+                                               ></v-select>
+                                            <span class="error-area_id error text-danger"></span>
                                         </div>
 
                                         <div class="form-group">
@@ -223,6 +231,7 @@ export default {
                 password: "",
                 district_id: "",
                 thana_id: "",
+                area_id: "",
                 father_name: "",
                 mother_name: "",
                 present_address: "",
@@ -239,6 +248,8 @@ export default {
             selectedDistrict: null,
             thanas: [],
             selectedThana: null,
+            areas: [],
+            selectedArea: null,
 
             columns: [
                 { label: "Image", field: "img", html: true, },
@@ -281,6 +292,25 @@ export default {
                     })
                 })
         },
+        onChangeThana() {
+            if (this.role != 'manager') {
+                if (this.selectedThana != null) {
+                    this.selectedArea = null;
+                    this.getAreas();
+                }
+            } else {
+                this.selectedArea = null;
+                this.getAreas();
+            }
+        },
+        getAreas() {
+            axios.get("/admin/area/fetch")
+                .then(res => {
+                    this.areas = res.data.data.filter(th => {
+                        return th.upazila_id == this.selectedThana.id
+                    })
+                })
+        },
         getUser() {
             axios.get("/admin/get-manager")
                 .then(res => {
@@ -302,6 +332,7 @@ export default {
             }
             this.form.district_id = this.selectedDistrict.id;
             this.form.thana_id = this.selectedThana.id;
+            this.form.area_id = this.selectedArea.id;
 
             let url = "/admin/manager";
             if (this.form.id != '') {
@@ -382,6 +413,7 @@ export default {
             this.form.phone = val.phone;
             this.form.district_id = val.district_id;
             this.form.thana_id = val.thana_id;
+            this.form.area_id = val.area_id;
             this.form.present_address = val.present_address;
             this.form.permanent_address = val.permanent_address;
             this.form.description = val.description;
@@ -398,6 +430,12 @@ export default {
             this.selectedThana = {
                 id: val.thana_id,
                 name: val.thana.name
+            }
+
+            this.getAreas();
+            this.selectedArea = {
+                id: val.area_id,
+                name: val.area.name
             }
         },
 
@@ -471,6 +509,7 @@ export default {
             this.form.password = "";
             this.form.district_id = "";
             this.form.thana_id = "";
+            this.form.area_id = "";
             this.form.father_name = "";
             this.form.mother_name = "";
             this.form.present_address = "";
@@ -485,6 +524,7 @@ export default {
                 delete (this.form.nid_back_img)
 
             this.selectedDistrict = null;
+            this.selectedArea = null;
             this.thanas = [];
             this.selectedThana = null;
         }

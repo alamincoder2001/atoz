@@ -36,6 +36,7 @@ class Admin extends Authenticatable
         'description',
         'district_id',
         'thana_id',
+        'area_id',
         'commission',
     ];
 
@@ -61,6 +62,10 @@ class Admin extends Authenticatable
     public function thana()
     {
         return $this->belongsTo(Thana::class, 'thana_id', 'id')->with('district');
+    }
+    public function area()
+    {
+        return $this->belongsTo(Area::class, 'area_id', 'id');
     }
 
     public static function checkGroupName($group, $access)

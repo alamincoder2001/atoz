@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\OrderDetail;
+use App\Models\CommissionPayment;
 use App\Models\PaymentCollection;
 use App\Models\Setting;
-use App\Models\Worker;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -27,9 +26,24 @@ class PaymentCollectionController extends Controller
         return view('admin.payment.worker_payment_collection');
     }
 
-    public function getPayment()
+    public function managerPayment()
     {
-        $paymentCollections = PaymentCollection::with('worker','receiveBy')->latest()->get();
+        if (!userAccess("paymentCollection")) {
+            return view("admin.unauthorize");
+        }
+        return view('admin.payment.manager_payment');
+    }
+
+    public function getPayment(Request $request)
+    {
+        $paymentCollections = PaymentCollection::with('worker', 'receiveBy');
+        if (!empty($request->workerId)) {
+            $paymentCollections = $paymentCollections->where('worker_id', $request->workerId);
+        }
+        if (!empty($request->dateFrom) && !empty($request->dateTo)) {
+            $paymentCollections = $paymentCollections->whereBetween('payment_date', [$request->dateFrom, $request->dateTo]);
+        }
+        $paymentCollections = $paymentCollections->latest()->get();
         return response()->json(['paymentCollections' => $paymentCollections]);
     }
 
@@ -62,21 +76,21 @@ class PaymentCollectionController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'payment_type' => 'required',
-            'amount' => 'required',
-            'workerDue' => 'required',
-            // 'note' => 'required',
-            'worker_id' => 'required'
+            'amount'       => 'required',
+            'workerDue'    => 'required',
+            'worker_id'    => 'required'
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error'=> $validator->errors()->first()]);
+            return response()->json(['error' => $validator->errors()->first()]);
         }
 
         $input = $request->all();
 
         try {
-            $input['transaction_id'] = 'PC'.'-'.rand();
+            $input['transaction_id'] = 'PC' . '-' . rand();
             $input['receive_by'] = Auth::guard('admin')->user()->id;
+            $input['previous_due'] = $request->workerDue;
 
             $pay = PaymentCollection::create($input);
             $pay_id = $pay->id;
@@ -86,31 +100,79 @@ class PaymentCollectionController extends Controller
         }
     }
 
-    public function paymentReceive($id)
+    public function managerPaymentStore(Request $request)
     {
-        $paymentCollection = PaymentCollection::with('worker','receiveBy')->findOrFail($id);
+        $validator = Validator::make($request->all(), [
+            'payment_type' => 'required',
+            'amount'       => 'required',
+            'managerDue'   => 'required',
+            'manager_id'   => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()->first()]);
+        }
+
+        $input = $request->all();
+
+        try {
+            $input['transaction_id'] = 'CP' . '-' . rand();
+            $input['receive_by'] = Auth::guard('admin')->user()->id;
+            $input['previous_due'] = $request->managerDue;
+
+            $pay = CommissionPayment::create($input);
+            $pay_id = $pay->id;
+            return response()->json(['success' => 'Manager Payment Successfully', 'id' => $pay_id]);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => $th->getMessage()]);
+        }
+    }
+
+    public function getCommissionPayment(Request $request)
+    {
+        $paymentCollections = CommissionPayment::with('manager', 'receiveBy');
+        if (!empty($request->managerId)) {
+            $paymentCollections = $paymentCollections->where('manager_id', $request->managerId);
+        }
+        if (!empty($request->dateFrom) && !empty($request->dateTo)) {
+            $paymentCollections = $paymentCollections->whereBetween('payment_date', [$request->dateFrom, $request->dateTo]);
+        }
+        $paymentCollections = $paymentCollections->latest()->get();
+        return response()->json(['paymentCollections' => $paymentCollections]);
+    }
+
+    public function paymentReceiveInvoice($id)
+    {
+        $paymentCollection = PaymentCollection::with('worker', 'receiveBy')->findOrFail($id);
         $companyInfo = Setting::first();
-        return view('admin.payment.worker_collection_report',compact('companyInfo','paymentCollection'));
+        return view('admin.payment.worker_collection_report', compact('companyInfo', 'paymentCollection'));
+    }
+
+    public function managerPaymentInvoice($id)
+    {
+        $paymentCollection = CommissionPayment::with('manager', 'receiveBy')->findOrFail($id);
+        $companyInfo = Setting::first();
+        return view('admin.payment.manager_collection_report', compact('companyInfo', 'paymentCollection'));
     }
 
     public function deletePayment(Request $request)
     {
         try {
             $paymentCollection = PaymentCollection::findOrFail($request->id);
-            $worker = Worker::findOrFail($paymentCollection->worker_id);
-            $worker->update(['payment_receive' => 1]);
-            $orderDetails = OrderDetail::where('worker_id', $paymentCollection->worker_id)->where('status', 'complete')->where('payment_receive_status', 1)->get();
-
-            foreach ($orderDetails as $od) {
-               OrderDetail::findOrFail($od->id)->update(['payment_receive_status' => 0]);
-            }
             $paymentCollection->delete();
-            return response()->json(['success'=> 'Payment Deleted Successfully']);
+            return response()->json(['success' => 'Payment Deleted Successfully']);
         } catch (\Throwable $th) {
             return response()->json(['error' => 'Payment Delete Failed!']);
         }
     }
-
-
-
+    public function deleteManagerPayment(Request $request)
+    {
+        try {
+            $paymentCollection = CommissionPayment::findOrFail($request->id);
+            $paymentCollection->delete();
+            return response()->json(['success' => 'Commission Payment Deleted Successfully']);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => 'Commission Payment Delete Failed!']);
+        }
+    }
 }

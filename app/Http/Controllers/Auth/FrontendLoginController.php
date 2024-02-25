@@ -67,6 +67,7 @@ class FrontendLoginController extends Controller
                 "mobile"           => "required",
                 "district_id"      => "required",
                 "thana_id"         => "required",
+                "area_id"          => "required",
                 "password"         => "required",
                 "confirm_password" => "required_with:password|same:password",
             ]);
@@ -83,6 +84,7 @@ class FrontendLoginController extends Controller
             $data->mobile        = $request->mobile;
             $data->district_id   = $request->district_id;
             $data->thana_id      = $request->thana_id;
+            $data->area_id      = $request->area_id;
             $data->password      = Hash::make($request->password);
             $data->save();
 

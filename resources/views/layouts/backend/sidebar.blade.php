@@ -71,6 +71,11 @@
                                 <a href="{{route('admin.thana.index')}}" class="sidebar-link {{Request::is('admin.thana.index') ? 'active':''}}"><i class="fas fa-list"></i><span class="hide-menu"> Upazila Entry </span></a>
                             </li>
                             @endif
+                            @if(userAccess("thanaEntry"))
+                            <li class="sidebar-item">
+                                <a href="{{route('admin.area.index')}}" class="sidebar-link {{Request::is('admin.area.index') ? 'active':''}}"><i class="fas fa-list"></i><span class="hide-menu"> Area Entry </span></a>
+                            </li>
+                            @endif
                             @if(userAccess("customerList"))
                             <li class="sidebar-item">
                                 <a href="{{route('admin.customer.index')}}" class="sidebar-link {{Request::is('admin.customer.index') ? 'active':''}}"><i class="fas fa-user-circle"></i><span class="hide-menu"> Customer List</span></a>
@@ -127,32 +132,32 @@
                         <ul aria-expanded="false" class="collapse first-level">
                             @if(userAccess("reportShow"))
                             <li class="sidebar-item">
-                                <a href="{{route('admin.order.report')}}" class="sidebar-link {{Request::is('admin.order.report') ? 'active':''}}"><i class="fas fa-file"></i><span class="hide-menu"> Commission Report </span></a>
+                                <a href="{{route('admin.report.managerPaymentReport')}}" class="sidebar-link {{Request::is('admin.report.managerPaymentReport') ? 'active':''}}"><i class="fas fa-file"></i><span class="hide-menu"> Manager Commission Report </span></a>
                             </li>
                             @endif
-                            @if(userAccess("paymentShow"))
+                            @if(userAccess("reportShow"))
                             <li class="sidebar-item">
-                                <a href="{{route('admin.commission.list')}}" class="sidebar-link {{Request::is('admin.commission.list') ? 'active':''}}"><i class="fas fa-file"></i><span class="hide-menu"> Commission Payment List </span></a>
+                                <a href="{{route('admin.report.workerPaymentReport')}}" class="sidebar-link {{Request::is('admin.report.workerPaymentReport') ? 'active':''}}"><i class="fas fa-file"></i><span class="hide-menu"> Worker Commission Report </span></a>
                             </li>
                             @endif
                         </ul>
                     </li>
                 @endif
 
-                @if(userAccess("userEntry"))
-                    <li class="sidebar-item {{Request::is('admin.payment.collection') ? 'selected':''}}" title="Worker Payment Collection">
-                        <a class="sidebar-link waves-effect waves-dark sidebar-link {{Request::is('admin.payment.collection') ? 'active':''}}" href="{{route('admin.payment.collection')}}" aria-expanded="false">
-                            <i class="mdi mdi-currency-usd" style="font-size: 23px;"></i>
-                            <span class="hide-menu">Payment Collection</span>
+                @if(userAccess("paymentCollection"))
+                    <li class="sidebar-item {{Request::is('admin.worker.payment') ? 'selected':''}}" title="Worker Payment Collection">
+                        <a class="sidebar-link waves-effect waves-dark sidebar-link {{Request::is('admin.worker.payment') ? 'active':''}}" href="{{route('admin.worker.payment')}}" aria-expanded="false">
+                            <i class="mdi mdi-cash" style="font-size: 23px;"></i>
+                            <span class="hide-menu">Worker Payment</span>
                         </a>
                     </li>
                 @endif
 
-                @if(userAccess("userEntry"))
-                    <li class="sidebar-item {{Request::is('admin.worker.commission') ? 'selected':''}}" title="Worker Commission List">
-                        <a class="sidebar-link waves-effect waves-dark sidebar-link {{Request::is('admin.worker.commission') ? 'active':''}}" href="{{route('admin.worker.commission')}}" aria-expanded="false">
-                            <i class="mdi mdi-currency-usd" style="font-size: 23px;"></i>
-                            <span class="hide-menu">Worker Commission</span>
+                @if(userAccess("workerPayment"))
+                    <li class="sidebar-item {{Request::is('admin.manager.payment') ? 'selected':''}}" title="Worker Commission List">
+                        <a class="sidebar-link waves-effect waves-dark sidebar-link {{Request::is('admin.manager.payment') ? 'active':''}}" href="{{route('admin.manager.payment')}}" aria-expanded="false">
+                            <i class="mdi mdi-cash" style="font-size: 23px;"></i>
+                            <span class="hide-menu">Manager Payment</span>
                         </a>
                     </li>
                 @endif

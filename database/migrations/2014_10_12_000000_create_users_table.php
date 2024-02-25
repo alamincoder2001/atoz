@@ -25,6 +25,7 @@ class CreateUsersTable extends Migration
             $table->string('mobile')->nullable();
             $table->integer('district_id')->nullable();
             $table->integer('thana_id')->nullable();
+            $table->integer('area_id')->nullable();
             $table->string('postcode')->nullable();
             $table->string('address')->nullable();
             $table->string("image")->nullable();

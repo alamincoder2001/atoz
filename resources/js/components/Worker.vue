@@ -16,7 +16,8 @@
                                             <span class="error-name error text-danger"></span>
                                         </div>
                                         <div class="form-group mb-1">
-                                            <label for="name" class="pe-0">Name<span class="text-danger fw-bold">*</span></label>
+                                            <label for="name" class="pe-0">Name<span
+                                                    class="text-danger fw-bold">*</span></label>
                                             <input type="text" id="name" v-model="form.name" class="form-control"
                                                 autocomplete="off" placeholder="Name">
                                             <span class="error-name error text-danger"></span>
@@ -36,7 +37,8 @@
                                             <span class="error-father_name error text-danger"></span>
                                         </div>
                                         <div class="form-group mb-1">
-                                            <label for="mother_name" class="pe-0">Mother Name<span class="text-danger fw-bold">*</span></label>
+                                            <label for="mother_name" class="pe-0">Mother Name<span
+                                                    class="text-danger fw-bold">*</span></label>
                                             <input type="text" id="mother_name" v-model="form.mother_name"
                                                 class="form-control" placeholder="Mother Name" autocomplete="off">
                                             <span class="error-mother_name error text-danger"></span>
@@ -46,8 +48,9 @@
                                             <label for="commission" class="pe-0 pe-md-0">Commission<span
                                                     class="text-danger fw-bold">*</span></label>
                                             <div class="input-group d-flex align-items-center">
-                                                <input type="number" step="0.01" min="0" id="commission" v-model="form.commission"
-                                                    class="form-control" placeholder="%" autocomplete="off">
+                                                <input type="number" step="0.01" min="0" id="commission"
+                                                    v-model="form.commission" class="form-control" placeholder="%"
+                                                    autocomplete="off">
                                                 <span style="background: #8b006d;padding: 4px;color: white;">%</span>
                                             </div>
                                             <span class="error-commission error text-danger"></span>
@@ -56,29 +59,32 @@
                                         <div class="form-group mb-1">
                                             <label for="category_id" class="pe-0">Category<span
                                                     class="text-danger fw-bold">*</span></label>
-                                            <v-select :options="categories" v-model="selectedCategory" multiple label="name"></v-select>
+                                            <v-select :options="categories" v-model="selectedCategory" multiple
+                                                label="name"></v-select>
                                             <span class="error-category_id error text-danger"></span>
                                         </div>
                                         <div class="form-group mb-1">
-                                                <label for="present_address" class="pe-0">Present Address<span class="text-danger fw-bold">*</span></label>
-                                                <input type="text" id="present_address" v-model="form.present_address"
-                                                    class="form-control" placeholder="Present Address" autocomplete="off">
+                                            <label for="present_address" class="pe-0">Present Address<span
+                                                    class="text-danger fw-bold">*</span></label>
+                                            <input type="text" id="present_address" v-model="form.present_address"
+                                                class="form-control" placeholder="Present Address" autocomplete="off">
                                             <span class="error-present_address error text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
 
                                         <div class="form-group mb-1">
-                                            <label for="permanent_address" class="pe-0">Permanent Address<span class="text-danger fw-bold">*</span></label>
-                                                <input type="text" id="permanent_address" v-model="form.permanent_address"
-                                                    class="form-control" placeholder="Permanent Address" autocomplete="off">
+                                            <label for="permanent_address" class="pe-0">Permanent Address<span
+                                                    class="text-danger fw-bold">*</span></label>
+                                            <input type="text" id="permanent_address" v-model="form.permanent_address"
+                                                class="form-control" placeholder="Permanent Address" autocomplete="off">
                                             <span class="error-permanent_address error text-danger"></span>
                                         </div>
 
                                         <div class="form-group mb-1">
                                             <label for="description" class="pe-0">Description</label>
-                                                <input type="text" id="description" v-model="form.description"
-                                                    class="form-control" placeholder="Description" autocomplete="off">
+                                            <input type="text" id="description" v-model="form.description"
+                                                class="form-control" placeholder="Description" autocomplete="off">
                                             <span class="error-description error text-danger"></span>
                                         </div>
 
@@ -98,10 +104,16 @@
                                             <span class="error-password error text-danger"></span>
                                         </div>
                                         <div class="form-group mb-1">
+                                            <label for="area_id" class="pe-0">Area<span
+                                                    class="text-danger fw-bold">*</span></label>
+                                            <v-select :options="areas" v-model="selectedArea" label="name"
+                                                @input="onChangeArea"></v-select>
+                                            <span class="error-area_id error text-danger"></span>
+                                        </div>
+                                        <div class="form-group mb-1">
                                             <label for="manager_id" class="pe-0">Manager<span
                                                     class="text-danger fw-bold">*</span></label>
-                                            <v-select :options="managers" v-model="selectedManager"
-                                                label="name"></v-select>
+                                            <v-select :options="managers" v-model="selectedManager" label="name"></v-select>
                                             <span class="error-manager_id error text-danger"></span>
                                         </div>
 
@@ -147,7 +159,7 @@
                                     <label class="form-label">
                                         Photo
                                     </label>
-                                    <input type="file" accept="image/*" class="form-control" @change="imageUrl" >
+                                    <input type="file" accept="image/*" class="form-control" @change="imageUrl">
                                 </div>
                                 <div class="form-group">
                                     <label>Preview Photo</label>
@@ -160,11 +172,12 @@
                                         <sup class="text-danger" title="must be fillable">*</sup>
                                         <small class="text-danger" style="font-size: 11px">150px x 150px</small>
                                     </label>
-                                        <input type="file" name="nid_front_img" accept="image/*" class="form-control" @change="nidFrontUrl" >
+                                    <input type="file" name="nid_front_img" accept="image/*" class="form-control"
+                                        @change="nidFrontUrl">
                                 </div>
                                 <div class="form-group">
                                     <label>Preview NID Front</label>
-                                    <img :src="nidFrontSrc" class="img-fluid" alt="nid_front" style="max-height: 60px;" >
+                                    <img :src="nidFrontSrc" class="img-fluid" alt="nid_front" style="max-height: 60px;">
                                 </div>
 
                                 <div class="form-group">
@@ -173,12 +186,14 @@
                                         <sup class="text-danger" title="must be fillable">*</sup>
                                         <small class="text-danger" style="font-size: 11px">150px x 150px</small>
                                     </label>
-                                        <!-- <input type="file" accept="image/*" class="form-control" @change="nidBackUrl" onchange="document.getElementById('nidBack').src = window.URL.createObjectURL(this.files[0])" > -->
-                                        <input type="file" name="nid_back_img" accept="image/*" class="form-control" @change="nidBackUrl" >
+                                    <!-- <input type="file" accept="image/*" class="form-control" @change="nidBackUrl" onchange="document.getElementById('nidBack').src = window.URL.createObjectURL(this.files[0])" > -->
+                                    <input type="file" name="nid_back_img" accept="image/*" class="form-control"
+                                        @change="nidBackUrl">
                                 </div>
                                 <div class="form-group">
                                     <label>Preview NID Back</label>
-                                    <img :src="nidBackSrc" id="nidBack" class="img-fluid" alt="nid_back" style="max-height: 60px;">
+                                    <img :src="nidBackSrc" id="nidBack" class="img-fluid" alt="nid_back"
+                                        style="max-height: 60px;">
                                 </div>
                             </div>
                         </div>
@@ -213,7 +228,8 @@
                                 <i class="fas fa-arrow-up text-success" title="Worker Status Active. Click To Change"></i>
                             </span>
                             <span v-else>
-                                <i class="fas fa-arrow-down text-warning" title="Worker Status Deactive. Click To Change"></i>
+                                <i class="fas fa-arrow-down text-warning"
+                                    title="Worker Status Deactive. Click To Change"></i>
                             </span>
                         </a>
                     </span>
@@ -248,6 +264,7 @@ export default {
                 manager_id: "",
                 district_id: "",
                 thana_id: "",
+                area_id: "",
                 present_address: "",
                 permanent_address: "",
                 description: "",
@@ -263,6 +280,8 @@ export default {
             selectedDistrict: null,
             thanas: [],
             selectedThana: null,
+            areas: [],
+            selectedArea: null,
             managers: [],
             selectedManager: null,
             categories: [],
@@ -299,19 +318,10 @@ export default {
     },
 
     methods: {
-        onChangeThana() {
-            this.selectedManager = null
-            this.getAreaManager();
-        },
-
         getAreaManager() {
             axios.get("/admin/get-manager")
                 .then(res => {
                     this.managers = res.data.manager.filter(item => item.thana_id == this.selectedThana.id);
-                    this.selectedManager = {
-                        id: this.managers[0].id,
-                        name: this.managers[0].name,
-                    }
                 })
         },
 
@@ -366,6 +376,38 @@ export default {
                     }
                 })
         },
+        onChangeThana() {
+            if (this.role != 'manager') {
+                if (this.selectedThana != null) {
+                    this.selectedArea = null;
+                    this.getAreas();
+                }
+            } else {
+                this.selectedArea = null;
+                this.getAreas();
+            }
+        },
+        getAreas() {
+            axios.get("/admin/area/fetch")
+                .then(res => {
+                    if (this.role != 'manager') {
+                        this.areas = res.data.data.filter(th => {
+                            return th.upazila_id == this.selectedThana.id
+                        })
+                    } else {
+                        this.areas = res.data.data.filter(th => th.id == this.thana_id)
+                        this.selectedThana = {
+                            id: this.areas[0].id,
+                            name: this.areas[0].name,
+                        }
+                    }
+                })
+        },
+
+        onChangeArea() {
+            this.selectedManager = null
+            this.getAreaManager();
+        },
 
         getWorker() {
             axios.get("/admin/get-worker")
@@ -398,9 +440,10 @@ export default {
             this.form.manager_id = this.selectedManager.id;
             this.form.district_id = this.selectedDistrict.id;
             this.form.thana_id = this.selectedThana.id;
+            this.form.area_id = this.selectedArea.id;
 
             let cate_id = [];
-            this.selectedCategory.map(function(value, key) {
+            this.selectedCategory.map(function (value, key) {
                 cate_id.push(value.id);
             });
 
@@ -447,7 +490,7 @@ export default {
         },
 
         editRow(val) {
-            if(this.role =='manager'){
+            if (this.role == 'manager') {
                 this.ManagerOrAdmin = false;
             }
 
@@ -462,7 +505,7 @@ export default {
 
             this.form.category_id = JSON.parse(val.category_id);
             let cats = [];
-            val.categories.map(function(value, key) {
+            val.categories.map(function (value, key) {
                 cats.push(value);
             });
 
@@ -471,6 +514,7 @@ export default {
             this.form.manager_id = val.manager_id;
             this.form.district_id = val.district_id;
             this.form.thana_id = val.thana_id;
+            this.form.area_id = val.area_id;
             this.form.present_address = val.present_address;
             this.form.permanent_address = val.permanent_address;
             this.form.description = val.description;
@@ -497,7 +541,17 @@ export default {
                 name: val.thana.name
             }
 
+            this.getAreas();
+            this.selectedArea = {
+                id: val.area_id,
+                name: val.area.name
+            }
+
             this.getAreaManager();
+            this.selectedManager = {
+                id: val.manager_id,
+                name: val.manager.name
+            }
         },
 
         deleteRow(id) {
@@ -524,8 +578,8 @@ export default {
             //     img.src = window.URL.createObjectURL(event.target.files[0]);
             //     img.onload = () => {
             //         if (img.width === 150 && img.height === 150) {
-                        this.imageSrc = window.URL.createObjectURL(event.target.files[0]);
-                        this.form.image = event.target.files[0];
+            this.imageSrc = window.URL.createObjectURL(event.target.files[0]);
+            this.form.image = event.target.files[0];
             //         } else {
             //             alert(`This image ${img.width}px X ${img.height}px but require image 150px X 150px`);
             //         }
@@ -541,8 +595,8 @@ export default {
             //     img.src = window.URL.createObjectURL(event.target.files[0]);
             //     img.onload = () => {
             //         if (img.width === 150 && img.height === 95) {
-                        this.nidFrontSrc = window.URL.createObjectURL(event.target.files[0]);
-                        this.form.nid_front_img = event.target.files[0];
+            this.nidFrontSrc = window.URL.createObjectURL(event.target.files[0]);
+            this.form.nid_front_img = event.target.files[0];
             //         } else {
             //             alert(`This image ${img.width}px X ${img.height}px but require image 150px X 95px`);
             //         }
@@ -558,8 +612,8 @@ export default {
             //     img.src = window.URL.createObjectURL(event.target.files[0]);
             //     img.onload = () => {
             //         if (img.width === 150 && img.height === 95) {
-                        this.nidBackSrc = window.URL.createObjectURL(event.target.files[0]);
-                        this.form.nid_back_img = event.target.files[0];
+            this.nidBackSrc = window.URL.createObjectURL(event.target.files[0]);
+            this.form.nid_back_img = event.target.files[0];
             //         } else {
             //             alert(`This image ${img.width}px X ${img.height}px but require image 150px X 95px`);
             //         }
@@ -580,6 +634,7 @@ export default {
             this.form.nid = "";
             this.form.district_id = "";
             this.form.thana_id = "";
+            this.form.area_id = "";
             this.form.present_address = "";
             this.form.permanent_address = "";
             this.form.description = "";
@@ -594,6 +649,7 @@ export default {
             this.selectedDistrict = null;
             this.thanas = [];
             this.selectedThana = null;
+            this.selectedArea = null;
             this.selectedManager = null;
             this.selectedCategory = null;
         }

@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
-use App\Models\OrderDetail;
 use App\Models\Worker;
+use App\Models\OrderDetail;
 use Illuminate\Http\Request;
+use App\Models\PaymentCollection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
@@ -15,11 +16,11 @@ class WorkerController extends Controller
     public function index()
     {
         if (Auth::guard('worker')->check()) {
+            $data['paymentCollections'] = PaymentCollection::with('receiveBy')->where('worker_id', Auth::guard('worker')->user()->id)->get();
             $data['orders'] = OrderDetail::with('service', 'order')->where('worker_id', Auth::guard('worker')->user()->id)->latest()->get();
             return view("dashboard.worker-dashboard", $data);
         } else {
             return redirect()->back()->with('error', 'You do not have any access to enter there!');
-            // return redirect("/login");
         }
     }
 

@@ -20,6 +20,7 @@ class CreateOrdersTable extends Migration
             $table->foreignId("customer_id")->constrained("users", "id")->onDelete("cascade");
             $table->boolean("is_shipping")->default(0);
             $table->integer("shipping_thana");
+            $table->integer("shipping_area");
             $table->string("shipping_mobile");
             $table->text("shipping_address");
             $table->string("shipping_postcode")->nullable();

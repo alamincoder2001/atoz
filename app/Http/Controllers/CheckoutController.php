@@ -32,7 +32,7 @@ class CheckoutController extends Controller
             // return $request->all();
             if (isset($request->is_shipping)) {
                 $shipping_charge = Thana::where('id', Auth::guard('web')->user()->thana_id)->first()->charge;
-            }else{
+            } else {
                 $shipping_charge = Thana::where('id', $request->shipping_thana)->first()->charge;
             }
             DB::beginTransaction();
@@ -59,6 +59,7 @@ class CheckoutController extends Controller
                 $data->customer_id       = Auth::guard('web')->user()->id;
                 $data->is_shipping       = !isset($request->is_shipping) ? 1 : 0;
                 $data->shipping_thana    = !isset($request->is_shipping) ? $request->shipping_thana : Auth::guard('web')->user()->thana_id;
+                $data->shipping_area    = !isset($request->is_shipping) ? $request->shipping_area : Auth::guard('web')->user()->area_id;
                 $data->shipping_mobile   = Auth::guard('web')->user()->mobile;
                 $data->shipping_address  = !isset($request->is_shipping) ? $request->shipping_address : $request->address;
                 $data->shipping_postcode = $request->postcode;

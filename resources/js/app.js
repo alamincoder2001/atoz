@@ -43,9 +43,10 @@ Vue.component("order-assign", require("./components/OrderAssign.vue").default);
 Vue.component("delivered-order", require("./components/deliveredOrder.vue").default);
 Vue.component("cancel-order", require("./components/cancelOrder.vue").default);
 Vue.component("invoice", require("./components/Invoice.vue").default);
-Vue.component("Report", require("./components/Report.vue").default);
 Vue.component("worker-payment", require("./components/WorkerPayment.vue").default);
-Vue.component("worker-commission", require("./components/WorkerCommission.vue").default);
+Vue.component("manager-payment", require("./components/ManagerPayment.vue").default);
+Vue.component("managercommission-report", require("./components/ManagerComissionReport.vue").default);
+Vue.component("workercommission-report", require("./components/WorkerComissionReport.vue").default);
 
 const app = new Vue({
     el: "#app",

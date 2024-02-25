@@ -4,6 +4,21 @@
 @section("breadcrumb_title", "Upazila")
 @section("breadcrumb_item", "Upazila Create")
 
+@push('admin_style')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/css/selectize.default.min.css">
+<style>
+    .selectize-input {
+        padding: 0.35rem 0.45rem !important;
+    }
+
+    .selectize-control.single .selectize-input {
+        box-shadow: none !important;
+        background-image: none !important;
+        background-color: #fff !important;
+    }
+</style>
+@endpush
+
 @section("content")
 <div class="col-12 col-lg-4">
     <div class="card">
@@ -22,7 +37,7 @@
                 </div>
                 <div class="form-group">
                     <label for="district_id">District Name</label>
-                    <select name="district_id" id="district_id" autocomplete="off" class="form-select shadow-none">
+                    <select name="district_id" id="district_id" autocomplete="off" class="shadow-none">
                         <option value="">Select District</option>
                         @php
                         $district = App\District::get();
@@ -66,7 +81,9 @@
 @endsection
 
 @push("js")
+<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js"></script>
 <script>
+    $("select").selectize();
     //get Data
     var table = $('#datatable').DataTable({
         ajax: location.origin + "/admin/thana/fetch",
@@ -118,6 +135,7 @@
                     $("form").trigger("reset")
                     $("#id").val("");
                     $(".changeBtn").text("Save").addClass("btn-success").removeClass("btn-primary");
+                    $("select")[0].selectize.clear();
                     table.ajax.reload()
                 } else {
                     $.each(res.error, (index, value) => {
@@ -139,6 +157,7 @@
                 $.each(res.data, (index, value) => {
                     $("form").find("#" + index).val(value);
                 })
+                $("select")[0].selectize.addItem(res.data.district_id, true);
             }
         })
     }

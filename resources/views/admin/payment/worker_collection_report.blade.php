@@ -16,84 +16,45 @@
             </a>
         </div>
         <div class="col-12 col-md-12">
-            <hr>
-
-
             <div class="report border-0" id="reportContent">
-                {{-- <div class="row">
-                    <div class="col-4">
-                        <table class="table table-borderless">
-                            <tr>
-                                <td class="d-flex">
-                                    <img class="mt-4" src="{{asset($companyInfo->logo != null ? $companyInfo->logo : 'noImage.jpg')}}"
-                                        alt="logo" style="height: 80px">
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div class="col-8">
-                        <table class="table table-borderless">
-                            <tr>
-                                <td>
-                                    <h5 class="mt-4">{{ $companyInfo->company_name }}</h5>
-                                    <span style="font-weight: 500">Mobile No.</span>
-                                    <span>{{ $companyInfo->mobile }}</span><br>
-                                    <span style="font-weight: 500">Email.</span>
-                                    <span>{{ $companyInfo->email }}</span><br>
-                                    <span style="font-weight: 500">Address.</span>
-                                    <span>{{ $companyInfo->address }}</span>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-
-                <div class="p-1"
-                    style="border-top: 1px dashed gray; border-bottom: 1px dashed gray; text-align: center; margin: 20px 0 0 0; color: #606060cf;">
-                    <strong class="">Payment Money Receive</strong>
-                </div> --}}
-
-
                 <div class="row mt-4">
-                    <div class="col-lg-8 col-md-8">
-
-                        <span class="c_color">TR.Id:</span>
-                        <span class="txt-color"> {{ $paymentCollection->transaction_id }} </span> <br>
-
-                        <span class="c_color">TR.Type:</span>
-                        <span class="txt-color">{{ $paymentCollection->payment_type }}</span> <br>
-
-                        <span class="c_color">TR.Date:</span>
-                        <span class="txt-color">{{ $paymentCollection->payment_date }}</span> <br>
-                    </div>
-
-                    <div class="col-lg-4 col-md-4" style="text-align: right;">
-                        <span class="c_color">Worker Code:</span>
+                    <div class="col-8">
+                        <strong class="c_color">Worker Code:</strong>
                         <span class="txt-color">
                             @if (isset($paymentCollection->worker))
-                                {{ $paymentCollection->worker->worker_code }}
+                            {{ $paymentCollection->worker->worker_code }}
                             @else
-                                N/A
+                            N/A
                             @endif
                         </span> <br>
 
-                        <span class="c_color">Worker Name:</span>
+                        <strong class="c_color">Worker Name:</strong>
                         <span class="txt-color">
                             @if (isset($paymentCollection->worker))
-                                {{ $paymentCollection->worker->name }}
+                            {{ $paymentCollection->worker->name }}
                             @else
-                                N/A
+                            N/A
                             @endif
                         </span> <br>
 
-                        <span class="c_color">Worker Phone:</span>
+                        <strong class="c_color">Worker Phone:</strong>
                         <span class="txt-color">
                             @if (isset($paymentCollection->worker))
-                                {{ $paymentCollection->worker->mobile }}
+                            {{ $paymentCollection->worker->mobile }}
                             @else
-                                N/A
+                            N/A
                             @endif
                         </span>
+                    </div>
+                    <div class="col-4 text-end">
+                        <strong class="c_color">TR.Id:</strong>
+                        <span class="txt-color"> {{ $paymentCollection->transaction_id }} </span> <br>
+
+                        <strong class="c_color">TR.Type:</strong>
+                        <span class="txt-color">{{ $paymentCollection->payment_type }}</span> <br>
+
+                        <strong class="c_color">TR.Date:</strong>
+                        <span class="txt-color">{{ $paymentCollection->payment_date }}</span> <br>
                     </div>
                 </div>
 
@@ -105,7 +66,6 @@
                                 <td>Sl.</td>
                                 <td>Description</td>
                                 <td>Received By</td>
-                                {{-- <td>Received By</td> --}}
                                 <td>Amount</td>
                             </tr>
                             <tbody>
@@ -113,16 +73,16 @@
                                     <td align="center">1</td>
                                     <td>
                                         @if (isset($paymentCollection->note) || $paymentCollection->note != '')
-                                            {{ $paymentCollection->note }}
+                                        {{ $paymentCollection->note }}
                                         @else
-                                            <span class="d-flex justify-content-center">N/A</span>
+                                        <span class="d-flex justify-content-center">N/A</span>
                                         @endif
                                     </td>
                                     <td align="center">
                                         @if (isset($paymentCollection->receiveBy))
-                                            {{ $paymentCollection->receiveBy->name }}
+                                        {{ $paymentCollection->receiveBy->name }}
                                         @else
-                                            N/A
+                                        N/A
                                         @endif
                                     </td>
                                     <td align="right">{{ number_format($paymentCollection->amount, 2) }}</td>
@@ -134,8 +94,7 @@
 
                     <div class="col-9">
                         <div class="d-flex mt-5">
-                            <span
-                                style="font-size: 14px;font-weight: 500;color: #323232;text-transform: uppercase !important;">
+                            <span style="font-size: 14px;font-weight: 500;color: #323232;text-transform: uppercase !important;">
                                 In word :
                             </span> &nbsp;
                             <p class="word" style="text-transform: uppercase !important;"></p>
@@ -158,7 +117,7 @@
                                 <tr>
                                     <td><strong>Current Due:</strong></td>
                                     <td style="text-align:right">
-                                        0.00
+                                        {{number_format($paymentCollection->previous_due - $paymentCollection->amount, 2)}}
                                     </td>
                                 </tr>
                             </table>
@@ -167,14 +126,15 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-8"></div>
-                    <div class="col-4" style="float: right !important;">
+                    <div class="col-12 mt-5">
                         <table class="table table-borderless">
                             <tr>
-                                <td style="float: right !important;" class="pe-0 me-0">Authorized Signature</td>
-                            </tr>
-                            <tr>
-                                <td style="float: right !important;" class="pe-0 me-0 pt-3">------------------------</td>
+                                <td class="pl-0 me-0" style="padding-left: 0 !important;">
+                                    <span style="text-decoration: overline;">Received By</span>
+                                </td>
+                                <td class="pe-0 me-0 text-end">
+                                    <span style="text-decoration: overline;">Authorized By</span>
+                                </td>
                             </tr>
                         </table>
                     </div>
@@ -187,79 +147,79 @@
 @endsection
 
 @push('js')
-    <script>
-        $(document).ready(function() {
-            let getnumber = {{ $paymentCollection->amount }};
-            numberToWords(getnumber);
-            $(".word").text(numberToWords(getnumber) + " TAKA ONLY.");
-        });
+<script>
+    $(document).ready(function() {
+        let getnumber = "{{ $paymentCollection->amount }}";
+        numberToWords(getnumber);
+        $(".word").text(numberToWords(getnumber) + " TAKA ONLY.");
+    });
 
-        function numberToWords(number) {
-            var digit = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
-            var elevenSeries = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen',
-                'eighteen', 'nineteen'
-            ];
-            var countingByTens = ['twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
-            var shortScale = ['', 'thousand', 'million', 'billion', 'trillion'];
-            number = number.toString();
-            number = number.replace(/[\, ]/g, '');
-            if (number != parseFloat(number)) return 'not a number';
-            var x = number.indexOf('.');
-            if (x == -1) x = number.length;
-            if (x > 15) return 'too big';
-            var n = number.split('');
-            var str = '';
-            var sk = 0;
-            for (var i = 0; i < x; i++) {
-                if ((x - i) % 3 == 2) {
-                    if (n[i] == '1') {
-                        str += elevenSeries[Number(n[i + 1])] + ' ';
-                        i++;
-                        sk = 1;
-                    } else if (n[i] != 0) {
-                        str += countingByTens[n[i] - 2] + ' ';
-                        sk = 1;
-                    }
+    function numberToWords(number) {
+        var digit = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+        var elevenSeries = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen',
+            'eighteen', 'nineteen'
+        ];
+        var countingByTens = ['twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+        var shortScale = ['', 'thousand', 'million', 'billion', 'trillion'];
+        number = number.toString();
+        number = number.replace(/[\, ]/g, '');
+        if (number != parseFloat(number)) return 'not a number';
+        var x = number.indexOf('.');
+        if (x == -1) x = number.length;
+        if (x > 15) return 'too big';
+        var n = number.split('');
+        var str = '';
+        var sk = 0;
+        for (var i = 0; i < x; i++) {
+            if ((x - i) % 3 == 2) {
+                if (n[i] == '1') {
+                    str += elevenSeries[Number(n[i + 1])] + ' ';
+                    i++;
+                    sk = 1;
                 } else if (n[i] != 0) {
-                    str += digit[n[i]] + ' ';
-                    if ((x - i) % 3 == 0) str += 'hundred ';
+                    str += countingByTens[n[i] - 2] + ' ';
                     sk = 1;
                 }
-                if ((x - i) % 3 == 1) {
-                    if (sk) str += shortScale[(x - i - 1) / 3] + ' ';
-                    sk = 0;
-                }
+            } else if (n[i] != 0) {
+                str += digit[n[i]] + ' ';
+                if ((x - i) % 3 == 0) str += 'hundred ';
+                sk = 1;
             }
-            if (x != number.length) {
-                var y = number.length;
-                str += 'point ';
-                for (var i = x + 1; i < y; i++) str += digit[n[i]] + ' ';
+            if ((x - i) % 3 == 1) {
+                if (sk) str += shortScale[(x - i - 1) / 3] + ' ';
+                sk = 0;
             }
-            str = str.replace(/\number+/g, ' ');
-            return str.trim() + " ";
-            $(".word").text(number);
         }
+        if (x != number.length) {
+            var y = number.length;
+            str += 'point ';
+            for (var i = x + 1; i < y; i++) str += digit[n[i]] + ' ';
+        }
+        str = str.replace(/\number+/g, ' ');
+        return str.trim() + " ";
+        $(".word").text(number);
+    }
 
-        // print  money receive
-        async function printMoneyReceive(event) {
-            event.preventDefault();
+    // print  money receive
+    async function printMoneyReceive(event) {
+        event.preventDefault();
 
-            let reportContent = `
-					<div class="container">
+        let reportContent = `
+					<div class="container-fluid">
 						<div class="row">
-							<div class="col-sm-12 text-center">
+							<div class="col-12 text-center">
 								<h3 style="text-align:center; border-top: 1px dashed gray; border-bottom: 1px dashed gray; padding:3px; color:gray;">
-                                    Payment Money Receive
+                                    Worker Payment Invoice
                                 </h3>
 							</div>
-							<div class="col-sm-12">
+							<div class="col-12">
 								${document.querySelector('#reportContent').innerHTML}
 							</div>
 						</div>
 					</div>
 				`;
-				var reportWindow = window.open('', 'PRINT', `height=${screen.height}, width=${screen.width}`);
-				reportWindow.document.write(`
+        var reportWindow = window.open('', 'PRINT', `height=${screen.height}, width=${screen.width}`);
+        reportWindow.document.write(`
 					<table>
                         <tr>
                             <td><img src="/uploads/logo/6524546_6517fde95908b.png"></td>
@@ -273,7 +233,7 @@
                     </table>
 				`);
 
-				reportWindow.document.head.innerHTML += `
+        reportWindow.document.head.innerHTML += `
                     <link rel="stylesheet" href="{{ asset('frontend/assets/css/bootstrap.min.css') }}">
                     <link rel="stylesheet" href="{{ asset('frontend/assets/css/boxicons.min.css') }}">
 
@@ -304,17 +264,12 @@
 						}
 					</style>
 				`;
-				reportWindow.document.body.innerHTML += reportContent;
+        reportWindow.document.body.innerHTML += reportContent;
 
-				// let rows = reportWindow.document.querySelectorAll('.record-table tr');
-				// rows.forEach(row => {
-				// 	row.lastChild.remove();
-				// })
-
-				reportWindow.focus();
-				await new Promise(resolve => setTimeout(resolve, 3000));
-				reportWindow.print();
-				reportWindow.close();
-        }
-    </script>
+        reportWindow.focus();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        reportWindow.print();
+        reportWindow.close();
+    }
+</script>
 @endpush

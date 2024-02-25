@@ -66,9 +66,18 @@ class AreaManagerController extends Controller
     {
         $authUser = Auth::guard('admin')->user();
         if ($authUser->role == 'manager') {
-            $data = Admin::with('thana')->where("role", "manager")->where('id', $authUser->id)->latest()->get();
+            $data = Admin::with('thana', 'area')->where("role", "manager")->where('id', $authUser->id)->latest()->get();
         } else {
-            $data = Admin::with('thana')->where("role", "manager")->latest()->get();
+            $data = Admin::with('thana', 'area')->where("role", "manager")->latest()->get();
+        }
+
+        foreach ($data as $key => $item) {
+            $collectionAmount = DB::select("select ifnull(sum(pc.amount), 0) as collectionAmount from payment_collections pc
+                                        left join workers w on w.id = pc.worker_id  
+                                        where w.manager_id = ?", [$item->id])[0]->collectionAmount;
+            $paymentAmount = DB::select("select ifnull(sum(cp.amount), 0) as paymentAmount from commission_payments cp where cp.manager_id = ?", [$item->id])[0]->paymentAmount;
+            $item['commissionAmount'] = ($collectionAmount * $item->commission) / 100;
+            $item['dueAmount'] = $item->commissionAmount - $paymentAmount;
         }
 
         return response()->json(["manager" => $data]);

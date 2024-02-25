@@ -215,7 +215,6 @@
         </div>
     </div>
 </nav>
-{{-- <section class="listing-area mt-5"> --}}
 <div class="container">
 
     <div class="row">
@@ -228,6 +227,10 @@
 
                 <a href="#order-info" data-bs-toggle="tab" class="tab-btn mb-1" aria-selected="false" role="tab" tabindex="-1">
                     <i class="bx bx-cart mt-2" style="font-size: 19px"></i> Order Details
+                </a>
+
+                <a href="#payment-details" data-bs-toggle="tab" class="tab-btn mb-1" aria-selected="false" role="tab" tabindex="-1">
+                    <i class="bx bx-list-ul mt-2" style="font-size: 19px"></i> Payment Details
                 </a>
 
                 <a href="#account-info" data-bs-toggle="tab" class="tab-btn mb-1" aria-selected="false" role="tab" tabindex="-1">
@@ -325,6 +328,52 @@
                                         </td>
                                     </tr>
                                     @endforeach
+                                    @else
+                                    <tr>
+                                        <td class="text-center" colspan="8">Not Found Order</td>
+                                    </tr>
+                                    @endif
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- Single Tab Content End -->
+
+                <!-- Single Tab Content Start -->
+                <div class="tab-pane fade" id="payment-details" role="tabpanel">
+                    <div class="myaccount-content">
+                        <h3 class="p-0">Payment Details</h3>
+                        <div class="account-details-form">
+                            <table class="table table-sm table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Sl</th>
+                                        <th>Invoice</th>
+                                        <th>Payment Date</th>
+                                        <th>Amount</th>
+                                        <th>Note</th>
+                                        <th>Receive By</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if(count($paymentCollections) > 0)
+                                    @foreach($paymentCollections as $key => $item)
+                                    <tr>
+                                        <td>{{$key + 1}}</td>
+                                        <td>{{$item->transaction_id}}</td>
+                                        <td>{{date('d-m-Y', strtotime($item->payment_date))}}</td>
+                                        <td>{{$item->amount}}</td>
+                                        <td>{{$item->note ?? "n/a"}}</td>
+                                        <td>{{$item->receiveBy->name ?? "n/a"}}</td>
+                                    </tr>
+                                    @endforeach
+                                    <tr>
+                                        <th colspan="3" style="text-align: center;">Total</th>
+                                        <th>{{$paymentCollections->sum('amount')}}</th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
                                     @else
                                     <tr>
                                         <td class="text-center" colspan="8">Not Found Order</td>
@@ -460,7 +509,6 @@
         </div>
     </div>
 </div>
-{{-- </section> --}}
 @endsection
 
 @push("front_script")
@@ -579,7 +627,7 @@
         let discount = $("#staticBackdrop").find('#discountAmount').val();
         let commissionPer = "{{Auth::guard('worker')->user()->commission}}";
         let total = parseFloat(billAmount) - parseFloat(discount);
-        
+
         let commAmount = (total * parseFloat(commissionPer)) / 100;
         $("#staticBackdrop").find('#commissionAmount').val(parseFloat(commAmount).toFixed(2));
         $("#staticBackdrop").find('#total').val(parseFloat(parseFloat(total)).toFixed(2));

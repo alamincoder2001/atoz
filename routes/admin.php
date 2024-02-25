@@ -14,10 +14,12 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DistrictController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\AdminAccessController;
+use App\Http\Controllers\Admin\AreaController;
 use App\Http\Controllers\Admin\AreaManagerController;
 use App\Http\Controllers\Admin\CommissionController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\PaymentCollectionController;
+use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\WorkerController;
 use App\Http\Controllers\HowToOrderController;
 use App\Http\Controllers\WorkerCommissionController;
@@ -76,6 +78,12 @@ Route::group(["prefix" => "admin"], function () {
     Route::post('/district', [DistrictController::class, 'store'])->name('admin.district.store');
     Route::post('/district/delete', [DistrictController::class, 'destroy'])->name('admin.district.destroy');
 
+    // area Route
+    Route::get('/area', [AreaController::class, 'index'])->name('admin.area.index');
+    Route::get('/area/fetch/{id?}', [AreaController::class, 'fetch'])->name('admin.area.fetch');
+    Route::post('/area', [AreaController::class, 'store'])->name('admin.area.store');
+    Route::post('/area/delete', [AreaController::class, 'destroy'])->name('admin.area.destroy');
+
     // How To Order
     Route::get('how-to-order', [HowToOrderController::class, 'howToOrder'])->name('admin.howto.order');
     Route::post('how-to-order', [HowToOrderController::class, 'howToOrderUpdate']);
@@ -96,7 +104,10 @@ Route::group(["prefix" => "admin"], function () {
     Route::post('/order/fetch', [OrderController::class, 'fetch'])->name('admin.order.fetch');
     Route::post('/order/delete', [OrderController::class, 'destroy'])->name('admin.order.destroy');
     Route::get('/order/invoice/{invoice}', [OrderController::class, 'invoice'])->name('admin.order.invoice');
-    Route::get('/order/report', [OrderController::class, 'report'])->name("admin.order.report");
+
+    //all report route
+    Route::get('/manager-payment-report', [ReportController::class, 'managerPaymentReport'])->name("admin.report.managerPaymentReport");
+    Route::get('/worker-payment-report', [ReportController::class, 'workerPaymentReport'])->name("admin.report.workerPaymentReport");
 
     // blog route
     Route::get('/blog', [BlogController::class, 'index'])->name('admin.blog.index');
@@ -128,7 +139,6 @@ Route::group(["prefix" => "admin"], function () {
 
     Route::get('/get-worker/{id?}', [WorkerController::class, 'index'])->name("admin.worker.index");
     Route::post('/worker', [WorkerController::class, 'store'])->name("admin.worker.store");
-    // Route::get('/worker/delete/{id}', [WorkerController::class, 'destroy'])->name("admin.worker.destroy");
     Route::post('/worker/delete', [WorkerController::class, 'destroy'])->name("admin.worker.destroy");
     Route::post('/worker/change_status', [WorkerController::class, 'workerStatus'])->name("admin.worker.changeStatus");
     Route::post('/update/worker', [WorkerController::class, 'update'])->name('admin.worker.update');
@@ -161,17 +171,21 @@ Route::group(["prefix" => "admin"], function () {
     Route::get('/commission-list', [CommissionController::class, 'list'])->name('admin.commission.list');
     Route::post('/commission-fetch', [CommissionController::class, 'fetch'])->name('admin.commission.fetch');
     Route::post('/pay-commission', [CommissionController::class, 'payCommission'])->name('admin.pay.commission');
-    Route::post('/order/commission', [CommissionController::class, 'getCommission'])->name("admin.order.commission");
 
     // payment collection
-    Route::get('/payment-collection', [PaymentCollectionController::class, 'index'])->name('admin.payment.collection');
-    Route::get('/get-worker-payment', [PaymentCollectionController::class, 'getPayment']);
+    Route::get('/payment-collection', [PaymentCollectionController::class, 'index'])->name('admin.worker.payment');
+    Route::get('/manager-payment', [PaymentCollectionController::class, 'managerPayment'])->name('admin.manager.payment');
+    Route::post('/get-worker-payment', [PaymentCollectionController::class, 'getPayment']);
     Route::get('/get-workers-withDueAmount', [PaymentCollectionController::class, 'getWorkerWithDueAmount']);
     Route::post('/worker/store/payment-collection', [PaymentCollectionController::class, 'storePayment']);
     Route::post('/worker/delete/payment-collection', [PaymentCollectionController::class, 'deletePayment']);
-    Route::get('/worker/payment-receive/{id}', [PaymentCollectionController::class, 'paymentReceive']);
+    Route::get('/worker/payment-receive/{id}', [PaymentCollectionController::class, 'paymentReceiveInvoice']);
+    Route::post('/manager/commission-store', [PaymentCollectionController::class, 'managerPaymentStore']);
+    Route::post('/get-manager-payment', [PaymentCollectionController::class, 'getCommissionPayment']);
+    Route::post('/manager/delete/payment', [PaymentCollectionController::class, 'deleteManagerPayment']);
+    Route::get('/manager/payment-invoice/{id}', [PaymentCollectionController::class, 'managerPaymentInvoice']);
 
-    Route::get('worker/commission', [WorkerCommissionController::class, 'index'])->name('admin.worker.commission');
+    // Route::get('worker/commission', [WorkerCommissionController::class, 'index'])->name('admin.worker.commission');
     Route::get('/get-worker-commission', [WorkerCommissionController::class, 'getCommission']);
     Route::get('/get-workers-with-commission', [WorkerCommissionController::class, 'getWorkerWithCommission']);
     Route::post('/worker/commission-store', [WorkerCommissionController::class, 'storeWorkerCommission']);
