@@ -29,6 +29,8 @@ class FrontendLoginController extends Controller
     {
         if (filter_var($username, FILTER_VALIDATE_EMAIL)) {
             return ['email' => $username, 'password' => $password];
+        } elseif (is_numeric($username) == 1) {
+            return ['mobile' => $username, 'password' => $password];
         } else {
             return ['username' => $username, 'password' => $password];
         }
@@ -38,22 +40,22 @@ class FrontendLoginController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                "username" => "required",
+                "mobile" => "required",
                 "password" => "required"
-            ], ["username.required" => "Username or Email required"]);
+            ], ["mobile.required" => "Mobile number is required"]);
 
             if ($validator->fails()) {
                 return response()->json(["error" => $validator->errors()]);
             }
 
             // login successfull
-            if (Auth::guard('web')->attempt($this->credentials($request->username, $request->password))) {
+            if (Auth::guard('web')->attempt($this->credentials($request->mobile, $request->password))) {
                 return response()->json(["success" => "Successfully Login", "content" => Cart::content()->count()]);
             } else {
                 return response()->json(["errors" => "Password or Email Not Match"]);
             }
         } catch (\Throwable $e) {
-            return "Opps! something went wrong";
+            return "Opps! something went wrong" . $e->getMessage();
         }
     }
 
@@ -62,8 +64,6 @@ class FrontendLoginController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 "name"             => "required",
-                "username"         => "required",
-                "email"            => "required",
                 "mobile"           => "required",
                 "district_id"      => "required",
                 "thana_id"         => "required",
@@ -79,8 +79,6 @@ class FrontendLoginController extends Controller
             $data                = new User();
             $data->customer_code = $this->generateCode("User", "C");
             $data->name          = $request->name;
-            $data->username      = $request->username;
-            $data->email         = $request->email;
             $data->mobile        = $request->mobile;
             $data->district_id   = $request->district_id;
             $data->thana_id      = $request->thana_id;
@@ -95,40 +93,6 @@ class FrontendLoginController extends Controller
             return "Opps something went wrong";
         }
     }
-
-    // public function TechnicianRegister(Request $request)
-    // {
-    //     try {
-    //         $validator = Validator::make($request->all(), [
-    //             "name"             => "required",
-    //             "username"         => "required",
-    //             "email"            => "required",
-    //             "mobile"           => "required",
-    //             "district_id"      => "required",
-    //             "thana_id"         => "required",
-    //             "password"         => "required",
-    //             "confirm_password" => "required_with:password|same:password",
-    //         ]);
-
-    //         if ($validator->fails()) {
-    //             return response()->json(["error" => $validator->errors()]);
-    //         }
-
-    //         $data                  = new Technician();
-    //         $data->technician_code = $this->generateCode("Technician", "T");
-    //         $data->name            = $request->name;
-    //         $data->username        = $request->username;
-    //         $data->email           = $request->email;
-    //         $data->mobile          = $request->mobile;
-    //         $data->district_id     = $request->district_id;
-    //         $data->thana_id        = $request->thana_id;
-    //         $data->password        = Hash::make($request->password);
-    //         $data->save();
-    //         return response()->json(["msg" => "Successfully Register"]);
-    //     } catch (\Throwable $e) {
-    //         return "Opps something went wrong";
-    //     }
-    // }
 
     public function WorkerLogin(Request $request)
     {

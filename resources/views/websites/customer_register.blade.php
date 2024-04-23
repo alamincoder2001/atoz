@@ -10,13 +10,13 @@
         border-radius: 5px;
     }
 
-    .select2-container--default .select2-selection--single {
-        border: 1px solid #ac51f0 !important;
-        height: 35px !important;
+    .selectize-control.single .selectize-input,
+    .selectize-dropdown.single {
+        border-color: #a52dd7;
     }
 
-    .select2-container--default .select2-selection--single .select2-selection__arrow {
-        height: 30px !important;
+    .selectize-input {
+        padding: 7px 8px;
     }
 </style>
 @endpush
@@ -29,7 +29,7 @@
             <div class="col-md-3 col-lg-3 col-xl-3 col-xxl-3"></div>
             <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-6">
                 <div class="card pt-0" style="box-shadow: 0px 0px 20px 3px #994bf238;">
-                    <h5 class="card-header border-0 text-center mt-2" style="color: #1f1f1f; letter-spacing: 1px; font-family: sans-serif;">Customer Register Form</h5>
+                    <h5 class="card-header border-0 text-center" style="font-style: italic;font-weight:700;">Customer Register Form</h5>
                     <div class="card-body customerRegister" style="padding:10px 40px 40px 40px;">
                         <form onsubmit="customerRegister(event)">
 
@@ -38,21 +38,13 @@
                                 <span class="text-danger error-name error"></span>
                             </div>
                             <div class="form-group mb-3">
-                                <input type="text" name="username" class="form-control c-control" placeholder="Username" autocomplete="off">
-                                <span class="text-danger error-username error"></span>
-                            </div>
-                            <div class="form-group mb-3">
-                                <input type="email" name="email" class="form-control c-control" placeholder="Email" autocomplete="off">
-                                <span class="text-danger error-email error"></span>
-                            </div>
-                            <div class="form-group mb-3">
                                 <input type="text" name="mobile" class="form-control c-control" placeholder="Mobile" autocomplete="off">
                                 <span class="text-danger error-mobile error"></span>
                             </div>
                             <div class="row mb-3">
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <select onchange="getUpazila(event)" name="district_id" class="form-select selectTwo">
+                                        <select onchange="getUpazila(event)" name="district_id" class="selectTwo">
                                             <option value="">Select District</option>
                                             @foreach($districts as $item)
                                             <option value="{{$item->id}}">{{$item->name}}</option>
@@ -63,16 +55,16 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <select name="thana_id" class="thana_id getThana form-select selectTwo" onchange="getArea(event)">
-
+                                        <select name="thana_id" class="thana_id getThana">
+                                            <option value="">Select Upazila</option>
                                         </select>
                                         <span class="text-danger error-thana_id error"></span>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group mb-3">
-                                <select name="area_id" class="area_id getArea form-select selectTwo">
-
+                                <select name="area_id" class="area_id getArea">
+                                    <option value="">Select Area</option>
                                 </select>
                                 <span class="text-danger error-area_id error"></span>
                             </div>
@@ -98,49 +90,88 @@
 @endsection
 
 @push('front_script')
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
-    $(document).ready(function() {
-        $('.selectTwo').select2();
+    $(".selectTwo").selectize();
+    var upazila = $('.getThana').selectize({
+        create: false,
+        sortField: 'text'
+    });
+    var getArea = $('.getArea').selectize({
+        create: false,
+        sortField: 'text'
     });
 
     function getUpazila(event) {
+        var selectizeUpazila = upazila[0].selectize;
+        let options = [];
         if (event.target.value) {
             $.ajax({
-                url: location.origin + "/getUpazila/" + event.target.value,
-                method: "GET",
-                beforeSend: () => {
-                    $(".thana_id").html(`<option value="">Select Upazila</option>`)
+                url: location.origin + "/getUpazila",
+                method: "POST",
+                data: {
+                    id: event.target.value
                 },
                 success: res => {
-                    $.each(res, (index, value) => {
-                        $(".getThana").append(`<option value="${value.id}">${value.name}</option>`)
-                    })
+                    selectizeUpazila.clearOptions();
+                    if (res.length > 0) {
+                        res.map(item => {
+                            let valueItem = {
+                                value: item.id,
+                                text: item.name
+                            }
+                            options.push(valueItem);
+                        })
+                    } else {
+                        options.push({
+                            value: '',
+                            text: 'Select upazila'
+                        })
+                    }
+                    selectizeUpazila.addOption(options);
+                    selectizeUpazila.refreshOptions(false);
                 }
             })
         } else {
-            $(".thana_id").html(`<option value="">Select Upazila</option>`)
+            selectizeUpazila.addOption(options);
+            selectizeUpazila.refreshOptions(false);
         }
     }
 
-    function getArea(event) {
+    $(".getThana").on("change", event => {
+        let options = [];
+        var selectizeArea = getArea[0].selectize;
         if (event.target.value) {
             $.ajax({
-                url: location.origin + "/getArea/" + event.target.value,
-                method: "GET",
-                beforeSend: () => {
-                    $(".area_id").html(`<option value="">Select Area</option>`)
+                url: location.origin + "/getArea",
+                method: "POST",
+                data: {
+                    id: event.target.value
                 },
                 success: res => {
-                    $.each(res, (index, value) => {
-                        $(".getArea").append(`<option value="${value.id}">${value.name}</option>`)
-                    })
+                    selectizeArea.clearOptions();
+                    if (res.length > 0) {
+                        res.map(item => {
+                            let valueItem = {
+                                value: item.id,
+                                text: item.name
+                            }
+                            options.push(valueItem);
+                        })
+                    } else {
+                        options.push({
+                            value: '',
+                            text: 'Select area'
+                        })
+                    }
+                    selectizeArea.addOption(options);
+                    selectizeArea.refreshOptions(false);
                 }
             })
         } else {
-            $(".area_id").html(`<option value="">Select Area</option>`)
+            selectizeArea.addOption(options);
+            selectizeArea.refreshOptions(false);
         }
-    }
+    })
 
     function customerRegister(event) {
         event.preventDefault();
@@ -167,7 +198,6 @@
                         gravity: "top",
                         backgroundColor: "linear-gradient(to right, #7b3edb, #7b3edb)"
                     }).showToast();
-                    // alert('Registered Successfully')
                     $("form").trigger("reset")
                     if (res.content > 0) {
                         setTimeout(() => {
@@ -176,10 +206,6 @@
                     } else {
                         location.href = "{{ url('customer-dashboard')}}"
                     }
-
-                    // if (res.customer_type == 'Retail') {
-                    //     location.href = "/customer-dashboard";
-                    // }
                 }
             }
         })

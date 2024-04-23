@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/meanmenu.min.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/responsive.css') }}">
+    <link rel="stylesheet" href="{{asset('frontend/assets/css/selectize.default.min.css')}}" />
 
     <!-- -- toastify -- -->
     <link rel="stylesheet" href="{{asset('css/toastify.min.css')}}">
@@ -775,12 +776,12 @@
                         <div class="col-12 CustomerLogin">
                             <form action="" onsubmit="CustomerLogin(event)">
                                 <span class="text-center d-block mt-2 btn-top-txt" style="letter-spacing: .7px;">
-                                    Continue as a customer </span>
+                                    Continue as a Customer </span>
                                 <div class="form-group mb-2 mt-4">
                                     <div class="d-flex justify-content-center" style="width: 244px !important;height: 35px !important;border: 1px solid #ac51f0;border-radius: 5px;margin-left: 88px; padding: 5px !important;">
-                                        <input type="text" name="username" class="form-control" style="height: 25px !important;border: none;font-size: 13px;" placeholder="Username">
+                                        <input type="text" name="mobile" class="form-control" style="height: 25px !important;border: none;font-size: 13px;" placeholder="Mobile">
                                     </div>
-                                    <span class="text-danger error-username error d-flex justify-content-center"></span>
+                                    <span class="text-danger error-mobile error d-flex justify-content-center"></span>
                                 </div>
                                 <div class="form-group mb-2">
                                     <div class="d-flex justify-content-center" style="width: 244px !important;height: 35px !important;border: 1px solid #ac51f0;border-radius: 5px;margin-left: 88px; padding: 5px !important;">
@@ -981,6 +982,7 @@
     <script src="{{ asset('frontend/assets/js/contact-form-script.js') }}"></script>
     <script src="{{ asset('frontend/assets/js/ajaxchimp.min.js') }}"></script>
     <script src="{{ asset('frontend/assets/js/main.js') }}"></script>
+    <script src="{{asset('frontend/assets/js/selectize.min.js')}}"></script>
 
     <script>
         $.ajaxSetup({
@@ -1427,7 +1429,6 @@
                     } else if (res.errors) {
                         $(".CustomerLogin .error-username").text(res.errors)
                     } else {
-                        // alert('Login Successfully');
                         Toastify({
                             text: res.success,
                             duration: 5000,
@@ -1438,9 +1439,7 @@
 
                         $("form").trigger("reset")
                         if (res.content > 0) {
-                            setTimeout(() => {
-                                location.href = "{{ url('checkout_page')}}"
-                            }, 500);
+                            location.href = "{{ url('checkout_page')}}"
                         } else {
                             window.location.reload();
                         }

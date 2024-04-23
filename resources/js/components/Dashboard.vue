@@ -5,31 +5,38 @@
 
 .card-header i {
     padding: 12px;
-    /* border-top-left-radius: 25px;
-    border-bottom-right-radius: 25px; */
     font-size: 25px;
     color: #fff;
     border-radius: 50%;
+}
+
+h4 {
+    font-size: 14px;
+}
+
+@media (min-width: 300px) and (max-width: 600px) {
+    .fontSize {
+        font-size: 14px;
+    }
 }
 </style>
 <template>
     <div>
         <div class="row d-flex justify-content-center">
-
             <div class="col-12">
-                <div class="row mb-1">
-                    <div class="col-7 col-md-7"></div>
-                    <div class="col-2 col-md-2">
+                <div class="row mb-2">
+                    <div class="col-12 col-md-7"></div>
+                    <div class="col-6 col-md-2 p-md-0">
                         <div class="form-group m-0">
                             <input type="date" class="form-control" v-model="filter.dateFrom" />
                         </div>
                     </div>
-                    <div class="col-2 col-md-2 ">
+                    <div class="col-6 col-md-2 p-md-0">
                         <div class="form-group m-0">
                             <input type="date" class="form-control" v-model="filter.dateTo" />
                         </div>
                     </div>
-                    <div class="col-1 col-md-1">
+                    <div class="col-12 col-md-1 my-md-0 my-2 text-md-end d-grid">
                         <button type="button" @click="getProfit" class="btn btn-primary btn-sm shadow-none">
                             Submit
                         </button>
@@ -38,7 +45,7 @@
             </div>
 
             <!-- Column -->
-            <div class="col-md-3 col-6">
+            <div class="col-md-2 col-6">
                 <div class="card">
                     <div class="card-header d-flex justify-content-center py-2 px-0">
                         <i class="fas fa-dollar-sign bg-secondary" style="padding: 12px 17px;"></i>
@@ -48,16 +55,16 @@
                             <h3 class="font-light text-white fontSize">Bill Amount</h3>
                             <h4 class="text-white">{{ orderDetail.reduce((acc, pre) => {
                                 return acc +
-                                        parseFloat(pre.bill_amount)
-                                },
-                                    0).toFixed(2) }}
-                                </h4>
+                                    parseFloat(pre.bill_amount)
+                            },
+                                0).toFixed(2) }}
+                            </h4>
                         </a>
                     </div>
                 </div>
             </div>
             <!-- Column -->
-            <div class="col-md-3 col-6">
+            <div class="col-md-2 col-6">
                 <div class="card">
                     <div class="card-header d-flex justify-content-center py-2 px-0">
                         <i class="fas fa-dollar-sign bg-primary" style="padding: 12px 17px;"></i>
@@ -67,14 +74,15 @@
                             <h3 class="font-light text-white fontSize">Paid Amount</h3>
                             <h4 class="text-white">
                                 {{ orderDetail.reduce((acc, pre) => {
-                                return acc +  parseFloat(pre.paid_amount) },  0).toFixed(2) }}
+                                    return acc + parseFloat(pre.paid_amount)
+                                }, 0).toFixed(2) }}
                             </h4>
                         </a>
                     </div>
                 </div>
             </div>
             <!-- Column -->
-            <div class="col-md-3 col-6">
+            <div class="col-md-2 col-6">
                 <div class="card">
                     <div class="card-header d-flex justify-content-center py-2 px-0">
                         <i class="fas fa-dollar-sign bg-danger" style="padding: 12px 17px;"></i>
@@ -90,13 +98,13 @@
                 </div>
             </div>
             <!-- Column -->
-            <div class="col-md-3 col-6">
+            <div class="col-md-2 col-6">
                 <div class="card">
                     <div class="card-header d-flex justify-content-center py-2 px-0">
                         <i class="fas fa-dollar-sign bg-info" style="padding: 12px 17px;"></i>
                     </div>
                     <div class="box bg-info text-center">
-                        <a href="/admin/order/report" title="View Commission Report">
+                        <a href="" @click.prevent="" title="View Commission Report">
                             <h3 class="font-light text-white fontSize">Commission</h3>
                             <h4 class="text-white">{{ orderDetail.reduce((acc, pre) => {
                                 return acc + parseFloat(pre.commission_amount)
@@ -105,10 +113,8 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row d-flex justify-content-center">
             <!-- Column -->
-            <div class="col-md-3 col-6">
+            <div class="col-md-2 col-6">
                 <div class="card">
                     <div class="card-header d-flex justify-content-center py-2 px-0">
                         <i class="fas fa-shopping-cart bg-dark"></i>
@@ -122,7 +128,7 @@
                 </div>
             </div>
             <!-- Column -->
-            <div class="col-md-3 col-6">
+            <div class="col-md-2 col-6">
                 <div class="card">
                     <div class="card-header d-flex justify-content-center py-2 px-0">
                         <i class="fas fa-shopping-cart bg-warning"></i>
@@ -136,7 +142,7 @@
                 </div>
             </div>
             <!-- Column -->
-            <div class="col-md-3 col-6">
+            <div class="col-md-2 col-6">
                 <div class="card">
                     <div class="card-header d-flex justify-content-center py-2 px-0">
                         <i class="fas fa-shopping-cart bg-success"></i>
@@ -149,10 +155,8 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row d-flex justify-content-center">
             <!-- Column -->
-            <div class="col-md-3 col-6" v-if="role != 'manager'">
+            <div class="col-md-2 col-6" v-if="role != 'manager'">
                 <div class="card">
                     <div class="card-header d-flex justify-content-center py-2 px-0">
                         <i class="fas fa-users bg-primary"></i>
@@ -166,7 +170,7 @@
                 </div>
             </div>
             <!-- Column -->
-            <div class="col-md-3 col-6">
+            <div class="col-md-2 col-6">
                 <div class="card">
                     <div class="card-header d-flex justify-content-center py-2 px-0">
                         <i class="fas fa-users bg-info"></i>
@@ -180,7 +184,7 @@
                 </div>
             </div>
             <!-- Column -->
-            <div class="col-md-3 col-6">
+            <div class="col-md-2 col-6">
                 <div class="card">
                     <div class="card-header d-flex justify-content-center py-2 px-0">
                         <i class="fas fa-users bg-secondary"></i>

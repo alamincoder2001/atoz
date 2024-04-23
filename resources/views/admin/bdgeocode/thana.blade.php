@@ -5,7 +5,7 @@
 @section("breadcrumb_item", "Upazila Create")
 
 @push('admin_style')
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/css/selectize.default.min.css">
+<link rel="stylesheet" href="{{asset('frontend/assets/css/selectize.default.min.css')}}">
 <style>
     .selectize-input {
         padding: 0.35rem 0.45rem !important;
@@ -81,7 +81,7 @@
 @endsection
 
 @push("js")
-<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js"></script>
+<script src="{{asset('frontend/assets/js/selectize.min.js')}}"></script>
 <script>
     $("select").selectize();
     //get Data

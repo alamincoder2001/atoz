@@ -14,7 +14,7 @@
         height: 30px !important;
     }
 </style> -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/css/selectize.default.min.css">
+<link rel="stylesheet" href="{{asset('frontend/assets/css/selectize.default.min.css')}}">
 <style>
     .selectize-input {
         padding: 0.35rem 0.45rem !important;
@@ -101,20 +101,20 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <div class="mb-3">
+                                    <div class="mb-1">
                                         <label for="name" class="form-label"><b>Name<sup class="text-danger">*</sup> </b></label>
                                         <input type="text" readonly class="form-control" id="name" value="{{Auth::guard('web')->user()->name}}" placeholder="House number" style="border-radius: 3px; height: 30px;">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="mb-3">
+                                    <div class="mb-1">
                                         <label for="mobile" class="form-label"><b>Mobile<sup class="text-danger">*</sup> </b></label>
                                         <input type="text" readonly class="form-control" id="mobile" value="{{Auth::guard('web')->user()->mobile}}" placeholder="House number" style="border-radius: 3px; height: 30px;">
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
-                                    <div class="mb-3">
+                                    <div class="mb-1">
                                         <label for="road_no" class="form-label"><b>District<sup class="text-danger">*</sup></b></label>
                                         <select id="inputDistrict" name="district_id" class=" mb-2 selectTwo" style="border-radius: 3px; height: 30px;">
                                             <option value="">Select a District</option>
@@ -127,7 +127,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="mb-3">
+                                    <div class="mb-1">
                                         <label for="inputThana" class="form-label"><b>City<sup class="text-danger">*</sup></b></label>
                                         <div class="form-group">
                                             <select name="billing_thana" id="inputThana" class="thana_id getThana">
@@ -138,7 +138,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="mb-3">
+                                    <div class="mb-1">
                                         <label for="inputArea" class="form-label"><b>Area<sup class="text-danger">*</sup></b></label>
                                         <div class="form-group">
                                             <select name="billing_area" id="inputArea" class="area_id getArea">
@@ -148,35 +148,35 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="mb-3">
+                                    <div class="mb-1">
                                         <label for="email" class="form-label"><b>Email Address</b></label>
                                         <input type="email" class="form-control" value="{{Auth::guard('web')->user()->email}}" id="email" disabled style="border-radius: 3px; height: 30px;">
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
-                                    <div class="mb-3">
+                                    <div class="mb-1">
                                         <label for="postcode" class="form-label"><b>Postcode / ZIP</b></label>
                                         <input type="text" class="form-control" id="postcode" name="postcode" style="border-radius: 3px; height: 30px;">
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
-                                    <div class="mb-3">
+                                    <div class="mb-1">
                                         <label for="address" class="form-label"><b>Billing Address<sup class="text-danger">*</sup> </b></label>
-                                        <textarea class="form-control" id="address" name="address" style="background:none;border-color: #b5b5b5 !important;border-radius: 3px; height: 30px;">{{Auth::guard('web')->user()->address}}</textarea>
+                                        <input type="text" class="form-control" id="address" autocomplete="off" name="address" style="background:none;border-color: #b5b5b5 !important;border-radius: 3px; height: 30px;" value="{{Auth::guard('web')->user()->address}}"/>
                                     </div>
                                 </div>
-                                <hr>
+                                <hr style="margin: 5px 0;">
                                 <!-- shipping address -->
                                 <div class="col-md-12">
-                                    <div class="mb-3 d-flex align-items-center">
+                                    <div class="mb-1 d-flex align-items-center">
                                         <input type="checkbox" value="1" id="is_shipping" onchange="IsShipping(event)" name="is_shipping" checked>
                                         <label for="is_shipping" style="margin: 0;margin-left: 8px;" class="form-label"><b>Same as</b></label>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="mb-3">
+                                    <div class="mb-1">
                                         <label for="road_no" class="form-label"><b>District<sup class="text-danger">*</sup></b></label>
                                         <select id="shippingDistrict" name="shipping_district" class="shippingDistrict mb-2">
                                             <option value="">Select a District</option>
@@ -189,7 +189,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="mb-3">
+                                    <div class="mb-1">
                                         <label for="road_no" class="form-label"><b>City<sup class="text-danger">*</sup></b></label>
                                         <div class="form-group">
                                             <select name="shipping_thana" id="shipping_thana" class="shippingThana">
@@ -200,7 +200,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="mb-3">
+                                    <div class="mb-1">
                                         <label for="shipping_area" class="form-label"><b>Area<sup class="text-danger">*</sup></b></label>
                                         <div class="form-group">
                                             <select name="shipping_area" id="shipping_area" class="shippingArea">
@@ -210,9 +210,9 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="mb-3">
+                                    <div class="mb-1">
                                         <label for="shipping_address" class="form-label"><b>Shipping Address</b></label>
-                                        <textarea class="form-control" style="background:none;border-color: #b5b5b5 !important;border-radius: 3px; height: 30px;" id="shipping_address" name="shipping_address">{{Auth::guard('web')->user()->address}}</textarea>
+                                        <input type="text" class="form-control" style="background:none;border-color: #b5b5b5 !important;border-radius: 3px; height: 30px;" id="shipping_address" name="shipping_address" value="{{Auth::guard('web')->user()->address}}" />
                                     </div>
                                 </div>
                             </div>
@@ -221,7 +221,7 @@
                 </div>
 
                 <div class="col-md-6 mt-4">
-                    <div class="card cCustom" style="height: 100vh;">
+                    <div class="card cCustom">
                         <h4 class="card-header border-0 bg-white">Order Summary</h4>
                         <div class="card-body">
 
@@ -273,7 +273,7 @@
 
                             <div class="row mt-3">
                                 <div class="col-md-12 mt-4">
-                                    <div class="mb-3">
+                                    <div class="mb-1">
                                         <div class="row">
                                             <div class="col-1">
                                                 <button type="button" style="background-color: #ce5cf6;border: 1px solid #ce5cf6; border-radius: 3px;">
@@ -306,7 +306,7 @@
 @endsection
 
 @push('front_script')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js"></script>
+<script src="{{asset('frontend/assets/js/selectize.min.js')}}"></script>
 
 <script>
     $(document).ready(function() {

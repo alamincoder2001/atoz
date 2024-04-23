@@ -137,7 +137,7 @@
     function Delete(id) {
         if (confirm("Are you sure want delete this !")) {
             $.ajax({
-                url: location.origin + "/admin/district/delete/",
+                url: location.origin + "/admin/district/delete",
                 method: "POST",
                 data: {
                     id: id

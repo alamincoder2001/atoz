@@ -309,12 +309,7 @@ h6 {
     transition: 0.5s;
 }
 
-.form-control:focus {
-    border-color: #088dd3;
-    background-color: #ffffff;
-}
-
-.form-control:focus::-webkit-input-placeholder {
+/* .form-control:focus::-webkit-input-placeholder {
     color: transparent;
 }
 
@@ -324,11 +319,11 @@ h6 {
 
 .form-control:focus::-ms-input-placeholder {
     color: transparent;
-}
+} */
 
-.form-control:focus::placeholder {
+/* .form-control:focus::placeholder {
     color: transparent;
-}
+} */
 
 .form-control::-webkit-input-placeholder {
     -webkit-transition: 0.5s;
