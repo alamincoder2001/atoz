@@ -41,8 +41,8 @@
                                 <input type="text" name="mobile" class="form-control c-control" placeholder="Mobile" autocomplete="off">
                                 <span class="text-danger error-mobile error"></span>
                             </div>
-                            <div class="row mb-3">
-                                <div class="col-lg-6">
+                            <div class="row">
+                                <div class="col-lg-6 mb-3">
                                     <div class="form-group">
                                         <select onchange="getUpazila(event)" name="district_id" class="selectTwo">
                                             <option value="">Select District</option>
@@ -53,7 +53,7 @@
                                         <span class="text-danger error-district_id error"></span>
                                     </div>
                                 </div>
-                                <div class="col-lg-6">
+                                <div class="col-lg-6 mb-3">
                                     <div class="form-group">
                                         <select name="thana_id" class="thana_id getThana">
                                             <option value="">Select Upazila</option>

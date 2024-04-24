@@ -155,7 +155,7 @@
                         <div class="col-lg-5 col-md-6">
                             <div class="form-group">
                                 <label>
-                                    <a href="javascript:void(0)" onclick="locationModal()">
+                                    <a href="javascript:void(0)" class="d-flex align-items-center" onclick="locationModal()">
                                         <span><i class="bx bx-map" style="font-size: 25px;font-weight: bold;"></i></span>
                                         <span class="locationName"></span>
                                     </a>
